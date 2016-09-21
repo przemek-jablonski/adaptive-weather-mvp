@@ -1,5 +1,6 @@
-package com.android.szparag.newadaptiveweather;
+package com.android.szparag.newadaptiveweather.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,11 +10,21 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.android.szparag.newadaptiveweather.AppController;
+import com.android.szparag.newadaptiveweather.R;
+
+import javax.inject.Inject;
+
 public class MainActivity extends AppCompatActivity {
+
+    @Inject
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        sharedPreferences =
 
         //layout (nested fragment inside .xml here)
         setContentView(R.layout.activity_main);
