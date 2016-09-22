@@ -19,7 +19,7 @@ public class AdaptiveWeatherModule {
 
     private Application application;
 
-    //Application class as o
+    //The Application class is single dependency that needs to be satisfied 'manually'
     public AdaptiveWeatherModule(Application application) {
         this.application = application;
     }

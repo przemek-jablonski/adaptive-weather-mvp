@@ -11,7 +11,7 @@ import com.android.szparag.newadaptiveweather.dagger.DaggerAdaptiveWeatherCompon
  */
 public class AppController extends Application {
 
-    AdaptiveWeatherComponent daggerComponent;
+    private AdaptiveWeatherComponent daggerComponent;
 
     @Override
     public void onCreate() {
@@ -21,6 +21,7 @@ public class AppController extends Application {
                 .builder()
                 .adaptiveWeatherModule(new AdaptiveWeatherModule(this))
                 .build();
+
     }
 
     public AdaptiveWeatherComponent getComponent() {
