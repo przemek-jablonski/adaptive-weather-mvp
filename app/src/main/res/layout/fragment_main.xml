@@ -15,4 +15,29 @@
         android:layout_height="wrap_content"
         android:text="Hello World!" />
 
+    <LinearLayout
+        android:id="@+id/weather_linear"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fragment_text">
+
+        <TextView
+            android:id="@+id/weather_text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="asdasd"/>
+        <TextView
+            android:id="@+id/weather_text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="asdasd"/>
+        <TextView
+            android:id="@+id/weather_text3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="asdasd"/>
+
+    </LinearLayout>
+
 </RelativeLayout>

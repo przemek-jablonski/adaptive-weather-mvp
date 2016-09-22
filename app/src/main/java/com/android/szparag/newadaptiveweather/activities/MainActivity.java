@@ -31,11 +31,15 @@ public class MainActivity extends AppCompatActivity {
         //dagger dependency injection
         ((AppController)getApplication()).getComponent().inject(this);
 
+        //dagger injection testing
         if (sharedPreferences != null) {
             sharedPreferences.edit().putBoolean(sharedPrefsKey, true).commit();
         } else {
             sharedPreferences.edit().putBoolean(sharedPrefsKey, false).commit();
         }
+
+
+
 
 
         //layout (nested fragment inside .xml here)

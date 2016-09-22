@@ -28,6 +28,7 @@ dependencies {
 
     //retrofit:
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
 
     //butterknife:
     compile 'com.jakewharton:butterknife:8.4.0'
@@ -39,4 +40,5 @@ dependencies {
 
     //jsr250 api (for dagger 2):
     provided 'javax.annotation:jsr250-api:1.0'
+
 }
