@@ -2,29 +2,29 @@ package com.android.szparag.newadaptiveweather;
 
 import android.app.Application;
 
-import com.android.szparag.newadaptiveweather.dagger.AdaptiveWeatherComponent;
-import com.android.szparag.newadaptiveweather.dagger.AdaptiveWeatherModule;
-import com.android.szparag.newadaptiveweather.dagger.DaggerAdaptiveWeatherComponent;
+import com.android.szparag.newadaptiveweather.dagger.components.DaggerMainComponent;
+import com.android.szparag.newadaptiveweather.dagger.components.MainComponent;
+import com.android.szparag.newadaptiveweather.dagger.modules.AdaptiveWeatherModule;
 
 /**
  * Created by ciemek on 21/09/2016.
  */
 public class AppController extends Application {
 
-    private AdaptiveWeatherComponent daggerComponent;
+    private MainComponent daggerComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        daggerComponent = DaggerAdaptiveWeatherComponent
+        daggerComponent = DaggerMainComponent
                 .builder()
                 .adaptiveWeatherModule(new AdaptiveWeatherModule(this))
                 .build();
 
     }
 
-    public AdaptiveWeatherComponent getComponent() {
+    public MainComponent getComponent() {
         return daggerComponent;
     }
 

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">NewAdaptiveWeather</string>
     <string name="action_settings">Settings</string>
+
+    <string name="openweathermap_baseurl">http://api.openweathermap.org/data/</string>
+    <string name="openweathermap_apikey">6f21fa4c59c346931602e199b942473f</string>
 </resources>

@@ -4,15 +4,16 @@ import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.szparag.newadaptiveweather.activities.MainActivity;
-import com.android.szparag.newadaptiveweather.backend.apis.WeatherApi;
 import com.android.szparag.newadaptiveweather.backend.models.WeatherForecastResponse;
+import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,11 +26,19 @@ import retrofit2.Response;
  */
 public class MainActivityFragment extends Fragment {
 
-    @BindView(R.id.weather_text1) TextView weatherText1;
-    @BindView(R.id.weather_text2) TextView weatherText2;
-    @BindView(R.id.weather_text3) TextView weatherText3;
+    @BindView(R.id.weather_text1)
+    TextView weatherText1;
 
-    View fragmentView;
+    @BindView(R.id.weather_text2)
+    TextView weatherText2;
+
+    @BindView(R.id.weather_text3)
+    TextView weatherText3;
+
+    @Inject
+    WeatherService service;
+
+    private View fragmentView;
 
     private SharedPreferences sharedPreferences;
 
@@ -45,6 +54,8 @@ public class MainActivityFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ButterKnife.bind(this, fragmentView);
+//        Utils.getDagger().inject(this);
+        ((AppController) getActivity().getApplication()).getComponent().inject(this);
 
         //dagger2 test: getting injected dependency from parent activity
         sharedPreferences = ((MainActivity) getActivity()).getSharedPreferences();
@@ -57,11 +68,11 @@ public class MainActivityFragment extends Fragment {
         );
 
         //retrofit2 test:
-        WeatherApi api = new WeatherApi();
+//        WeatherService service = new WeatherServiceImpl();
         float gpsWarsawLat = 52.196217f;
         float gpsWarsawLon = 21.178225f;
 
-        api.getForecast5Day(gpsWarsawLat, gpsWarsawLon, new Callback<WeatherForecastResponse>() {
+        service.getForecast5Day(gpsWarsawLat, gpsWarsawLon, new Callback<WeatherForecastResponse>() {
             @Override
             public void onResponse(Call<WeatherForecastResponse> call, Response<WeatherForecastResponse> response) {
                 WeatherForecastResponse responseBody = response.body();

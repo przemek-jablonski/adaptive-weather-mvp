@@ -1,9 +1,11 @@
-package com.android.szparag.newadaptiveweather.dagger;
+package com.android.szparag.newadaptiveweather.dagger.modules;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.android.szparag.newadaptiveweather.AppController;
 
 import javax.inject.Singleton;
 
@@ -34,6 +36,12 @@ public class AdaptiveWeatherModule {
     @Singleton
     public SharedPreferences provideSharedPreferences(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    @Provides
+    @Singleton
+    public AppController provideAppController() throws ClassCastException {
+        return (AppController)application;
     }
 
 }
