@@ -19,28 +19,11 @@ import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity {
 
-    @Inject
-    SharedPreferences sharedPreferences;
-
     public String sharedPrefsKey = "dagger";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //dagger dependency injection
-        ((AppController)getApplication()).getComponent().inject(this);
-
-        //dagger injection testing
-        if (sharedPreferences != null) {
-            sharedPreferences.edit().putBoolean(sharedPrefsKey, true).commit();
-        } else {
-            sharedPreferences.edit().putBoolean(sharedPrefsKey, false).commit();
-        }
-
-
-
-
 
         //layout (nested fragment inside .xml here)
         setContentView(R.layout.activity_main);
@@ -73,9 +56,5 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public SharedPreferences getSharedPreferences() {
-        return sharedPreferences;
     }
 }

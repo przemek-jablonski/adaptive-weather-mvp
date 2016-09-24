@@ -1,5 +1,8 @@
 package com.android.szparag.newadaptiveweather.utils;
 
+import android.app.Activity;
+import android.support.v4.app.Fragment;
+
 import com.android.szparag.newadaptiveweather.AppController;
 import com.android.szparag.newadaptiveweather.dagger.components.MainComponent;
 
@@ -8,16 +11,13 @@ import com.android.szparag.newadaptiveweather.dagger.components.MainComponent;
  */
 public class Utils {
 
-    //todo: check if this isn't bad for performance (possible memory leak?)
-    static AppController appController;
-
-    public Utils(AppController appController) {
-        Utils.appController = appController;
+    public static MainComponent getDagger2(Activity activity) {
+        return ((AppController) activity.getApplication()).getComponent();
     }
 
-    //todo: don't know if this is proper thing to do, check it
-    public static MainComponent getDagger() {
-        return appController.getComponent();
+    public static MainComponent getDagger2(Fragment fragment) {
+        return getDagger2(fragment.getActivity());
     }
+
 
 }

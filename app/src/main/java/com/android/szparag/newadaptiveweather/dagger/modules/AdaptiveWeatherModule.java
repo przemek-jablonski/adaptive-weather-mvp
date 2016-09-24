@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.android.szparag.newadaptiveweather.AppController;
+import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
+import com.android.szparag.newadaptiveweather.presenters.BasePresenter;
+import com.android.szparag.newadaptiveweather.presenters.MainPresenter;
 
 import javax.inject.Singleton;
 
@@ -42,6 +45,11 @@ public class AdaptiveWeatherModule {
     @Singleton
     public AppController provideAppController() throws ClassCastException {
         return (AppController)application;
+    }
+
+    @Provides
+    public BasePresenter provideMainPresenter(WeatherService service) {
+        return new MainPresenter(service);
     }
 
 }
