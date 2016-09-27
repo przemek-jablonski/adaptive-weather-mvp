@@ -10,15 +10,6 @@
     tools:context="com.android.szparag.newadaptiveweather.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
-
-    <Button
-        android:id="@+id/button_retrofit_connect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="32dp"
-        android:text="Fire up Retrofit call!"/>
-
-
     <include
         android:id="@+id/main_fragment_location"
         layout="@layout/item_weather_location" />
@@ -28,7 +19,5 @@
         android:id="@+id/main_fragment_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-
 
 </LinearLayout>

@@ -36,21 +36,14 @@ public class MainActivityFragment extends Fragment implements BaseView {
     @Inject
     BasePresenter presenter;
 
-    @BindView(R.id.button_retrofit_connect)
-    Button buttonRetrofit;
-
     @BindView(R.id.main_fragment_recycler)
     RecyclerView recyclerView;
 
     @BindView(R.id.main_fragment_location)
     View locationLayout;
 
-    private MainAdapter adapter;
 
-    @OnClick(R.id.button_retrofit_connect)
-    void onButtonRetrofitClick() {
-        presenter.fetchForecast5Day();
-    }
+    private MainAdapter adapter;
 
 
     @Override
@@ -73,21 +66,22 @@ public class MainActivityFragment extends Fragment implements BaseView {
         presenter.checkInternetConnectivity();
         buildRecycler();
         hideWeatherLocationLayout();
+        presenter.fetchForecast5Day();
     }
 
     @Override
     public void showNetworkConnectionError() {
-        Snackbar.make(getView(), getString(R.string.no_internet_connection_error), Snackbar.LENGTH_LONG);
+        Snackbar.make(getView(), getString(R.string.no_internet_connection_error), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void showWeatherFetchSuccess() {
-        Snackbar.make(getView(), getString(R.string.weather_fetching_success), Snackbar.LENGTH_LONG);
+        Snackbar.make(getView(), getString(R.string.weather_fetching_success), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void showWeatherFetchFailure() {
-        Snackbar.make(getView(), getString(R.string.weather_fetching_failure), Snackbar.LENGTH_LONG);
+        Snackbar.make(getView(), getString(R.string.weather_fetching_failure), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
