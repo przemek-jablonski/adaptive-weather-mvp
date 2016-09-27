@@ -63,12 +63,14 @@ public class MainAdapter extends BaseAdapter<WeatherForecastItem> {
             textDetail = (TextView) itemView.findViewById(R.id.recycler_item_weather_row_basic_detail);
             textTemperature = (TextView) itemView.findViewById(R.id.recycler_item_weather_row_basic_temperature);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    recyclerOnPosClickListener.OnPosClick(view, getLayoutPosition());
-                }
-            });
+            if (recyclerOnPosClickListener != null) {
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        recyclerOnPosClickListener.OnPosClick(view, getLayoutPosition());
+                    }
+                });
+            }
         }
 
     }
