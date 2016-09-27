@@ -78,8 +78,14 @@ public class Utils {
         return builder.toString();
     }
 
+    //todo: make a settings activity with units of measurement
+    //and pass it into an api call
     public static CharSequence kelvinToCelsiusRoundDebug(float kelvinTemp) {
         return Integer.toString(Math.round(kelvinTemp - KELVIN_TO_CELSIUS_SUBTRAHEND));
+    }
+
+    public static CharSequence makeTemperatureString(float kelvinTemp) {
+        return (kelvinToCelsiusRoundDebug(kelvinTemp) + "°");
     }
 
 

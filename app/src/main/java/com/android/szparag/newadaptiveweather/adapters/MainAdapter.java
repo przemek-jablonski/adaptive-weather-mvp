@@ -45,7 +45,7 @@ public class MainAdapter extends BaseAdapter<WeatherForecastItem> {
         ((MainViewHolder) holder).textDay.setText(item.calculationUTCTime);
         ((MainViewHolder) holder).textShortDesc.setText(item.weather.get(0).description);
         ((MainViewHolder) holder).textDetail.setText(Utils.makeWeatherDetailString(item));
-        ((MainViewHolder) holder).textTemperature.setText(Utils.kelvinToCelsiusRoundDebug(item.main.temp));
+        ((MainViewHolder) holder).textTemperature.setText(Utils.makeTemperatureString(item.main.temp));
     }
 
     public class MainViewHolder extends RecyclerView.ViewHolder {

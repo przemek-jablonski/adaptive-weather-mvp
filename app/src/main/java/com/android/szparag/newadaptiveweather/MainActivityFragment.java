@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import decorators.HorizontalSeparator;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -93,6 +94,7 @@ public class MainActivityFragment extends Fragment implements BaseView {
     public void buildRecycler() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setHasFixedSize(false);
+        recyclerView.addItemDecoration(new HorizontalSeparator(getActivity()));
 
         adapter = new MainAdapter(null);
 

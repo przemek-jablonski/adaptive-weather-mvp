@@ -15,4 +15,8 @@
     <string name="placeholder_string_float">66.12312</string>
     <string name="placeholder_string_single">superpogodajest</string>
     <string name="placeholder_string_separated">ta pogoda bedzie ekstra</string>
+
+    <string name="temperature_unit_kelvin">K</string>
+    <string name="temperature_unit_celsius">°C</string>
+    <string name="temperature_unit_fahrenheit">F</string>
 </resources>
