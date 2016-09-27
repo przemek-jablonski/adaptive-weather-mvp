@@ -11,6 +11,8 @@ public interface BasePresenter {
 
     void checkInternetConnectivity();
 
+    void checkGrantedPermissions();
+
     void fetchForecast5Day();
 
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/activity_vertical_margin">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="5"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/recycler_item_weather_row_basic_day"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_string_single" />
+
+        <TextView
+            android:id="@+id/recycler_item_weather_row_basic_shortdesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_string_separated" />
+
+        <TextView
+            android:id="@+id/recycler_item_weather_row_basic_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_string_separated" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/recycler_item_weather_row_basic_temperature"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textSize="@dimen/font_size_big"
+        android:text="@string/placeholder_string_int" />
+
+</LinearLayout>

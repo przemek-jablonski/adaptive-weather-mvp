@@ -8,4 +8,11 @@
     <string name="no_internet_connection_error">No connection: turn on Cellular/WiFi</string>
     <string name="weather_fetching_success">Weather successfully fetched</string>
     <string name="weather_fetching_failure">Server error: cannot fetch weather</string>
+
+    <string name="weather_for_location">Weather for:</string>
+
+    <string name="placeholder_string_int">66</string>
+    <string name="placeholder_string_float">66.12312</string>
+    <string name="placeholder_string_single">superpogodajest</string>
+    <string name="placeholder_string_separated">ta pogoda bedzie ekstra</string>
 </resources>
