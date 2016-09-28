@@ -7,6 +7,7 @@ import android.util.Log;
 import com.android.szparag.newadaptiveweather.AppController;
 import com.android.szparag.newadaptiveweather.backend.models.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.backend.models.auxiliary.City;
+import com.android.szparag.newadaptiveweather.backend.models.auxiliary.Coordinates;
 import com.android.szparag.newadaptiveweather.backend.models.auxiliary.WeatherForecastItem;
 import com.android.szparag.newadaptiveweather.dagger.components.MainComponent;
 
@@ -67,15 +68,19 @@ public class Utils {
         return builder.toString();
     }
 
-    public static CharSequence makeLocationGpsString(City city) {
+    public static CharSequence makeLocationGpsString(Coordinates coordinates) {
         StringBuilder builder = new StringBuilder("(");
 
-        builder.append(Float.toString(city.coordinates.lat));
+        builder.append(Float.toString(coordinates.lat));
         builder.append(", ");
-        builder.append(Float.toString(city.coordinates.lon));
+        builder.append(Float.toString(coordinates.lon));
         builder.append(")");
 
         return builder.toString();
+    }
+
+    public static CharSequence makeLocationGpsString(City city) {
+        return makeLocationGpsString(city.coordinates);
     }
 
     //todo: make a settings activity with units of measurement
@@ -87,6 +92,19 @@ public class Utils {
     public static CharSequence makeTemperatureString(float kelvinTemp) {
         return (kelvinToCelsiusRoundDebug(kelvinTemp) + "°");
     }
+
+
+//    public static CharSequence dateStringFromUnix(String unixTime) {
+//
+//    }
+//
+//    public static CharSequence dateStringFromUTC(String utcTime) {
+//
+//    }
+//
+//    public static CharSequence utcTimeFromUnixTime(String unixTime) {
+//
+//    }
 
 
 }

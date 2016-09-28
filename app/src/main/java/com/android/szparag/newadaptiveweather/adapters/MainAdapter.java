@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.szparag.newadaptiveweather.R;
-import com.android.szparag.newadaptiveweather.backend.models.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.backend.models.auxiliary.WeatherForecastItem;
 import com.android.szparag.newadaptiveweather.utils.Utils;
 
@@ -16,10 +15,7 @@ import com.android.szparag.newadaptiveweather.utils.Utils;
  * Created by ciemek on 26/09/2016.
  */
 public class MainAdapter extends BaseAdapter<WeatherForecastItem> {
-    @Override
-    public int getItemCount() {
-        return super.getItemCount();
-    }
+
 
     public MainAdapter(@Nullable RecyclerOnPosClickListener clickListener) {
         super(clickListener);
@@ -32,7 +28,7 @@ public class MainAdapter extends BaseAdapter<WeatherForecastItem> {
                 LayoutInflater
                         .from(parent.getContext())
                         .inflate(
-                                R.layout.recycler_item_weather_row_basic,
+                                R.layout.item_recycler_weather_row_basic,
                                 parent,
                                 false
                         )
@@ -46,6 +42,11 @@ public class MainAdapter extends BaseAdapter<WeatherForecastItem> {
         ((MainViewHolder) holder).textShortDesc.setText(item.weather.get(0).description);
         ((MainViewHolder) holder).textDetail.setText(Utils.makeWeatherDetailString(item));
         ((MainViewHolder) holder).textTemperature.setText(Utils.makeTemperatureString(item.main.temp));
+    }
+
+    @Override
+    public int getItemCount() {
+        return super.getItemCount();
     }
 
     public class MainViewHolder extends RecyclerView.ViewHolder {
@@ -71,6 +72,7 @@ public class MainAdapter extends BaseAdapter<WeatherForecastItem> {
                     }
                 });
             }
+
         }
 
     }

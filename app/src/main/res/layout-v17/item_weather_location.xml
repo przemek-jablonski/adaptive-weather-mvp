@@ -3,13 +3,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/margin_vertical_smaller">
+    android:padding="@dimen/margin_vertical_small">
 
     <LinearLayout
         android:id="@+id/layout_weather_location_city"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_vertical_smaller"
+        android:padding="@dimen/margin_vertical_small"
         android:paddingTop="@dimen/activity_vertical_margin">
 
         <TextView
@@ -18,7 +18,7 @@
             android:layout_weight="2"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textSize="@dimen/font_size_bigger"
+            android:textSize="@dimen/font_size_big"
             android:textAlignment="center"
             android:text="asdasdasdas dasasdas sddddddaadsdsdsa ddd" />
 
@@ -35,6 +35,14 @@
 
     <TextView
         android:id="@+id/item_weather_location_gps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/placeholder_string_float"/>
+
+    <TextView
+        android:id="@+id/item_weather_location_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_vertical_small">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/item_weather_current_shortdesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_vertical_smaller"
+            android:text="@string/placeholder_string_single" />
+
+        <TextView
+            android:id="@+id/item_weather_current_tempmaxmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:textSize="@dimen/font_size_big"
+            android:text="@string/placeholder_string_float" />
+
+        <TextView
+            android:id="@+id/item_weather_current_temperature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_size_huge"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:text="@string/placeholder_string_int" />
+
+        <TextView
+            android:id="@+id/item_weather_current_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_vertical_smaller"
+            android:text="@string/placeholder_string_separated" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">>
+
+            <TextView
+                android:id="@+id/item_weather_current_pressure_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@string/placeholder_string_single"
+                android:layout_margin="@dimen/margin_vertical_smaller" />
+
+            <TextView
+                android:id="@+id/item_weather_current_humidity_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@string/placeholder_string_single"
+                android:layout_margin="@dimen/margin_vertical_smaller" />
+
+            <TextView
+                android:id="@+id/item_weather_current_windspeed_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@string/placeholder_string_single"
+                android:layout_margin="@dimen/margin_vertical_smaller" />
+
+            <TextView
+                android:id="@+id/item_weather_current_winddirection_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@string/placeholder_string_single"
+                android:layout_margin="@dimen/margin_vertical_smaller" />
+
+            <TextView
+                android:id="@+id/item_weather_current_clouds_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@string/placeholder_string_single"
+                android:layout_margin="@dimen/margin_vertical_smaller" />
+
+            <TextView
+                android:id="@+id/item_weather_current_rain_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@string/placeholder_string_single"
+                android:layout_margin="@dimen/margin_vertical_smaller" />
+
+            <TextView
+                android:id="@+id/item_weather_current_snow_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@string/placeholder_string_single"
+                android:layout_margin="@dimen/margin_vertical_smaller" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:measureWithLargestChild="false"
+            android:baselineAligned="false">
+
+            <TextView
+                android:id="@+id/item_weather_current_pressure_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/placeholder_string_float"
+                android:layout_margin="@dimen/margin_vertical_smaller" />
+
+            <TextView
+                android:id="@+id/item_weather_current_humidity_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/placeholder_string_float"
+                android:layout_margin="@dimen/margin_vertical_smaller" />
+
+            <TextView
+                android:id="@+id/item_weather_current_windspeed_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/placeholder_string_float"
+                android:layout_margin="@dimen/margin_vertical_smaller" />
+
+            <TextView
+                android:id="@+id/item_weather_current_winddirection_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/placeholder_string_float"
+                android:layout_margin="@dimen/margin_vertical_smaller" />
+
+            <TextView
+                android:id="@+id/item_weather_current_clouds_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/placeholder_string_float"
+                android:layout_margin="@dimen/margin_vertical_smaller" />
+
+            <TextView
+                android:id="@+id/item_weather_current_rain_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/placeholder_string_float"
+                android:layout_margin="@dimen/margin_vertical_smaller" />
+
+            <TextView
+                android:id="@+id/item_weather_current_snow_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/placeholder_string_float"
+                android:layout_margin="@dimen/margin_vertical_smaller" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    
+
+
+</LinearLayout>

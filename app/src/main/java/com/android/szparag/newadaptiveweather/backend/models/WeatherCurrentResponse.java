@@ -70,6 +70,6 @@ public class WeatherCurrentResponse {
 
     @SerializedName("cod")
     @Expose
-    public Integer cod; //ke?
+    public Integer cod;
 
 }
