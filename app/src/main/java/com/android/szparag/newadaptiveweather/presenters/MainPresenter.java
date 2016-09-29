@@ -2,11 +2,8 @@ package com.android.szparag.newadaptiveweather.presenters;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 
-import com.android.szparag.newadaptiveweather.AppController;
-import com.android.szparag.newadaptiveweather.adapters.MainAdapter;
+import com.android.szparag.newadaptiveweather.backend.models.WeatherCurrentResponse;
 import com.android.szparag.newadaptiveweather.backend.models.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
 import com.android.szparag.newadaptiveweather.views.BaseView;
@@ -53,7 +50,27 @@ public class MainPresenter implements BasePresenter {
     }
 
     @Override
-    public void fetchForecast5Day() {
+    public void fetchWeatherCurrent() {
+        float gpsWarsawLat = 52.196217f;
+        float gpsWarsawLon = 21.172225f;
+
+        service.getCurrentWeather(gpsWarsawLat, gpsWarsawLon, new Callback<WeatherCurrentResponse>() {
+            @Override
+            public void onResponse(Call<WeatherCurrentResponse> call, Response<WeatherCurrentResponse> response) {
+                view.showForecastLocationLayout();
+                view.updateForecastCurrentView(response.body());
+                view.showWeatherFetchSuccess();
+            }
+
+            @Override
+            public void onFailure(Call<WeatherCurrentResponse> call, Throwable t) {
+                view.showWeatherFetchFailure();
+            }
+        });
+    }
+
+    @Override
+    public void fetchWeather5Day() {
 
         float gpsWarsawLat = 52.196217f;
         float gpsWarsawLon = 21.172225f;
@@ -61,9 +78,9 @@ public class MainPresenter implements BasePresenter {
         service.getForecast5Day(gpsWarsawLat, gpsWarsawLon, new Callback<WeatherForecastResponse>() {
             @Override
             public void onResponse(Call<WeatherForecastResponse> call, Response<WeatherForecastResponse> response) {
-                view.showWeatherLocationLayout();
-                view.updateRecyclerItems(response.body());
-                view.updateWeatherLocationLayout(response.body().city);
+                view.showForecastLocationLayout();
+                view.updateForecast5DayView(response.body());
+                view.updateForecastLocationTimeLayout(response.body());
                 view.showWeatherFetchSuccess();
             }
 
@@ -73,6 +90,41 @@ public class MainPresenter implements BasePresenter {
             }
         });
 
+    }
+
+    @Override
+    public void fetchWeatherPollutionCO() {
+        //..
+    }
+
+    @Override
+    public void fetchWeatherPollutionO3() {
+        //..
+    }
+
+    @Override
+    public void fetchWeatherMapTemperature() {
+        //...
+    }
+
+    @Override
+    public void fetchWeatherMapClouds() {
+        //...
+    }
+
+    @Override
+    public void fetchWeatherMapPressure() {
+        //...
+    }
+
+    @Override
+    public void fetchWeatherMapPrecipitation() {
+        //...
+    }
+
+    @Override
+    public void fetchWeatherStations() {
+        //..
     }
 
 }

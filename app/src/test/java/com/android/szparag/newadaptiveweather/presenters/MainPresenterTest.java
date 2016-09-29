@@ -35,7 +35,7 @@ public class MainPresenterTest {
 
 //    @Test
 //    public void ifUserIsNullThenNoInteractionWithView() {
-//        basePresenter.fetchForecast5Day();
+//        basePresenter.fetchWeather5Day();
 //    }
 
 

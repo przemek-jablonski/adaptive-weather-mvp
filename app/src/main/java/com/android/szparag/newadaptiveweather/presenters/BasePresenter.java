@@ -13,6 +13,20 @@ public interface BasePresenter {
 
     void checkGrantedPermissions();
 
-    void fetchForecast5Day();
+    void fetchWeatherCurrent();
+
+    void fetchWeather5Day();
+
+    void fetchWeatherPollutionCO();
+
+    void fetchWeatherPollutionO3();
+
+    void fetchWeatherMapTemperature();
+    void fetchWeatherMapClouds();
+    void fetchWeatherMapPressure();
+    void fetchWeatherMapPrecipitation();
+         //...
+
+    void fetchWeatherStations();
 
 }

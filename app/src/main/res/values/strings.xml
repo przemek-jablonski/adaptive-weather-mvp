@@ -19,4 +19,12 @@
     <string name="temperature_unit_kelvin">K</string>
     <string name="temperature_unit_celsius">°C</string>
     <string name="temperature_unit_fahrenheit">F</string>
+
+    <string name="pressure_text">Pressure:</string>
+    <string name="humidity_text">Humidity(%):</string>
+    <string name="windspeed_text">Wind speed:</string>
+    <string name="winddirection_text">Wind direction:</string>
+    <string name="clouds_text">Clouds:</string>
+    <string name="rain_text">Rain(3h):</string>
+    <string name="snow_text">Snow(3h):</string>
 </resources>

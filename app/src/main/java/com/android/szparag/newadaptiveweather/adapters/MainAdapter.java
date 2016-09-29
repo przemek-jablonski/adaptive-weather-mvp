@@ -17,6 +17,8 @@ import com.android.szparag.newadaptiveweather.utils.Utils;
 public class MainAdapter extends BaseAdapter<WeatherForecastItem> {
 
 
+    //todo: implement butterknife injects here
+
     public MainAdapter(@Nullable RecyclerOnPosClickListener clickListener) {
         super(clickListener);
     }

@@ -79,6 +79,10 @@ public class Utils {
         return builder.toString();
     }
 
+    public static String makeStringRoundedFloat(float val) {
+        return Integer.toString(Math.round(val));
+    }
+
     public static CharSequence makeLocationGpsString(City city) {
         return makeLocationGpsString(city.coordinates);
     }
@@ -93,6 +97,10 @@ public class Utils {
         return (kelvinToCelsiusRoundDebug(kelvinTemp) + "°");
     }
 
+    public static CharSequence makeTemperatureMinMaxString(float kelvinTempMax, float kelvinTempMin) {
+        return ("↑" + kelvinToCelsiusRoundDebug(kelvinTempMax) + "° "
+                + "↓" + kelvinToCelsiusRoundDebug(kelvinTempMin) + "° ");
+    }
 
 //    public static CharSequence dateStringFromUnix(String unixTime) {
 //
@@ -105,6 +113,9 @@ public class Utils {
 //    public static CharSequence utcTimeFromUnixTime(String unixTime) {
 //
 //    }
+
+
+
 
 
 }
