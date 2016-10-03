@@ -42,4 +42,7 @@ dependencies {
     //jsr250 api (for dagger 2):
     provided 'javax.annotation:jsr250-api:1.0'
 
+    //picasso
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
 }

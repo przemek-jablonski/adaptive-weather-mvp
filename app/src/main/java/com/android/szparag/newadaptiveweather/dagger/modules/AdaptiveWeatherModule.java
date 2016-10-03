@@ -9,7 +9,9 @@ import com.android.szparag.newadaptiveweather.AppController;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
 import com.android.szparag.newadaptiveweather.presenters.BasePresenter;
 import com.android.szparag.newadaptiveweather.presenters.MainPresenter;
+import com.android.szparag.newadaptiveweather.utils.Constants;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -48,8 +50,10 @@ public class AdaptiveWeatherModule {
     }
 
     @Provides
-    public BasePresenter provideMainPresenter(WeatherService service) {
-        return new MainPresenter(service);
+    public BasePresenter provideMainPresenter(WeatherService service,
+                                              @Named(Constants.GOOGLEMAPSSTATIC_BASEURL) String baseUrl,
+                                              @Named(Constants.GOOGLEMAPSSTATIC_APIKEY) String apiKey) {
+        return new MainPresenter(service, baseUrl, apiKey);
     }
 
 }

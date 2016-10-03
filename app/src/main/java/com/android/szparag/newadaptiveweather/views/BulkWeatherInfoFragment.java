@@ -1,12 +1,14 @@
 package com.android.szparag.newadaptiveweather.views;
 
-import android.icu.util.IslamicCalendar;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +20,9 @@ import com.android.szparag.newadaptiveweather.adapters.BaseAdapter;
 import com.android.szparag.newadaptiveweather.adapters.MainAdapter;
 import com.android.szparag.newadaptiveweather.backend.models.WeatherCurrentResponse;
 import com.android.szparag.newadaptiveweather.backend.models.WeatherForecastResponse;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.WeatherForecastItem;
 import com.android.szparag.newadaptiveweather.presenters.BasePresenter;
 import com.android.szparag.newadaptiveweather.utils.Utils;
 
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -132,8 +132,11 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
         buildForecastCurrentView();
         buildForecast5DayView();
 
+
         presenter.fetchWeatherCurrent();
         presenter.fetchWeather5Day();
+
+        presenter.fetchBackgroundMap();
     }
 
     @Override
@@ -173,7 +176,6 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
 
         forecastCurrentCloudsText.setText(getString(R.string.clouds_text));
         forecastCurrentCloudsVal.setText(Utils.makeStringRoundedFloat(forecast.clouds.cloudsPercent));
-
 
         forecastCurrentRainText.setText(getString(R.string.rain_text));
         forecastCurrentSnowText.setText(getString(R.string.snow_text));
@@ -237,11 +239,23 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
     }
 
     @Override
-    public void updateForecastLocationTimeLayout(WeatherCurrentResponse response) {
-//        ((TextView) locationView.findViewById(R.id.item_weather_location_left)).setText(response.cityName);
-//        ((TextView) locationView.findViewById(R.id.item_weather_location_right)).setText(response.sys.countryCode);
-//        ((TextView) locationView.findViewById(R.id.item_weather_location_gps)).setText(Utils.makeLocationGpsString(response.coord));
-//        ((TextView) locationView.findViewById(R.id.item_weather_location_time)).setText(response.calculationUnixTime);
+    public int[] getViewDimensions() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return new int[] {
+                displayMetrics.widthPixels,
+                displayMetrics.heightPixels
+        };
+    }
+
+    @Override
+    public void setBackground(Bitmap bitmap) {
+        getView().setBackground(new BitmapDrawable(getResources(), bitmap));
+    }
+
+    @Override
+    public void setBackgroundPlaceholder() {
+        //...
     }
 
     // snackbar responses:
@@ -258,6 +272,11 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
     @Override
     public void showWeatherFetchFailure() {
         Snackbar.make(getView(), getString(R.string.weather_fetching_failure), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showBackgroundFetchFailure() {
+        Snackbar.make(getView(), getString(R.string.background_fetching_failure), Snackbar.LENGTH_LONG).show();
     }
 
 

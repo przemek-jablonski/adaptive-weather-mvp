@@ -5,9 +5,13 @@
     <string name="openweathermap_baseurl">http://api.openweathermap.org/data/</string>
     <string name="openweathermap_apikey">6f21fa4c59c346931602e199b942473f</string>
 
+    <string name="googlemapsstatic_baseurl">https://maps.googleapis.com/maps/api/</string>
+    <string name="googlemapsstatic_apikey">AIzaSyALRwA7dWm2QdE2BH14KhXmclr01ETL0rQ</string>
+
     <string name="no_internet_connection_error">No connection: turn on Cellular/WiFi</string>
     <string name="weather_fetching_success">Weather successfully fetched</string>
     <string name="weather_fetching_failure">Server error: cannot fetch weather</string>
+    <string name="background_fetching_failure">Picasso error: cannot fetch background</string>
 
     <string name="weather_for_location">Weather for:</string>
 

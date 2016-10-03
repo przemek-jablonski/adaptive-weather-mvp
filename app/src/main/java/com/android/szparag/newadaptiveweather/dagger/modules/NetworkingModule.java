@@ -26,19 +26,31 @@ public class NetworkingModule {
 
     @Provides
     @Named(Constants.OPENWEATHERMAP_BASEURL)
-    public String provideBaseUrl(Context context) {
+    public String provideOpenWeatherMapBaseUrl(Context context) {
         return context.getString(R.string.openweathermap_baseurl);
     }
 
     @Provides
     @Named(Constants.OPENWEATHERMAP_APIKEY)
-    public String provideApiKey(Context context) {
+    public String provideOpenWeatherMapApiKey(Context context) {
         return context.getString(R.string.openweathermap_apikey);
     }
 
     @Provides
+    @Named(Constants.GOOGLEMAPSSTATIC_BASEURL)
+    public String provideGoogleMapsStaticBaseUrl(Context context) {
+        return context.getString(R.string.googlemapsstatic_baseurl);
+    }
+
+    @Provides
+    @Named(Constants.GOOGLEMAPSSTATIC_APIKEY)
+    public String provideGoogleMapsStaticApiKey(Context context) {
+        return context.getString(R.string.googlemapsstatic_apikey);
+    }
+
+    @Provides
     @Singleton
-    public Retrofit provideRetrofitAdapter(@Named(Constants.OPENWEATHERMAP_BASEURL) String apiBaseUrl) {
+    public Retrofit provideOpenWeatherMapRetrofitAdapter(@Named(Constants.OPENWEATHERMAP_BASEURL) String apiBaseUrl) {
         return new Retrofit.Builder()
                 .baseUrl(apiBaseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -58,6 +70,5 @@ public class NetworkingModule {
     public WeatherService provideWeatherService(WeatherApiService weatherApiService, @Named(Constants.OPENWEATHERMAP_APIKEY) String apiKey) {
         return new WeatherServiceImpl(weatherApiService, apiKey);
     }
-
 
 }

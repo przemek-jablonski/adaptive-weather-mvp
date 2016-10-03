@@ -1,14 +1,19 @@
 package com.android.szparag.newadaptiveweather.presenters;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 
 import com.android.szparag.newadaptiveweather.backend.models.WeatherCurrentResponse;
 import com.android.szparag.newadaptiveweather.backend.models.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
+import com.android.szparag.newadaptiveweather.utils.Utils;
 import com.android.szparag.newadaptiveweather.views.BaseView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
-import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,12 +26,21 @@ public class MainPresenter implements BasePresenter {
 
     private BaseView view;
 
-    @Inject
+    private float placeholderWarsawGpsLat = 52.196217f;
+    private float placeholderWarsawGpsLon = 21.172225f;
+
+    private String googleStaticMapsBaseUrl;
+    private String googleStaticMapsApiKey;
+
+//    @Inject
     WeatherService service;
 
 
-    public MainPresenter(WeatherService service) {
+
+    public MainPresenter(WeatherService service, String googleStaticMapsBaseUrl, String googleStaticMapsApiKey) {
         this.service = service;
+        this.googleStaticMapsBaseUrl = googleStaticMapsBaseUrl;
+        this.googleStaticMapsApiKey = googleStaticMapsApiKey;
     }
 
     @Override
@@ -51,10 +65,8 @@ public class MainPresenter implements BasePresenter {
 
     @Override
     public void fetchWeatherCurrent() {
-        float gpsWarsawLat = 52.196217f;
-        float gpsWarsawLon = 21.172225f;
 
-        service.getCurrentWeather(gpsWarsawLat, gpsWarsawLon, new Callback<WeatherCurrentResponse>() {
+        service.getCurrentWeather(placeholderWarsawGpsLat, placeholderWarsawGpsLon, new Callback<WeatherCurrentResponse>() {
             @Override
             public void onResponse(Call<WeatherCurrentResponse> call, Response<WeatherCurrentResponse> response) {
                 view.showForecastLocationLayout();
@@ -72,10 +84,7 @@ public class MainPresenter implements BasePresenter {
     @Override
     public void fetchWeather5Day() {
 
-        float gpsWarsawLat = 52.196217f;
-        float gpsWarsawLon = 21.172225f;
-
-        service.getForecast5Day(gpsWarsawLat, gpsWarsawLon, new Callback<WeatherForecastResponse>() {
+        service.getForecast5Day(placeholderWarsawGpsLat, placeholderWarsawGpsLon, new Callback<WeatherForecastResponse>() {
             @Override
             public void onResponse(Call<WeatherForecastResponse> call, Response<WeatherForecastResponse> response) {
                 view.showForecastLocationLayout();
@@ -90,6 +99,83 @@ public class MainPresenter implements BasePresenter {
             }
         });
 
+    }
+
+    @Override
+    public void fetchBackgroundMap() {
+        Picasso.with(view.getActivity()).load(createBackgroundMapUri()).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                view.setBackground(bitmap);
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+                view.showBackgroundFetchFailure();
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                view.setBackgroundPlaceholder();
+            }
+        });
+    }
+
+    private Uri createBackgroundMapUri() {
+        Uri.Builder uriBuilder = new Uri.Builder();
+        int[] viewDimensions = view.getViewDimensions();
+
+        uriBuilder.path(googleStaticMapsBaseUrl);
+        uriBuilder.appendQueryParameter(
+                "center",       //make those load from strings.xml
+                Utils.makeLocationGpsString(
+                        placeholderWarsawGpsLat,
+                        placeholderWarsawGpsLon,
+                        true
+                ).toString()
+        );
+
+        uriBuilder.appendQueryParameter(
+                "zoom",
+                Integer.toString(6)
+        );
+
+        uriBuilder.appendQueryParameter(
+                "size",
+                Utils.makeStringGoogleMapsSize(viewDimensions[0], viewDimensions[1])
+        );
+
+        uriBuilder.appendQueryParameter(
+                "scale",
+                Integer.toString(2)
+        );
+
+        uriBuilder.appendQueryParameter(
+                "maptype",
+                "hybrid"        //make stuff in Constants class like Constants.Gmaps.Maptype.hybrid
+        );
+
+        uriBuilder.appendQueryParameter(
+                "format",
+                "jpg-baseline"
+        );
+
+        uriBuilder.appendQueryParameter(
+                "key",
+                googleStaticMapsApiKey
+        );
+
+//        uriBuilder.appendQueryParameter(
+//                "language",
+//                "english"
+//        );
+
+        return uriBuilder.build();
+    }
+
+    @Override
+    public void fetchBackgroundImage() {
+        //...
     }
 
     @Override

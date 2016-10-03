@@ -17,6 +17,10 @@ public interface BasePresenter {
 
     void fetchWeather5Day();
 
+    void fetchBackgroundMap();
+
+    void fetchBackgroundImage();
+
     void fetchWeatherPollutionCO();
 
     void fetchWeatherPollutionO3();

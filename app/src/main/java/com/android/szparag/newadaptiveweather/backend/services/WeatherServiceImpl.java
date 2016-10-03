@@ -14,18 +14,18 @@ import retrofit2.Callback;
  */
 public class WeatherServiceImpl implements WeatherService{
 
-    private WeatherApiService service;
+    private WeatherApiService api;
     private String OPENWEATHERMAP_APIKEY;
 
-    public WeatherServiceImpl(WeatherApiService service, String OPENWEATHERMAP_APIKEY) {
-        this.service = service;
+    public WeatherServiceImpl(WeatherApiService api, String OPENWEATHERMAP_APIKEY) {
+        this.api = api;
         this.OPENWEATHERMAP_APIKEY = OPENWEATHERMAP_APIKEY;
     }
 
 
     @Override
     public void getCurrentWeather(@NonNull float latitude, @NonNull float longitude, Callback<WeatherCurrentResponse> callback) {
-        service.getCurrentWeather(
+        api.getCurrentWeather(
                 latitude,
                 longitude,
                 OPENWEATHERMAP_APIKEY
@@ -34,7 +34,7 @@ public class WeatherServiceImpl implements WeatherService{
 
     @Override
     public void getForecast5Day(@NonNull float latitude, @NonNull float longitude, Callback<WeatherForecastResponse> callback) {
-        service.getForecast5Day(
+        api.getForecast5Day(
                 latitude,
                 longitude,
                 OPENWEATHERMAP_APIKEY

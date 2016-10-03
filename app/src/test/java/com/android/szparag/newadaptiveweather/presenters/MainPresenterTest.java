@@ -24,8 +24,8 @@ public class MainPresenterTest {
 
         mockView = mock(BaseView.class);
 
-        basePresenter = new MainPresenter(mockService);
-        basePresenter.setView(mockView);
+//        basePresenter = new MainPresenter(mockService);
+//        basePresenter.setView(mockView);
     }
 
     @Test

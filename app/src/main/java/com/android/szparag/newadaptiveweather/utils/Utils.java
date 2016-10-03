@@ -3,6 +3,7 @@ package com.android.szparag.newadaptiveweather.utils;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.StringBuilderPrinter;
 
 import com.android.szparag.newadaptiveweather.AppController;
 import com.android.szparag.newadaptiveweather.backend.models.WeatherForecastResponse;
@@ -68,14 +69,32 @@ public class Utils {
         return builder.toString();
     }
 
-    public static CharSequence makeLocationGpsString(Coordinates coordinates) {
+    public static CharSequence makeLocationGpsString(float gpsLat, float gpsLon) {
         StringBuilder builder = new StringBuilder("(");
-
-        builder.append(Float.toString(coordinates.lat));
+        builder.append(Float.toString(gpsLat));
         builder.append(", ");
-        builder.append(Float.toString(coordinates.lon));
+        builder.append(Float.toString(gpsLon));
         builder.append(")");
+        return builder.toString();
+    }
 
+    public static CharSequence makeLocationGpsString(City city) {
+        return makeLocationGpsString(city.coordinates);
+    }
+
+    public static CharSequence makeLocationGpsString(Coordinates coordinates) {
+        return makeLocationGpsString(coordinates.lat, coordinates.lon);
+    }
+
+    public static CharSequence makeLocationGpsString(float gpsLat, float gpsLon, boolean commaSeparatedOnly) {
+        if (!commaSeparatedOnly) {
+            return makeLocationGpsString(gpsLat, gpsLon);
+        }
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(Float.toString(gpsLat));
+        builder.append(",");
+        builder.append(Float.toString(gpsLon));
         return builder.toString();
     }
 
@@ -83,9 +102,13 @@ public class Utils {
         return Integer.toString(Math.round(val));
     }
 
-    public static CharSequence makeLocationGpsString(City city) {
-        return makeLocationGpsString(city.coordinates);
+    public static String makeStringGoogleMapsSize(int sizeHorizontal, int sizeVertical) {
+        StringBuilder builder = new StringBuilder(Integer.toString(sizeHorizontal));
+        builder.append("x");
+        builder.append(Integer.toString(sizeVertical));
+        return builder.toString();
     }
+
 
     //todo: make a settings activity with units of measurement
     //and pass it into an api call
