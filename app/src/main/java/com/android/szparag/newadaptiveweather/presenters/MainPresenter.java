@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.util.Log;
 
 import com.android.szparag.newadaptiveweather.backend.models.WeatherCurrentResponse;
 import com.android.szparag.newadaptiveweather.backend.models.WeatherForecastResponse;
@@ -14,6 +15,9 @@ import com.android.szparag.newadaptiveweather.views.BaseView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -121,57 +125,115 @@ public class MainPresenter implements BasePresenter {
         });
     }
 
-    private Uri createBackgroundMapUri() {
-        Uri.Builder uriBuilder = new Uri.Builder();
+    private String createBackgroundMapUri() {
         int[] viewDimensions = view.getViewDimensions();
+        StringBuilder stringBuilder = new StringBuilder();
 
-        uriBuilder.path(googleStaticMapsBaseUrl);
-        uriBuilder.appendQueryParameter(
-                "center",       //make those load from strings.xml
-                Utils.makeLocationGpsString(
-                        placeholderWarsawGpsLat,
-                        placeholderWarsawGpsLon,
-                        true
-                ).toString()
+
+        stringBuilder.append(googleStaticMapsBaseUrl);
+        stringBuilder.append('?');
+
+        stringBuilder.append("center=");
+        stringBuilder.append(Utils.makeLocationGpsString(
+                placeholderWarsawGpsLat,
+                placeholderWarsawGpsLon,
+                true)
         );
 
-        uriBuilder.appendQueryParameter(
-                "zoom",
-                Integer.toString(6)
+        stringBuilder.append("&");
+        stringBuilder.append("zoom=");
+        stringBuilder.append(Integer.toString(6));
+
+        stringBuilder.append("&");
+        stringBuilder.append("size=");
+        stringBuilder.append(Utils.makeStringGoogleMapsSize(
+                viewDimensions[0],
+                viewDimensions[1])
         );
 
-        uriBuilder.appendQueryParameter(
-                "size",
-                Utils.makeStringGoogleMapsSize(viewDimensions[0], viewDimensions[1])
-        );
+        stringBuilder.append("&");
+        stringBuilder.append("scale=");
+        stringBuilder.append(Integer.toString(2));
 
-        uriBuilder.appendQueryParameter(
-                "scale",
-                Integer.toString(2)
-        );
+        stringBuilder.append("&");
+        stringBuilder.append("maptype=");
+        stringBuilder.append("hybrid");
 
-        uriBuilder.appendQueryParameter(
-                "maptype",
-                "hybrid"        //make stuff in Constants class like Constants.Gmaps.Maptype.hybrid
-        );
+        stringBuilder.append("&");
+        stringBuilder.append("format=");
+        stringBuilder.append("jpg-baseline");
 
-        uriBuilder.appendQueryParameter(
-                "format",
-                "jpg-baseline"
-        );
+        stringBuilder.append("&");
+        stringBuilder.append("key=");
+        stringBuilder.append(googleStaticMapsApiKey);
 
-        uriBuilder.appendQueryParameter(
-                "key",
-                googleStaticMapsApiKey
-        );
+        String s = stringBuilder.toString();
 
-//        uriBuilder.appendQueryParameter(
-//                "language",
-//                "english"
-//        );
+        Log.e("trollololol", s);
 
-        return uriBuilder.build();
+        return s;
     }
+
+//
+//    private String createBackgroundMapUri() {
+//        Uri.Builder uriBuilder = new Uri.Builder();
+//        int[] viewDimensions = view.getViewDimensions();
+//
+//        uriBuilder.encodedPath(googleStaticMapsBaseUrl);
+//        uriBuilder.appendQueryParameter(
+//                "center",       //make those load from strings.xml
+//                Utils.makeLocationGpsString(
+//                        placeholderWarsawGpsLat,
+//                        placeholderWarsawGpsLon,
+//                        true
+//                ).toString()
+//        );
+//
+//        uriBuilder.appendQueryParameter(
+//                "zoom",
+//                Integer.toString(6)
+//        );
+//
+//        uriBuilder.appendQueryParameter(
+//                "size",
+//                Utils.makeStringGoogleMapsSize(viewDimensions[0], viewDimensions[1])
+//        );
+//
+//        uriBuilder.appendQueryParameter(
+//                "scale",
+//                Integer.toString(2)
+//        );
+//
+//        uriBuilder.appendQueryParameter(
+//                "maptype",
+//                "hybrid"        //make stuff in Constants class like Constants.Gmaps.Maptype.hybrid
+//        );
+//
+//        uriBuilder.appendQueryParameter(
+//                "format",
+//                "jpg-baseline"
+//        );
+//
+//        uriBuilder.appendQueryParameter(
+//                "key",
+//                googleStaticMapsApiKey
+//        );
+//
+////        uriBuilder.appendQueryParameter(
+////                "language",
+////                "english"
+////        );
+//
+//        Uri uri = uriBuilder.build();
+//        String uriString = new String();
+//        try {
+//            uriString = URLDecoder.decode(uri.toString(), "UTF-8");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//        Log.e("URI", uriString);
+//        return uriString;
+//    }
 
     @Override
     public void fetchBackgroundImage() {

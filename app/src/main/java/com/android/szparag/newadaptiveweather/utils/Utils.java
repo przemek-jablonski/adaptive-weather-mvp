@@ -93,7 +93,7 @@ public class Utils {
 
         StringBuilder builder = new StringBuilder();
         builder.append(Float.toString(gpsLat));
-        builder.append(",");
+        builder.append(',');
         builder.append(Float.toString(gpsLon));
         return builder.toString();
     }
