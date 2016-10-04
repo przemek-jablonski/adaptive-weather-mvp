@@ -14,6 +14,7 @@ import com.android.szparag.newadaptiveweather.utils.Utils;
 import com.android.szparag.newadaptiveweather.views.BaseView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.squareup.picasso.Transformation;
 
 
 import java.io.UnsupportedEncodingException;
@@ -107,7 +108,8 @@ public class MainPresenter implements BasePresenter {
 
     @Override
     public void fetchBackgroundMap() {
-        Picasso.with(view.getActivity()).load(createBackgroundMapUri()).into(new Target() {
+        Picasso.with(view.getActivity()).load(createBackgroundMapUri())
+                .into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 view.setBackground(bitmap);
