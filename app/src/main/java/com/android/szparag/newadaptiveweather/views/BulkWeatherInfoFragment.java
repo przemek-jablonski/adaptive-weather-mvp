@@ -136,7 +136,7 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
         presenter.fetchWeatherCurrent();
         presenter.fetchWeather5Day();
 
-        presenter.fetchBackgroundMap();
+//        presenter.fetchBackgroundMap();
     }
 
     @Override
@@ -211,6 +211,8 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
         forecast5dayView.addItemDecoration(new HorizontalSeparator(getActivity()));
         adapter = new MainAdapter(null);
         forecast5dayView.setAdapter(adapter);
+        forecast5dayView.setNestedScrollingEnabled(false);
+
     }
 
     @Override
@@ -227,7 +229,7 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
 
     @Override
     public void hideForecastLocationLayout() {
-        locationView.setVisibility(LinearLayout.GONE);
+        locationView.setVisibility(LinearLayout.INVISIBLE);
     }
 
     @Override

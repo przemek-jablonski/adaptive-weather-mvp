@@ -31,8 +31,8 @@ public class MainPresenter implements BasePresenter {
 
     private BaseView view;
 
-    private float placeholderWarsawGpsLat = 52.196217f;
-    private float placeholderWarsawGpsLon = 21.172225f;
+    private float placeholderWarsawGpsLat = 52.233101f;
+    private float placeholderWarsawGpsLon = 21.061399f;
 
     private String googleStaticMapsBaseUrl;
     private String googleStaticMapsApiKey;
