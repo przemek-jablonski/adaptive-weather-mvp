@@ -6,6 +6,9 @@ import com.android.szparag.newadaptiveweather.dagger.components.DaggerMainCompon
 import com.android.szparag.newadaptiveweather.dagger.components.MainComponent;
 import com.android.szparag.newadaptiveweather.dagger.modules.AdaptiveWeatherModule;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 /**
  * Created by ciemek on 21/09/2016.
  */
@@ -21,6 +24,13 @@ public class AppController extends Application {
                 .builder()
                 .adaptiveWeatherModule(new AdaptiveWeatherModule(this))
                 .build();
+
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder()
+                .name("weatherdata.realm")
+                .build();
+
+
+        Realm.setDefaultConfiguration(realmConfig);
 
     }
 

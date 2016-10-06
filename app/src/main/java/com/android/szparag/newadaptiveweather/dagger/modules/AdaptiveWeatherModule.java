@@ -16,6 +16,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by ciemek on 21/09/2016.
@@ -50,10 +52,18 @@ public class AdaptiveWeatherModule {
     }
 
     @Provides
-    public BasePresenter provideMainPresenter(WeatherService service,
+    public Realm provideRealm() {
+        return Realm.getDefaultInstance();
+    }
+
+    @Provides
+    public BasePresenter provideMainPresenter(Realm realm,
+                                              WeatherService service,
                                               @Named(Constants.GOOGLEMAPSSTATIC_BASEURL) String baseUrl,
                                               @Named(Constants.GOOGLEMAPSSTATIC_APIKEY) String apiKey) {
-        return new MainPresenter(service, baseUrl, apiKey);
+        return new MainPresenter(realm, service, baseUrl, apiKey);
     }
+
+
 
 }

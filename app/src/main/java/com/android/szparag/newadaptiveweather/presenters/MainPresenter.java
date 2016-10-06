@@ -20,6 +20,7 @@ import com.squareup.picasso.Transformation;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,12 +38,13 @@ public class MainPresenter implements BasePresenter {
     private String googleStaticMapsBaseUrl;
     private String googleStaticMapsApiKey;
 
-//    @Inject
     WeatherService service;
+    Realm realm;
 
 
 
-    public MainPresenter(WeatherService service, String googleStaticMapsBaseUrl, String googleStaticMapsApiKey) {
+    public MainPresenter(Realm realm, WeatherService service, String googleStaticMapsBaseUrl, String googleStaticMapsApiKey) {
+        this.realm = realm;
         this.service = service;
         this.googleStaticMapsBaseUrl = googleStaticMapsBaseUrl;
         this.googleStaticMapsApiKey = googleStaticMapsApiKey;

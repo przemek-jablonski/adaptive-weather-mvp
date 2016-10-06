@@ -10,6 +10,9 @@ buildscript {
 
         //android-apt plugin (tools to aid code generation)
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+
+        //realm database plugin
+        classpath "io.realm:realm-gradle-plugin:2.0.1"
     }
 }
 
