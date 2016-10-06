@@ -3,8 +3,8 @@ package com.android.szparag.newadaptiveweather.backend.services;
 import android.support.annotation.NonNull;
 
 import com.android.szparag.newadaptiveweather.backend.apis.WeatherApiService;
-import com.android.szparag.newadaptiveweather.backend.models.WeatherCurrentResponse;
-import com.android.szparag.newadaptiveweather.backend.models.WeatherForecastResponse;
+import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentResponse;
+import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 
 import retrofit2.Callback;
 

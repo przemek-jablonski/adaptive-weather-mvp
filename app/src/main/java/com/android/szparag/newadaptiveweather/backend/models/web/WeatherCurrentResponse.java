@@ -1,13 +1,13 @@
-package com.android.szparag.newadaptiveweather.backend.models;
+package com.android.szparag.newadaptiveweather.backend.models.web;
 
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.Clouds;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.Coordinates;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.Main;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.Rain;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.Snow;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.Sys;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.WeatherInfo;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.Wind;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Clouds;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Coordinates;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.MainWeatherData;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Rain;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Snow;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Sys;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.WeatherInfo;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Wind;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -34,7 +34,7 @@ public class WeatherCurrentResponse {
 
     @SerializedName("main")
     @Expose
-    public Main main;
+    public MainWeatherData mainWeatherData;
 
     @SerializedName("wind")
     @Expose

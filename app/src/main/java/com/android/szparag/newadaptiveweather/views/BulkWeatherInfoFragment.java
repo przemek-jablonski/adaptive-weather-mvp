@@ -18,8 +18,8 @@ import android.widget.TextView;
 import com.android.szparag.newadaptiveweather.R;
 import com.android.szparag.newadaptiveweather.adapters.BaseAdapter;
 import com.android.szparag.newadaptiveweather.adapters.MainAdapter;
-import com.android.szparag.newadaptiveweather.backend.models.WeatherCurrentResponse;
-import com.android.szparag.newadaptiveweather.backend.models.WeatherForecastResponse;
+import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentResponse;
+import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.presenters.BasePresenter;
 import com.android.szparag.newadaptiveweather.utils.Utils;
 
@@ -157,16 +157,16 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
 
     @Override
     public void updateForecastCurrentView(WeatherCurrentResponse forecast) {
-        forecastCurrentTemperature.setText(Utils.makeTemperatureString(forecast.main.temp));
-        forecastCurrentTemperatures.setText(Utils.makeTemperatureMinMaxString(forecast.main.tempMax, forecast.main.tempMin));
+        forecastCurrentTemperature.setText(Utils.makeTemperatureString(forecast.mainWeatherData.temp));
+        forecastCurrentTemperatures.setText(Utils.makeTemperatureMinMaxString(forecast.mainWeatherData.tempMax, forecast.mainWeatherData.tempMin));
         forecastCurrentShortDesc.setText(forecast.weather.get(0).main);
         forecastCurrentDesc.setText(forecast.weather.get(0).description);
 
         forecastCurrentPressureText.setText(getString(R.string.pressure_text));
-        forecastCurrentPressureVal.setText(Utils.makeStringRoundedFloat(forecast.main.pressureAtmospheric));
+        forecastCurrentPressureVal.setText(Utils.makeStringRoundedFloat(forecast.mainWeatherData.pressureAtmospheric));
 
         forecastCurrentHumidityText.setText(getString(R.string.humidity_text));
-        forecastCurrentHumidityVal.setText(Utils.makeStringRoundedFloat(forecast.main.humidityPercent));
+        forecastCurrentHumidityVal.setText(Utils.makeStringRoundedFloat(forecast.mainWeatherData.humidityPercent));
 
         forecastCurrentWindspeedText.setText(getString(R.string.windspeed_text));
         forecastCurrentWindspeedVal.setText(Utils.makeStringRoundedFloat(forecast.wind.speed));

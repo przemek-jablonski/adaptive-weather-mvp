@@ -2,9 +2,6 @@ package com.android.szparag.newadaptiveweather.adapters;
 
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
-
-import com.android.szparag.newadaptiveweather.backend.models.WeatherForecastResponse;
 
 import java.util.ArrayList;
 import java.util.List;

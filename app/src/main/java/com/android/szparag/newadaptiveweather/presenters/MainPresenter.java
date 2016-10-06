@@ -4,21 +4,18 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.util.Log;
 
-import com.android.szparag.newadaptiveweather.backend.models.WeatherCurrentResponse;
-import com.android.szparag.newadaptiveweather.backend.models.WeatherForecastResponse;
+import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentResponse;
+import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
 import com.android.szparag.newadaptiveweather.utils.Utils;
 import com.android.szparag.newadaptiveweather.views.BaseView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-import com.squareup.picasso.Transformation;
 
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+import java.util.Date;
 
 import io.realm.Realm;
 import retrofit2.Call;

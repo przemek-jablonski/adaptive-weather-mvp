@@ -2,19 +2,12 @@ package com.android.szparag.newadaptiveweather.views;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.android.szparag.newadaptiveweather.adapters.BaseAdapter;
-import com.android.szparag.newadaptiveweather.backend.models.WeatherCurrentResponse;
-import com.android.szparag.newadaptiveweather.backend.models.WeatherForecastResponse;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.City;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.WeatherForecastItem;
-import com.android.szparag.newadaptiveweather.dagger.components.MainComponent;
-
-import java.util.List;
+import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentResponse;
+import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 
 /**
  * Created by ciemek on 23/09/2016.

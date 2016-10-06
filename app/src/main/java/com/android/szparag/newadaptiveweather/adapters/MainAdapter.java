@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.szparag.newadaptiveweather.R;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.WeatherForecastItem;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.WeatherForecastItem;
 import com.android.szparag.newadaptiveweather.utils.Utils;
 
 /**
@@ -43,7 +43,7 @@ public class MainAdapter extends BaseAdapter<WeatherForecastItem> {
         ((MainViewHolder) holder).textDay.setText(item.calculationUTCTime);
         ((MainViewHolder) holder).textShortDesc.setText(item.weather.get(0).description);
         ((MainViewHolder) holder).textDetail.setText(Utils.makeWeatherDetailString(item));
-        ((MainViewHolder) holder).textTemperature.setText(Utils.makeTemperatureString(item.main.temp));
+        ((MainViewHolder) holder).textTemperature.setText(Utils.makeTemperatureString(item.mainWeatherData.temp));
     }
 
     @Override

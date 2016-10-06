@@ -1,7 +1,7 @@
-package com.android.szparag.newadaptiveweather.backend.models;
+package com.android.szparag.newadaptiveweather.backend.models.web;
 
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.City;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.WeatherForecastItem;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.City;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.WeatherForecastItem;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

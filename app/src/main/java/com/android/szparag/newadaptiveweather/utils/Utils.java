@@ -2,14 +2,11 @@ package com.android.szparag.newadaptiveweather.utils;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.util.StringBuilderPrinter;
 
 import com.android.szparag.newadaptiveweather.AppController;
-import com.android.szparag.newadaptiveweather.backend.models.WeatherForecastResponse;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.City;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.Coordinates;
-import com.android.szparag.newadaptiveweather.backend.models.auxiliary.WeatherForecastItem;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.City;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Coordinates;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.WeatherForecastItem;
 import com.android.szparag.newadaptiveweather.dagger.components.MainComponent;
 
 /**

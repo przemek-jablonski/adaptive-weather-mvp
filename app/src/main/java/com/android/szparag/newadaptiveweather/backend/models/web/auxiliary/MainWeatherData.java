@@ -1,4 +1,4 @@
-package com.android.szparag.newadaptiveweather.backend.models.auxiliary;
+package com.android.szparag.newadaptiveweather.backend.models.web.auxiliary;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Ciemek on 06/07/16.
  */
-public class Main {
+public class MainWeatherData {
 
     @SerializedName("temp")
     @Expose
