@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import decorators.HorizontalSeparator;
+import com.android.szparag.newadaptiveweather.decorators.HorizontalSeparator;
 
 /**
  * A placeholder fragment containing a simple view.

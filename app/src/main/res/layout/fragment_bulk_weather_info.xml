@@ -17,14 +17,14 @@
         android:orientation="vertical">
 
         <include
-            android:id="@+id/bulk_fragment_location"
             layout="@layout/item_weather_location"
+            android:id="@+id/bulk_fragment_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <include
-            android:id="@+id/bulk_fragment_current"
             layout="@layout/item_weather_current"
+            android:id="@+id/bulk_fragment_current"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
