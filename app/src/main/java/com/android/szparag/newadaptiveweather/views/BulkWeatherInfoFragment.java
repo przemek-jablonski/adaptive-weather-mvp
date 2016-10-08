@@ -132,11 +132,11 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
         buildForecastCurrentView();
         buildForecast5DayView();
 
-
         presenter.fetchWeatherCurrent();
         presenter.fetchWeather5Day();
-
 //        presenter.fetchBackgroundMap();
+
+        presenter.fetchBackgroundMap();
     }
 
     @Override
@@ -148,6 +148,12 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.realmClose();
     }
 
     @Override

@@ -57,11 +57,11 @@ public class AdaptiveWeatherModule {
     }
 
     @Provides
-    public BasePresenter provideMainPresenter(Realm realm,
+    public BasePresenter provideMainPresenter(/*Realm realm,*/
                                               WeatherService service,
                                               @Named(Constants.GOOGLEMAPSSTATIC_BASEURL) String baseUrl,
                                               @Named(Constants.GOOGLEMAPSSTATIC_APIKEY) String apiKey) {
-        return new MainPresenter(realm, service, baseUrl, apiKey);
+        return new MainPresenter(/*realm,*/ service, baseUrl, apiKey);
     }
 
 

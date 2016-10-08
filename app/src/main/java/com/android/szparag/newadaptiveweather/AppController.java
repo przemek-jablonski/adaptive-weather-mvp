@@ -25,12 +25,12 @@ public class AppController extends Application {
                 .adaptiveWeatherModule(new AdaptiveWeatherModule(this))
                 .build();
 
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder()
-                .name("weatherdata.realm")
-                .build();
-
-
-        Realm.setDefaultConfiguration(realmConfig);
+//        RealmConfiguration realmConfig = new RealmConfiguration.Builder()
+//                .name("weatherdata.realm")
+//                .build();
+//
+//
+//        Realm.setDefaultConfiguration(realmConfig);
 
     }
 
