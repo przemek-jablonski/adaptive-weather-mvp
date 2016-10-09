@@ -1,6 +1,6 @@
 package com.android.szparag.newadaptiveweather.backend.interceptors;
 
-import android.util.Log;
+import com.android.szparag.newadaptiveweather.utils.Utils;
 
 import java.io.IOException;
 
@@ -14,11 +14,8 @@ import okhttp3.ResponseBody;
  */
 public class PrintResponseInterceptor implements Interceptor{
 
-     private final   String LOGTAG = "Retrofit";
     private final   String REQUEST = "Request:" + "\n";
     private final   String RESPONSE = "Response:" + "\n";
-    private final   int    REQUEST_LOG_LEVEL = Log.ERROR;
-    private final   int    RESPONSE_LOG_LEVEL = Log.ERROR;
 
     @Override
     public Response intercept(Interceptor.Chain chain) throws IOException {
@@ -26,8 +23,8 @@ public class PrintResponseInterceptor implements Interceptor{
         Request request = chain.request();
         long t1 = System.nanoTime();
 
-        String loggingDialog = REQUEST + "URL: " + request.url();
-        Log.println(REQUEST_LOG_LEVEL, LOGTAG, loggingDialog);
+        String logMessage = REQUEST + "URL: " + request.url();
+        Utils.logRetrofit(logMessage);
 
         Response response = chain.proceed(request);
         long t2 = System.nanoTime();
@@ -35,25 +32,23 @@ public class PrintResponseInterceptor implements Interceptor{
         String bodyString = response.body().string();
         if (response.body() == null) {
             //TODO: throw exception here
-            loggingDialog = RESPONSE +
+            logMessage = RESPONSE +
                     "TIME: " + ((t2 - t1) / 1e6d) + "ms" + "\n" +
                     "URL: " + request.url() + "\n" +
                     "REQUEST BODY FOR GIVEN URL IS NULL!";
         } else {
-            loggingDialog = RESPONSE +
+            logMessage = RESPONSE +
                     "URL: " + response.request().url() + "\n" +
                     "CODE: " + response.code() + " / " + response.message() + "\n" +
                     "TIME: " + ((t2 - t1) / 1e6d) + "ms" + "\n" +
                     "DATE: " + response.header("Date") + "\n" +
                     "TYPE: " + response.header("Content-Type");
-            Log.println(RESPONSE_LOG_LEVEL, LOGTAG, loggingDialog + "\n" + bodyString);
+            Utils.logRetrofit(logMessage);
         }
-
 
         return response.newBuilder()
                 .body(ResponseBody.create(response.body().contentType(), bodyString))
                 .build();
     }
-
 
 }
