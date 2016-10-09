@@ -4,12 +4,15 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
 
+import com.android.szparag.newadaptiveweather.backend.MethodCallback;
 import com.android.szparag.newadaptiveweather.backend.interceptors.AvoidNullsInterceptor;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentResponse;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
+import com.android.szparag.newadaptiveweather.utils.Computation;
 import com.android.szparag.newadaptiveweather.utils.Constants;
 import com.android.szparag.newadaptiveweather.utils.Utils;
 import com.android.szparag.newadaptiveweather.views.BaseView;
@@ -21,6 +24,7 @@ import com.squareup.picasso.Target;
 import javax.inject.Inject;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,7 +81,57 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
 
     @Override
     public void fetchWeatherCurrent() {
+        fetchWeatherCurrentLocal(
+                new MethodCallback.OnSuccess() {
+                    @Override
+                    public void onSuccess(RealmResults results) {
 
+                    }
+                },
+                new MethodCallback.OnFailure() {
+                    @Override
+                    public void onFailure() {
+                        fetchWeatherCurrentInternet();
+                    }
+                }
+        );
+    }
+
+    private void fetchWeatherCurrentLocal(
+            @NonNull MethodCallback.OnSuccess onSuccess,
+            @NonNull MethodCallback.OnFailure onFailure) {
+
+        RealmResults<Weather> weathers = realm.where(Weather.class)
+                .between(
+                    "time",
+                    Computation.getCurrentUnixTime(),
+                    Computation.calculateUnixTimeInterval(Computation.UnixTimeInterval.MINUTE_15))
+                .findAll();
+
+        if (weathers.size() == 0) {
+            Utils.logRealm("size of current weather is different than 1 (" + weathers.size() + ")!");
+            Utils.logRealm("calling onFailure");
+            onFailure.onFailure();
+        }
+
+        if (weathers.size() < 1) {
+            Utils.logRealm("size of current weather is different than 1 (" + weathers.size() + ")!");
+            Utils.logRealm("deleting all violating 'current weathers'...");
+            if (weathers.deleteAllFromRealm()) {
+                Utils.logRealm("...deleted succesfully, calling onFailure.");
+            } else {
+                Utils.logRealm("...DELETE UNSUCCESSFULL - RAISING EXCEPTION, CALLING ONFAILURE");
+                Utils.logException(new UnsupportedOperationException());
+            }
+
+            onFailure.onFailure();
+        }
+
+
+        onSuccess.onSuccess(weathers);
+    }
+
+    private void fetchWeatherCurrentInternet() {
         service.getCurrentWeather(placeholderWarsawGpsLat, placeholderWarsawGpsLon, new Callback<WeatherCurrentResponse>() {
             @Override
             public void onResponse(Call<WeatherCurrentResponse> call, Response<WeatherCurrentResponse> response) {
@@ -108,17 +162,7 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
 
                         Utils.logRealm("Weather object created: ID:" + w.getId() + ", Unix:" + w.getUnixTime());
                     }
-                }/*, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        Utils.logRealm("Weather object created: ID:" + w.getId() + ", Unix:" + w.getUnixTime());
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-
-                    }
-                }*/);
+                });
 
                 view.showForecastLocationLayout();
                 view.updateForecastCurrentView(body);

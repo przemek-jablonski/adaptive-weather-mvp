@@ -1,5 +1,7 @@
 package com.android.szparag.newadaptiveweather.backend.models.realm;
 
+import java.util.Date;
+
 import io.realm.RealmModel;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.RealmClass;
@@ -12,8 +14,8 @@ import io.realm.annotations.RealmClass;
 public class Weather implements RealmModel {
 
     @PrimaryKey
-    private long id;
-    private int     unixTime;
+    private long    id;
+    private long    unixTime;
     private String  city;
 
     //WeatherForecastItem outer scope representation
@@ -44,10 +46,10 @@ public class Weather implements RealmModel {
         return id;
     }
 
-    public int getUnixTime() {
+    public long getUnixTime() {
         return unixTime;
     }
-    public void setUnixTime(int unixTime) {
+    public void setUnixTime(long unixTime) {
         this.unixTime = unixTime;
     }
 

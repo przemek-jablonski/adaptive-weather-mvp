@@ -35,18 +35,19 @@ public class Utils {
     }
 
     public static void logRetrofit(String logMessage) {
-        logDebug(Constants.ADAPTIVE_WEATHER_RETROFIT, logMessage);
+        logError(Constants.ADAPTIVE_WEATHER_RETROFIT, logMessage);
     }
 
     public static void logException(Throwable exception) {
         logError(Constants.ADAPTIVE_WEATHER, exception.getMessage());
     }
 
-    public static void logDebug(String tag, String message) {
+
+    private static void logDebug(String tag, String message) {
         Log.println(Log.DEBUG, tag, message);
     }
 
-    public static void logError(String tag, String message) {
+    private static void logError(String tag, String message) {
         Log.println(Log.ERROR, tag, message);
     }
 
@@ -129,7 +130,7 @@ public class Utils {
     //todo: make a settings activity with units of measurement
     //and pass it into an api call
     public static CharSequence kelvinToCelsiusRoundDebug(float kelvinTemp) {
-        return Integer.toString(Math.round(kelvinTemp - Constants.KELVIN_TO_CELSIUS_SUBTRAHEND));
+        return Integer.toString(Computation.kelvinToCelsiusConversionInteger(kelvinTemp));
     }
 
     public static CharSequence makeTemperatureString(float kelvinTemp) {
