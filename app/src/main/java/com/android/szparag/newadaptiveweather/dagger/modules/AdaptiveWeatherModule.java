@@ -6,10 +6,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.android.szparag.newadaptiveweather.AppController;
+import com.android.szparag.newadaptiveweather.backend.interceptors.AvoidNullsInterceptor;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
 import com.android.szparag.newadaptiveweather.presenters.BasePresenter;
-import com.android.szparag.newadaptiveweather.presenters.MainPresenter;
+import com.android.szparag.newadaptiveweather.presenters.BulkWeatherInfoPresenter;
 import com.android.szparag.newadaptiveweather.utils.Constants;
+import com.google.gson.annotations.Since;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -17,7 +19,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 /**
  * Created by ciemek on 21/09/2016.
@@ -52,16 +53,21 @@ public class AdaptiveWeatherModule {
     }
 
     @Provides
+    @Singleton
+    public AvoidNullsInterceptor provideAvoidNullsInterceptor() {
+        return new AvoidNullsInterceptor();
+    }
+
+    @Provides
     public Realm provideRealm() {
         return Realm.getDefaultInstance();
     }
 
     @Provides
-    public BasePresenter provideMainPresenter(/*Realm realm,*/
-                                              WeatherService service,
+    public BasePresenter provideMainPresenter(WeatherService service,
                                               @Named(Constants.GOOGLEMAPSSTATIC_BASEURL) String baseUrl,
                                               @Named(Constants.GOOGLEMAPSSTATIC_APIKEY) String apiKey) {
-        return new MainPresenter(/*realm,*/ service, baseUrl, apiKey);
+        return new BulkWeatherInfoPresenter(service, baseUrl, apiKey);
     }
 
 

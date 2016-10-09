@@ -1,7 +1,7 @@
 package com.android.szparag.newadaptiveweather.utils;
 
 import android.app.Activity;
-import android.net.Uri;
+
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
@@ -10,9 +10,6 @@ import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.City;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Coordinates;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.WeatherForecastItem;
 import com.android.szparag.newadaptiveweather.dagger.components.MainComponent;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  * Created by ciemek on 23/09/2016.
@@ -26,6 +23,33 @@ public class Utils {
     public static MainComponent getDagger2(Fragment fragment) {
         return getDagger2(fragment.getActivity());
     }
+
+
+    public static void logMisc(String logMessage) {
+        logDebug(Constants.ADAPTIVE_WEATHER, logMessage);
+    }
+
+    public static void logRealm(String logMessage) {
+        logDebug(Constants.ADAPTIVE_WEATHER_REALM, logMessage);
+        //todo: add another logDebug line - statistics of given Realm (onchangelistener?)
+    }
+
+    public static void logRetrofit(String logMessage) {
+        logDebug(Constants.ADAPTIVE_WEATHER_RETROFIT, logMessage);
+    }
+
+    public static void logException(Throwable exception) {
+        logError(Constants.ADAPTIVE_WEATHER, exception.getMessage());
+    }
+
+    public static void logDebug(String tag, String message) {
+        Log.println(Log.DEBUG, tag, message);
+    }
+
+    public static void logError(String tag, String message) {
+        Log.println(Log.ERROR, tag, message);
+    }
+
 
     public static CharSequence makeWeatherDetailString(WeatherForecastItem weatherForecastItem) {
         StringBuilder builder = new StringBuilder();

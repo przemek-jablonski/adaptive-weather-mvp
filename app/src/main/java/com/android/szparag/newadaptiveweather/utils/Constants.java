@@ -5,7 +5,10 @@ package com.android.szparag.newadaptiveweather.utils;
  */
 public class Constants {
 
-    public static final String ADAPTIVE_WEATHER = "adaptive_weather";
+    public static final String ADAPTIVE_WEATHER = "ADAPTIVE_WEATHER";
+    public static final String ADAPTIVE_WEATHER_REALM = "REALM";
+    public static final String ADAPTIVE_WEATHER_RETROFIT = "RETROFIT";
+
     public static final String OPENWEATHERMAP_BASEURL = "openweathermap_baseurl";
     public static final String OPENWEATHERMAP_APIKEY = "openweathermap_apikey";
 

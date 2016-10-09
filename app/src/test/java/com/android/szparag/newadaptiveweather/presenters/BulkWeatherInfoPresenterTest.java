@@ -11,7 +11,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Created by ciemek on 25/09/2016.
  */
-public class MainPresenterTest {
+public class BulkWeatherInfoPresenterTest {
 
     BasePresenter   basePresenter;
     WeatherService  mockService;
@@ -24,7 +24,7 @@ public class MainPresenterTest {
 
         mockView = mock(BaseView.class);
 
-//        basePresenter = new MainPresenter(mockService);
+//        basePresenter = new BulkWeatherInfoPresenter(mockService);
 //        basePresenter.setView(mockView);
     }
 

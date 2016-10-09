@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.android.szparag.newadaptiveweather.R;
 import com.android.szparag.newadaptiveweather.backend.apis.WeatherApiService;
+import com.android.szparag.newadaptiveweather.backend.interceptors.AvoidNullsInterceptor;
 import com.android.szparag.newadaptiveweather.backend.interceptors.PrintResponseInterceptor;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherServiceImpl;
@@ -54,7 +55,10 @@ public class NetworkingModule {
         return new Retrofit.Builder()
                 .baseUrl(apiBaseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(new OkHttpClient.Builder().addInterceptor(new PrintResponseInterceptor()).build())
+                .client(
+                        new OkHttpClient.Builder()
+                                .addInterceptor(new PrintResponseInterceptor())
+                                .build())
                 .build();
     }
 

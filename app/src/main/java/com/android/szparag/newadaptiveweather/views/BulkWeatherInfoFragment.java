@@ -135,8 +135,6 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
         presenter.fetchWeatherCurrent();
         presenter.fetchWeather5Day();
 //        presenter.fetchBackgroundMap();
-
-        presenter.fetchBackgroundMap();
     }
 
     @Override
@@ -169,50 +167,49 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
         forecastCurrentDesc.setText(forecast.weather.get(0).description);
 
         forecastCurrentPressureText.setText(getString(R.string.pressure_text));
-        forecastCurrentPressureVal.setText(Utils.makeStringRoundedFloat(forecast.mainWeatherData.pressureAtmospheric));
+        forecastCurrentPressureVal.setText(
+                Utils.makeStringRoundedFloat(forecast.mainWeatherData.pressureAtmospheric)
+        );
 
         forecastCurrentHumidityText.setText(getString(R.string.humidity_text));
-        forecastCurrentHumidityVal.setText(Utils.makeStringRoundedFloat(forecast.mainWeatherData.humidityPercent));
+        forecastCurrentHumidityVal.setText(
+                Utils.makeStringRoundedFloat(forecast.mainWeatherData.humidityPercent)
+        );
 
         forecastCurrentWindspeedText.setText(getString(R.string.windspeed_text));
-        forecastCurrentWindspeedVal.setText(Utils.makeStringRoundedFloat(forecast.wind.speed));
+        forecastCurrentWindspeedVal.setText(
+                Utils.makeStringRoundedFloat(forecast.wind.speed)
+        );
 
         forecastCurrentWinddirectionText.setText(getString(R.string.winddirection_text));
-        forecastCurrentWinddirectionVal.setText(Utils.makeStringRoundedFloat(forecast.wind.directionDegrees));
+        forecastCurrentWinddirectionVal.setText(
+                Utils.makeStringRoundedFloat(forecast.wind.directionDegrees)
+        );
 
         forecastCurrentCloudsText.setText(getString(R.string.clouds_text));
-        forecastCurrentCloudsVal.setText(Utils.makeStringRoundedFloat(forecast.clouds.cloudsPercent));
+        forecastCurrentCloudsVal.setText(
+                Utils.makeStringRoundedFloat(forecast.clouds.cloudsPercent)
+        );
 
         forecastCurrentRainText.setText(getString(R.string.rain_text));
+        forecastCurrentRainVal.setText(
+                Utils.makeStringRoundedFloat(forecast.rain.past3h)
+        );
+
         forecastCurrentSnowText.setText(getString(R.string.snow_text));
-
-
-        //todo: for the love of god, this nulls in models need to be got rid of
-        if (forecast.rain != null) {
-            if (forecast.rain.past3h != null) {
-                forecastCurrentRainVal.setText(Utils.makeStringRoundedFloat(forecast.rain.past3h));
-            } else {
-                forecastCurrentRainVal.setText(" 0 ");
-            }
-        } else {
-            forecastCurrentRainVal.setText(" 0 ");
-        }
-
-        //todo: who doesn't love spaghetti, right?
-        if (forecast.snow != null ) {
-            if (forecast.snow.past3h != null) {
-                forecastCurrentSnowVal.setText(Utils.makeStringRoundedFloat(forecast.snow.past3h));
-            } else {
-                forecastCurrentSnowVal.setText(" - ");
-            }
-        } else {
-            forecastCurrentSnowVal.setText(" - ");
-        }
+        forecastCurrentSnowVal.setText(
+                Utils.makeStringRoundedFloat(forecast.snow.past3h)
+        );
     }
 
     @Override
     public void buildForecast5DayView() {
-        forecast5dayView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        forecast5dayView.setLayoutManager(
+                new LinearLayoutManager(
+                    getActivity(),
+                    LinearLayoutManager.VERTICAL,
+                    false)
+        );
         forecast5dayView.setHasFixedSize(false);
         forecast5dayView.addItemDecoration(new HorizontalSeparator(getActivity()));
         adapter = new MainAdapter(null);

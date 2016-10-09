@@ -12,6 +12,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.android.szparag.newadaptiveweather.utils.Utils;
+
 /**
  * Created by Ciemek on 19/06/16.
  */
@@ -49,14 +51,18 @@ public class HorizontalSeparator extends RecyclerView.ItemDecoration {
         RecyclerView.LayoutParams params;
         int top, bottom;
 
-        child = parent.getChildAt(0);
-        params = (RecyclerView.LayoutParams) child.getLayoutParams();
+        try {
+            child = parent.getChildAt(0);
+            params = (RecyclerView.LayoutParams) child.getLayoutParams();
 
-        top = child.getTop() - params.bottomMargin;
-        bottom = top + separator.getIntrinsicHeight();
+            top = child.getTop() - params.bottomMargin;
+            bottom = top + separator.getIntrinsicHeight();
 
-        separator.setBounds(left, top, right, bottom);
-        separator.draw(canvas);
+            separator.setBounds(left, top, right, bottom);
+            separator.draw(canvas);
+        } catch (NullPointerException exc) {
+            Utils.logException(exc);
+        }
     }
 
     private void onDrawBottomSeparator(Canvas canvas, RecyclerView parent, int left, int right) {
@@ -64,14 +70,18 @@ public class HorizontalSeparator extends RecyclerView.ItemDecoration {
         RecyclerView.LayoutParams params;
         int top, bottom;
 
-        child = parent.getChildAt(parent.getChildCount()-1);
-        params = (RecyclerView.LayoutParams) child.getLayoutParams();
+        try {
+            child = parent.getChildAt(parent.getChildCount() - 1);
+            params = (RecyclerView.LayoutParams) child.getLayoutParams();
 
-        top = child.getTop() - params.bottomMargin;
-        bottom = top + separator.getIntrinsicHeight();
+            top = child.getTop() - params.bottomMargin;
+            bottom = top + separator.getIntrinsicHeight();
 
-        separator.setBounds(left, top, right, bottom);
-        separator.draw(canvas);
+            separator.setBounds(left, top, right, bottom);
+            separator.draw(canvas);
+        } catch (NullPointerException exc) {
+            Utils.logException(exc);
+        }
     }
 
     private void onDrawBetweenRecyclerItems(Canvas canvas, RecyclerView parent, int left, int right) {

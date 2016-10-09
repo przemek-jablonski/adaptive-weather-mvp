@@ -4,8 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
+import com.android.szparag.newadaptiveweather.backend.interceptors.AvoidNullsInterceptor;
+import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentResponse;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
@@ -16,7 +17,8 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 
-import java.util.Date;
+
+import javax.inject.Inject;
 
 import io.realm.Realm;
 import retrofit2.Call;
@@ -26,7 +28,13 @@ import retrofit2.Response;
 /**
  * Created by ciemek on 24/09/2016.
  */
-public class MainPresenter implements BasePresenter {
+public class BulkWeatherInfoPresenter implements BasePresenter {
+
+    @Inject
+    Realm realm;
+
+    @Inject
+    AvoidNullsInterceptor avoidNullsInterceptor;
 
     private BaseView view;
 
@@ -37,12 +45,10 @@ public class MainPresenter implements BasePresenter {
     private String googleStaticMapsApiKey;
 
     WeatherService service;
-    Realm realm;
 
 
 
-    public MainPresenter(/*Realm realm,*/ WeatherService service, String googleStaticMapsBaseUrl, String googleStaticMapsApiKey) {
-//        this.realm = realm;
+    public BulkWeatherInfoPresenter(WeatherService service, String googleStaticMapsBaseUrl, String googleStaticMapsApiKey) {
         this.service = service;
         this.googleStaticMapsBaseUrl = googleStaticMapsBaseUrl;
         this.googleStaticMapsApiKey = googleStaticMapsApiKey;
@@ -51,6 +57,7 @@ public class MainPresenter implements BasePresenter {
     @Override
     public void setView(BaseView view) {
         this.view = view;
+        Utils.getDagger2(view.getAndroidView()).inject(this);
     }
 
     @Override
@@ -74,8 +81,47 @@ public class MainPresenter implements BasePresenter {
         service.getCurrentWeather(placeholderWarsawGpsLat, placeholderWarsawGpsLon, new Callback<WeatherCurrentResponse>() {
             @Override
             public void onResponse(Call<WeatherCurrentResponse> call, Response<WeatherCurrentResponse> response) {
+                final WeatherCurrentResponse body = avoidNullsInterceptor.processResponseBody(response.body());
+
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Weather w = realm.createObject(
+                                Weather.class,
+                                realm.where(Weather.class).count()
+                        );
+
+                        w.setCity(body.cityName); //refactor to coord instead of city, with some error margin, like ~10km.
+                        w.setUnixTime(body.calculationUnixTime);
+
+                        w.setTemperature(body.mainWeatherData.temp);
+                        w.setTemperatureMin(body.mainWeatherData.tempMin);
+                        w.setTemperatureMax(body.mainWeatherData.tempMax);
+                        w.setHumidityPercent(body.mainWeatherData.humidityPercent);
+                        w.setPressureAtmospheric(body.mainWeatherData.pressureAtmospheric);
+                        w.setPressureSeaLevel(body.mainWeatherData.pressureSeaLevel);
+                        w.setPressureGroundLevel(body.mainWeatherData.pressureGroundLevel);
+
+                        w.setWeatherMain(body.weather.get(0).main);
+                        w.setWeatherDescription(body.weather.get(0).description);
+                        w.setWeatherIconId(body.weather.get(0).iconId);
+
+                        Utils.logRealm("Weather object created: ID:" + w.getId() + ", Unix:" + w.getUnixTime());
+                    }
+                }/*, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        Utils.logRealm("Weather object created: ID:" + w.getId() + ", Unix:" + w.getUnixTime());
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override
+                    public void onError(Throwable error) {
+
+                    }
+                }*/);
+
                 view.showForecastLocationLayout();
-                view.updateForecastCurrentView(response.body());
+                view.updateForecastCurrentView(body);
                 view.showWeatherFetchSuccess();
             }
 
@@ -92,24 +138,6 @@ public class MainPresenter implements BasePresenter {
         service.getForecast5Day(placeholderWarsawGpsLat, placeholderWarsawGpsLon, new Callback<WeatherForecastResponse>() {
             @Override
             public void onResponse(Call<WeatherForecastResponse> call, Response<WeatherForecastResponse> response) {
-
-//                realm.executeTransactionAsync(new Realm.Transaction() {
-//                    @Override
-//                    public void execute(Realm realm) {
-//
-//                    }
-//                }, new Realm.Transaction.OnSuccess() {
-//                    @Override
-//                    public void onSuccess() {
-//
-//                    }
-//                }, new Realm.Transaction.OnError() {
-//                    @Override
-//                    public void onError(Throwable error) {
-//
-//                    }
-//                });
-
                 view.showForecastLocationLayout();
                 view.updateForecast5DayView(response.body());
                 view.updateForecastLocationTimeLayout(response.body());
@@ -126,24 +154,23 @@ public class MainPresenter implements BasePresenter {
 
     @Override
     public void fetchBackgroundMap() {
-        createBackgroundMapUri();
-//        Picasso.with(view.getActivity()).load(createBackgroundMapUri())
-//                .into(new Target() {
-//            @Override
-//            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                view.setBackground(bitmap);
-//            }
-//
-//            @Override
-//            public void onBitmapFailed(Drawable errorDrawable) {
-//                view.showBackgroundFetchFailure();
-//            }
-//
-//            @Override
-//            public void onPrepareLoad(Drawable placeHolderDrawable) {
-//                view.setBackgroundPlaceholder();
-//            }
-//        });
+        Picasso.with(view.getActivity()).load(createBackgroundMapUri())
+                .into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                view.setBackground(bitmap);
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+                view.showBackgroundFetchFailure();
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                view.setBackgroundPlaceholder();
+            }
+        });
     }
 
 
@@ -206,8 +233,7 @@ public class MainPresenter implements BasePresenter {
 
     @Override
     public void realmClose() {
-//      is it really nessesary, since i have only 1 presenter here?
-//      realm.close();
+      realm.close();
     }
 
 }
