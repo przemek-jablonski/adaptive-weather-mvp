@@ -1,7 +1,11 @@
 package com.android.szparag.newadaptiveweather.backend;
 
+import android.support.annotation.Nullable;
+
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentResponse;
+
+import java.util.LinkedList;
 
 import io.realm.RealmModel;
 import io.realm.RealmObject;
@@ -14,27 +18,59 @@ public class RealmUtils {
 
     private float minDiff;
 
-    public synchronized Weather findClosestTimeValue(RealmResults<Weather> results, float value) {
+    public synchronized @Nullable Weather findClosestTimeValue(LinkedList<Weather> results, float value) {
+        if (results.size() == 0) {
+            return null;
+        }
+
+        if (results.size() == 1) {
+            return results.getFirst();
+        }
+
         float diff = 0;
-        int minDiffId = 0;
+        int minDiffId = -1;
         minDiff = Float.MAX_VALUE;
 
         for (int i = 0; i < results.size(); ++i) {
-            diff = value - results.get(i).getUnixTime();
-            if (diff == 0) {
-                return results.get(i);
-            }
+            diff = results.get(i).getUnixTime() - value;
 
             if (minDiff > Math.abs(diff)) {
-                minDiff = diff;
+                minDiff = Math.abs(diff);
                 minDiffId = i;
             }
+        }
+        if (minDiffId == -1) {
+            return null;
         }
         return results.get(minDiffId);
     }
 
+    public synchronized @Nullable Weather findClosestTimeValue(RealmResults<Weather> results, float value) {
+//        float diff = 0;
+//        int minDiffId = -1;
+//        minDiff = Float.MAX_VALUE;
+//
+//        for (int i = 0; i < results.size(); ++i) {
+//            diff = value - results.get(i).getUnixTime();
+//            if (diff == 0) {
+//                return results.get(i);
+//            }
+//
+//            if (minDiff > Math.abs(diff)) {
+//                minDiff = diff;
+//                minDiffId = i;
+//            }
+//        }
+//        if (minDiffId == -1) {
+//            return null;
+//        }
+//        return results.get(minDiffId);
+        return null;
+    }
+
 //    public RealmModel findClosestValueSorted(RealmResults<Weather> results, String key, float value) {
         //todo: use .average() here in up or down direction to cut iteration time by ~2
+    //todo: if diff ==0, return this value
 //    }
 
     public Weather mapJsonResponseToRealm(WeatherCurrentResponse responseBody, Weather mappedObject) {
