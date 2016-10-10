@@ -6,12 +6,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.android.szparag.newadaptiveweather.AppController;
+import com.android.szparag.newadaptiveweather.backend.RealmUtils;
 import com.android.szparag.newadaptiveweather.backend.interceptors.AvoidNullsInterceptor;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
 import com.android.szparag.newadaptiveweather.presenters.BasePresenter;
 import com.android.szparag.newadaptiveweather.presenters.BulkWeatherInfoPresenter;
 import com.android.szparag.newadaptiveweather.utils.Constants;
-import com.google.gson.annotations.Since;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -56,6 +56,12 @@ public class AdaptiveWeatherModule {
     @Singleton
     public AvoidNullsInterceptor provideAvoidNullsInterceptor() {
         return new AvoidNullsInterceptor();
+    }
+
+    @Provides
+    @Singleton
+    public RealmUtils provideRealmUtils() {
+        return new RealmUtils();
     }
 
     @Provides

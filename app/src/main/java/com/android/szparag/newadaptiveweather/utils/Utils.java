@@ -25,17 +25,23 @@ public class Utils {
     }
 
 
-    public static void logMisc(String logMessage) {
-        logDebug(Constants.ADAPTIVE_WEATHER, logMessage);
+    public static void logMisc(String... logMessages) {
+        for (int i=0; i < logMessages.length; ++i) {
+            logDebug(Constants.ADAPTIVE_WEATHER, logMessages[i]);
+        }
     }
 
-    public static void logRealm(String logMessage) {
-        logDebug(Constants.ADAPTIVE_WEATHER_REALM, logMessage);
+    public static void logRealm(String... logMessages) {
+        for (int i=0; i < logMessages.length; ++i) {
+            logDebug(Constants.ADAPTIVE_WEATHER_REALM, logMessages[i]);
+        }
         //todo: add another logDebug line - statistics of given Realm (onchangelistener?)
     }
 
-    public static void logRetrofit(String logMessage) {
-        logError(Constants.ADAPTIVE_WEATHER_RETROFIT, logMessage);
+    public static void logRetrofit(String... logMessages) {
+        for (int i=0; i < logMessages.length; ++i) {
+            logError(Constants.ADAPTIVE_WEATHER_RETROFIT, logMessages[i]);
+        }
     }
 
     public static void logException(Throwable exception) {

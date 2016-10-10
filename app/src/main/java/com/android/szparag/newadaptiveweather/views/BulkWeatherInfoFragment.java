@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.android.szparag.newadaptiveweather.R;
 import com.android.szparag.newadaptiveweather.adapters.BaseAdapter;
 import com.android.szparag.newadaptiveweather.adapters.MainAdapter;
+import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentResponse;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.presenters.BasePresenter;
@@ -62,44 +63,23 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
     @BindView(R.id.item_weather_current_desc)
     TextView forecastCurrentDesc;
 
-    @BindView(R.id.item_weather_current_pressure_text)
-    TextView forecastCurrentPressureText;
-
     @BindView(R.id.item_weather_current_pressure_val)
     TextView forecastCurrentPressureVal;
-
-    @BindView(R.id.item_weather_current_humidity_text)
-    TextView forecastCurrentHumidityText;
 
     @BindView(R.id.item_weather_current_humidity_val)
     TextView forecastCurrentHumidityVal;
 
-    @BindView(R.id.item_weather_current_windspeed_text)
-    TextView forecastCurrentWindspeedText;
-
     @BindView(R.id.item_weather_current_windspeed_val)
     TextView forecastCurrentWindspeedVal;
-
-    @BindView(R.id.item_weather_current_winddirection_text)
-    TextView forecastCurrentWinddirectionText;
 
     @BindView(R.id.item_weather_current_winddirection_val)
     TextView forecastCurrentWinddirectionVal;
 
-    @BindView(R.id.item_weather_current_clouds_text)
-    TextView forecastCurrentCloudsText;
-
     @BindView(R.id.item_weather_current_clouds_val)
     TextView forecastCurrentCloudsVal;
 
-    @BindView(R.id.item_weather_current_rain_text)
-    TextView forecastCurrentRainText;
-
     @BindView(R.id.item_weather_current_rain_val)
     TextView forecastCurrentRainVal;
-
-    @BindView(R.id.item_weather_current_snow_text)
-    TextView forecastCurrentSnowText;
 
     @BindView(R.id.item_weather_current_snow_val)
     TextView forecastCurrentSnowVal;
@@ -140,6 +120,7 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
     @Override
     public void onPause() {
         super.onPause();
+        presenter.unregisterRealm();
     }
 
     @Override
@@ -159,47 +140,46 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
 //        unbinderCurrentView = ButterKnife.bind(this, forecastCurrentView);
     }
 
+
+    //TODO: DELETE THAT, EVERY WEATHER SHOULD BE PULLED FROM REALM
     @Override
     public void updateForecastCurrentView(WeatherCurrentResponse forecast) {
         forecastCurrentTemperature.setText(Utils.makeTemperatureString(forecast.mainWeatherData.temp));
         forecastCurrentTemperatures.setText(Utils.makeTemperatureMinMaxString(forecast.mainWeatherData.tempMax, forecast.mainWeatherData.tempMin));
+
         forecastCurrentShortDesc.setText(forecast.weather.get(0).main);
         forecastCurrentDesc.setText(forecast.weather.get(0).description);
 
-        forecastCurrentPressureText.setText(getString(R.string.pressure_text));
-        forecastCurrentPressureVal.setText(
-                Utils.makeStringRoundedFloat(forecast.mainWeatherData.pressureAtmospheric)
-        );
+        forecastCurrentPressureVal.setText(Utils.makeStringRoundedFloat(forecast.mainWeatherData.pressureAtmospheric));
+        forecastCurrentHumidityVal.setText(Utils.makeStringRoundedFloat(forecast.mainWeatherData.humidityPercent));
 
-        forecastCurrentHumidityText.setText(getString(R.string.humidity_text));
-        forecastCurrentHumidityVal.setText(
-                Utils.makeStringRoundedFloat(forecast.mainWeatherData.humidityPercent)
-        );
+        forecastCurrentWindspeedVal.setText(Utils.makeStringRoundedFloat(forecast.wind.speed));
+        forecastCurrentWinddirectionVal.setText(Utils.makeStringRoundedFloat(forecast.wind.directionDegrees));
 
-        forecastCurrentWindspeedText.setText(getString(R.string.windspeed_text));
-        forecastCurrentWindspeedVal.setText(
-                Utils.makeStringRoundedFloat(forecast.wind.speed)
-        );
+        forecastCurrentCloudsVal.setText(Utils.makeStringRoundedFloat(forecast.clouds.cloudsPercent));
 
-        forecastCurrentWinddirectionText.setText(getString(R.string.winddirection_text));
-        forecastCurrentWinddirectionVal.setText(
-                Utils.makeStringRoundedFloat(forecast.wind.directionDegrees)
-        );
+        forecastCurrentRainVal.setText(Utils.makeStringRoundedFloat(forecast.rain.past3h));
+        forecastCurrentSnowVal.setText(Utils.makeStringRoundedFloat(forecast.snow.past3h));
+    }
 
-        forecastCurrentCloudsText.setText(getString(R.string.clouds_text));
-        forecastCurrentCloudsVal.setText(
-                Utils.makeStringRoundedFloat(forecast.clouds.cloudsPercent)
-        );
+    @Override
+    public void updateForecastCurrentView(Weather weather) {
+        forecastCurrentTemperature.setText(Utils.makeTemperatureString(weather.getTemperature()));
+        forecastCurrentTemperatures.setText(Utils.makeTemperatureMinMaxString(weather.getTemperatureMax(), weather.getTemperatureMin()));
 
-        forecastCurrentRainText.setText(getString(R.string.rain_text));
-        forecastCurrentRainVal.setText(
-                Utils.makeStringRoundedFloat(forecast.rain.past3h)
-        );
+        forecastCurrentShortDesc.setText(weather.getWeatherMain());
+        forecastCurrentDesc.setText(weather.getWeatherDescription());
 
-        forecastCurrentSnowText.setText(getString(R.string.snow_text));
-        forecastCurrentSnowVal.setText(
-                Utils.makeStringRoundedFloat(forecast.snow.past3h)
-        );
+        forecastCurrentPressureVal.setText(Utils.makeStringRoundedFloat(weather.getPressureAtmospheric()));
+        forecastCurrentHumidityVal.setText(Utils.makeStringRoundedFloat(weather.getHumidityPercent()));
+
+        forecastCurrentWindspeedVal.setText(Utils.makeStringRoundedFloat(weather.getWindSpeed()));
+        forecastCurrentWinddirectionVal.setText(Utils.makeStringRoundedFloat(weather.getWindDirection()));
+
+        forecastCurrentCloudsVal.setText(Utils.makeStringRoundedFloat(weather.getCloudsPercent()));
+
+        forecastCurrentRainVal.setText(Utils.makeStringRoundedFloat(weather.getRainPast3h()));
+        forecastCurrentSnowVal.setText(Utils.makeStringRoundedFloat(weather.getSnowPast3h()));
     }
 
     @Override

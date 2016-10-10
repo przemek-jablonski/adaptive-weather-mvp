@@ -1,35 +1,30 @@
 package com.android.szparag.newadaptiveweather.utils;
 
-
-import android.icu.util.DateInterval;
-
-import java.text.DateFormat;
-
 /**
  * Created by ciemek on 28/09/2016.
  */
 public class Computation {
 
     public class UnixTimeInterval {
-        public static final int NOW = 0; //minutes as units of measurement
-        public static final int MINUTE_1 = 1;
-        public static final int MINUTE_5 = 5;
-        public static final int MINUTE_10 = 10;
-        public static final int MINUTE_15 = 15;
-        public static final int MINUTE_30 = 30;
-        public static final int HOUR_1 = 60;
-        public static final int HOUR_2 = 120;
-        public static final int HOUR_3 = 180;
-        public static final int HOUR_6 = 360;
-        public static final int HOUR_12 = 720;
-        public static final int DAY_1 = 1440;
-        public static final int DAY_5 = 7200;
+        public static final int NOW = 0; //SECONDS as units of measurement (as in epoch time)
+        public static final int MINUTE_1 = 60;
+        public static final int MINUTE_5 = 300;
+        public static final int MINUTE_10 = 600;
+        public static final int MINUTE_15 = 900;
+        public static final int MINUTE_30 = 1800;
+        public static final int HOUR_1 = 3600;
+        public static final int HOUR_2 = 7200;
+        public static final int HOUR_3 = 10800;
+        public static final int HOUR_6 = 21600;
+        public static final int HOUR_12 = 43200;
+        public static final int DAY_1 = 86400;
+        public static final int DAY_5 = 432000;
 
-        static final int SECONDS_IN_MINUTE = 60;
+        public static final int OUTDATED_DATA_INTERVAL = MINUTE_15;
     }
 
     public static long calculateUnixTimeInterval(int unixTimeIntervalConstant) {
-        return getCurrentUnixTime() - (unixTimeIntervalConstant * UnixTimeInterval.SECONDS_IN_MINUTE);
+        return getCurrentUnixTime() - unixTimeIntervalConstant;
     }
 
 

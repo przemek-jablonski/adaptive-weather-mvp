@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 
 import com.android.szparag.newadaptiveweather.adapters.BaseAdapter;
+import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentResponse;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 
@@ -25,6 +26,7 @@ public interface BaseView {
 
     void buildForecastCurrentView();
     void updateForecastCurrentView(WeatherCurrentResponse forecast);
+    void updateForecastCurrentView(Weather weather);
 
     void buildForecast5DayView();
     void updateForecast5DayView(WeatherForecastResponse forecast);

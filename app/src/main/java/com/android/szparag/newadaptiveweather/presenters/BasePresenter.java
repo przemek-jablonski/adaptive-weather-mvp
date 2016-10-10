@@ -33,5 +33,6 @@ public interface BasePresenter {
 
     void fetchWeatherStations();
 
+    void unregisterRealm();
     void realmClose();
 }

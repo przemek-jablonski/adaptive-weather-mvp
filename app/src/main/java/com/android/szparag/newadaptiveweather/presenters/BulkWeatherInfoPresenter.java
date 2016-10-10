@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 
 import com.android.szparag.newadaptiveweather.backend.MethodCallback;
+import com.android.szparag.newadaptiveweather.backend.RealmUtils;
 import com.android.szparag.newadaptiveweather.backend.interceptors.AvoidNullsInterceptor;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentResponse;
@@ -24,7 +25,8 @@ import com.squareup.picasso.Target;
 import javax.inject.Inject;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
+import io.realm.RealmChangeListener;
+import io.realm.Sort;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,6 +38,9 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
 
     @Inject
     Realm realm;
+
+    @Inject
+    RealmUtils realmUtils;
 
     @Inject
     AvoidNullsInterceptor avoidNullsInterceptor;
@@ -51,7 +56,6 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
     WeatherService service;
 
 
-
     public BulkWeatherInfoPresenter(WeatherService service, String googleStaticMapsBaseUrl, String googleStaticMapsApiKey) {
         this.service = service;
         this.googleStaticMapsBaseUrl = googleStaticMapsBaseUrl;
@@ -62,6 +66,16 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
     public void setView(BaseView view) {
         this.view = view;
         Utils.getDagger2(view.getAndroidView()).inject(this);
+
+        RealmChangeListener realmWeatherCurrentChangeListener = new RealmChangeListener() {
+            @Override
+            public void onChange(Object element) {
+                Utils.logRealm("Realm WeatherCurrentChangeListener triggered." , "Calling fetchWeatherCurrent...");
+                fetchWeatherCurrent();
+            }
+        };
+
+        realm.addChangeListener(realmWeatherCurrentChangeListener);
     }
 
     @Override
@@ -81,58 +95,59 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
 
     @Override
     public void fetchWeatherCurrent() {
-        fetchWeatherCurrentLocal(
-                new MethodCallback.OnSuccess() {
-                    @Override
-                    public void onSuccess(RealmResults results) {
 
-                    }
-                },
-                new MethodCallback.OnFailure() {
-                    @Override
-                    public void onFailure() {
-                        fetchWeatherCurrentInternet();
-                    }
-                }
-        );
+        fetchWeatherCurrentLocal(new MethodCallback.OnSuccess() {
+            @Override
+            public void onSuccess(Weather result) {
+                view.showForecastLocationLayout();
+                view.updateForecastCurrentView(result);
+                view.showWeatherFetchSuccess();
+            }
+        }, new MethodCallback.OnFailure() {
+            @Override
+            public void onFailure() {
+                fetchWeatherCurrentInternet();
+            }
+        });
+
     }
 
     private void fetchWeatherCurrentLocal(
             @NonNull MethodCallback.OnSuccess onSuccess,
             @NonNull MethodCallback.OnFailure onFailure) {
 
-        RealmResults<Weather> weathers = realm.where(Weather.class)
-                .between(
-                    "time",
-                    Computation.getCurrentUnixTime(),
-                    Computation.calculateUnixTimeInterval(Computation.UnixTimeInterval.MINUTE_15))
-                .findAll();
+        Weather currentWeather = realmUtils.findClosestTimeValue(
+                        realm.where(Weather.class)
+                                .between(
+                                        "time",
+                                        Computation.getCurrentUnixTime(),
+                                        Computation.calculateUnixTimeInterval(Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL))
+                                .findAllSorted("time", Sort.ASCENDING),
+                        Computation.getCurrentUnixTime());
 
-        if (weathers.size() == 0) {
-            Utils.logRealm("size of current weather is different than 1 (" + weathers.size() + ")!");
-            Utils.logRealm("calling onFailure");
+        if (currentWeather == null
+                || realmUtils.getMinDiff() > Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL
+//              || IF THERE IS INTERNET CONNECTIVITY AVAILABLE
+//              || IF LAST KNOWN LOCATION HAS CHANGED
+                ) {
+//            fetchWeatherCurrentInternet();
+            Utils.logRealm("fetching CurrentWeather from Local FAILED!", "Calling onFailure...");
             onFailure.onFailure();
         }
 
-        if (weathers.size() < 1) {
-            Utils.logRealm("size of current weather is different than 1 (" + weathers.size() + ")!");
-            Utils.logRealm("deleting all violating 'current weathers'...");
-            if (weathers.deleteAllFromRealm()) {
-                Utils.logRealm("...deleted succesfully, calling onFailure.");
-            } else {
-                Utils.logRealm("...DELETE UNSUCCESSFULL - RAISING EXCEPTION, CALLING ONFAILURE");
-                Utils.logException(new UnsupportedOperationException());
-            }
+        //// FIXME: 10/10/2016 possible deadlock or infinite spaghetti here
+        // if computation fails or currWeather will be null, then retrofit will query API forever
 
-            onFailure.onFailure();
-        }
+//        view.updateForecastCurrentView(currentWeather);
 
+        Utils.logRealm("fetching CurrentWeather from Local succeeded!", "Calling onSuccess...");
+        onSuccess.onSuccess(currentWeather);
 
-        onSuccess.onSuccess(weathers);
     }
 
     private void fetchWeatherCurrentInternet() {
         service.getCurrentWeather(placeholderWarsawGpsLat, placeholderWarsawGpsLon, new Callback<WeatherCurrentResponse>() {
+
             @Override
             public void onResponse(Call<WeatherCurrentResponse> call, Response<WeatherCurrentResponse> response) {
                 final WeatherCurrentResponse body = avoidNullsInterceptor.processResponseBody(response.body());
@@ -140,33 +155,33 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        Weather w = realm.createObject(
-                                Weather.class,
-                                realm.where(Weather.class).count()
-                        );
+                        Weather currentWeatherFromAPI =
+                                realm.createObject(Weather.class, realm.where(Weather.class).count());
 
-                        w.setCity(body.cityName); //refactor to coord instead of city, with some error margin, like ~10km.
-                        w.setUnixTime(body.calculationUnixTime);
-
-                        w.setTemperature(body.mainWeatherData.temp);
-                        w.setTemperatureMin(body.mainWeatherData.tempMin);
-                        w.setTemperatureMax(body.mainWeatherData.tempMax);
-                        w.setHumidityPercent(body.mainWeatherData.humidityPercent);
-                        w.setPressureAtmospheric(body.mainWeatherData.pressureAtmospheric);
-                        w.setPressureSeaLevel(body.mainWeatherData.pressureSeaLevel);
-                        w.setPressureGroundLevel(body.mainWeatherData.pressureGroundLevel);
-
-                        w.setWeatherMain(body.weather.get(0).main);
-                        w.setWeatherDescription(body.weather.get(0).description);
-                        w.setWeatherIconId(body.weather.get(0).iconId);
-
-                        Utils.logRealm("Weather object created: ID:" + w.getId() + ", Unix:" + w.getUnixTime());
+                        currentWeatherFromAPI = realmUtils.mapJsonResponseToRealm(body, currentWeatherFromAPI);
+                        realm.commitTransaction();
+                        Utils.logRealm("Weather object created: ID:" + currentWeatherFromAPI.getId() + ", Unix:" + currentWeatherFromAPI.getUnixTime());
                     }
                 });
-
-                view.showForecastLocationLayout();
-                view.updateForecastCurrentView(body);
-                view.showWeatherFetchSuccess();
+                //REPLACED WITH ONCHANGE LISTENER?
+//
+//                view.showForecastLocationLayout();
+////                view.updateForecastCurrentView(body);
+//                fetchWeatherCurrentLocal(new MethodCallback.OnSuccess() {
+//                    @Override
+//                    public void onSuccess(RealmResults<Weather> results) {
+//                        view.showForecastLocationLayout();
+//                        view.updateForecastCurrentView(results.first());
+//                        view.showWeatherFetchSuccess();
+//                    }
+//                }, new MethodCallback.OnFailure() {
+//                    @Override
+//                    public void onFailure() {
+//
+//                    }
+//                });
+//
+//                view.showWeatherFetchSuccess();
             }
 
             @Override
@@ -247,7 +262,6 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
     @Override
     public void fetchWeatherPollutionO3() {
         //..
-
     }
 
     @Override
@@ -276,8 +290,14 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
     }
 
     @Override
+    public void unregisterRealm() {
+        realm.removeAllChangeListeners();
+    }
+
+    @Override
     public void realmClose() {
-      realm.close();
+        unregisterRealm();
+        realm.close();
     }
 
 }

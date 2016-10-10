@@ -1,5 +1,7 @@
 package com.android.szparag.newadaptiveweather.backend;
 
+import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
+
 import io.realm.RealmResults;
 
 /**
@@ -8,10 +10,8 @@ import io.realm.RealmResults;
 public interface MethodCallback {
 
     interface OnSuccess {
-        void onSuccess(RealmResults results);
+        void onSuccess(Weather result);
     }
-
-
 
     interface OnFailure {
         void onFailure();
