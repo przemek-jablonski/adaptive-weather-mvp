@@ -1,6 +1,7 @@
 package com.android.szparag.newadaptiveweather.views;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +26,6 @@ public interface BaseView {
     void showBackgroundFetchFailure();
 
     void buildForecastCurrentView();
-    void updateForecastCurrentView(WeatherCurrentResponse forecast);
     void updateForecastCurrentView(Weather weather);
 
     void buildForecast5DayView();
@@ -35,12 +35,13 @@ public interface BaseView {
     void showForecastLocationLayout();
     void updateForecastLocationTimeLayout(WeatherForecastResponse response);
 
-
-
-    int[] getViewDimensions();
+    SharedPreferences getSharedPreferences();
+    void writeToSharedPreferences(String key, long value);
 
     Fragment getAndroidView();
     Activity getActivity();
+
+    int[] getViewDimensions();
 
     RecyclerView getRecycler();
     BaseAdapter getAdapter();

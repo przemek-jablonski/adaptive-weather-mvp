@@ -1,5 +1,7 @@
 package com.android.szparag.newadaptiveweather.views;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.Nullable;
@@ -19,7 +21,6 @@ import com.android.szparag.newadaptiveweather.R;
 import com.android.szparag.newadaptiveweather.adapters.BaseAdapter;
 import com.android.szparag.newadaptiveweather.adapters.MainAdapter;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
-import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentResponse;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.presenters.BasePresenter;
 import com.android.szparag.newadaptiveweather.utils.Utils;
@@ -113,7 +114,7 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
         buildForecast5DayView();
 
         presenter.fetchWeatherCurrent();
-        presenter.fetchWeather5Day();
+//        presenter.fetchWeather5Day();
 //        presenter.fetchBackgroundMap();
     }
 
@@ -138,28 +139,6 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
     @Override
     public void buildForecastCurrentView() {
 //        unbinderCurrentView = ButterKnife.bind(this, forecastCurrentView);
-    }
-
-
-    //TODO: DELETE THAT, EVERY WEATHER SHOULD BE PULLED FROM REALM
-    @Override
-    public void updateForecastCurrentView(WeatherCurrentResponse forecast) {
-        forecastCurrentTemperature.setText(Utils.makeTemperatureString(forecast.mainWeatherData.temp));
-        forecastCurrentTemperatures.setText(Utils.makeTemperatureMinMaxString(forecast.mainWeatherData.tempMax, forecast.mainWeatherData.tempMin));
-
-        forecastCurrentShortDesc.setText(forecast.weather.get(0).main);
-        forecastCurrentDesc.setText(forecast.weather.get(0).description);
-
-        forecastCurrentPressureVal.setText(Utils.makeStringRoundedFloat(forecast.mainWeatherData.pressureAtmospheric));
-        forecastCurrentHumidityVal.setText(Utils.makeStringRoundedFloat(forecast.mainWeatherData.humidityPercent));
-
-        forecastCurrentWindspeedVal.setText(Utils.makeStringRoundedFloat(forecast.wind.speed));
-        forecastCurrentWinddirectionVal.setText(Utils.makeStringRoundedFloat(forecast.wind.directionDegrees));
-
-        forecastCurrentCloudsVal.setText(Utils.makeStringRoundedFloat(forecast.clouds.cloudsPercent));
-
-        forecastCurrentRainVal.setText(Utils.makeStringRoundedFloat(forecast.rain.past3h));
-        forecastCurrentSnowVal.setText(Utils.makeStringRoundedFloat(forecast.snow.past3h));
     }
 
     @Override
@@ -221,6 +200,19 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
         ((TextView) locationView.findViewById(R.id.item_weather_location_right)).setText(response.city.countryCode);
         ((TextView) locationView.findViewById(R.id.item_weather_location_gps)).setText(Utils.makeLocationGpsString(response.city));
         ((TextView) locationView.findViewById(R.id.item_weather_location_time)).setText(response.list.get(0).calculationUTCTime);
+    }
+
+    @Override
+    public SharedPreferences getSharedPreferences() {
+        return getActivity().getPreferences(Context.MODE_PRIVATE);
+    }
+
+    @Override
+    public void writeToSharedPreferences(String key, long value) {
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.remove(key);
+        editor.putLong(key, value);
+        editor.commit();
     }
 
     @Override
