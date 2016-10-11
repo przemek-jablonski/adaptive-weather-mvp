@@ -39,7 +39,7 @@ public class RealmUtilsTest {
 
     @Test
     public void testFindClosestTimeValueInRandomListFluctuatingTimeStandard() throws Exception {
-        int randomListSize = random.nextInt(2) + 1;
+        int randomListSize = random.nextInt(1000) + 1000;
         long validTime = currentTime + Computation.UnixTimeInterval.HOUR_2;
         int fluctuationTimeInterval = Computation.UnixTimeInterval.HOUR_3;
         LinkedList<Weather> weatherList = new LinkedList<>();

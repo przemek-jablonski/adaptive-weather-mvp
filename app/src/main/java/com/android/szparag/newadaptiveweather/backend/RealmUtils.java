@@ -7,8 +7,6 @@ import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentR
 
 import java.util.LinkedList;
 
-import io.realm.RealmModel;
-import io.realm.RealmObject;
 import io.realm.RealmResults;
 
 /**
@@ -46,26 +44,30 @@ public class RealmUtils {
     }
 
     public synchronized @Nullable Weather findClosestTimeValue(RealmResults<Weather> results, float value) {
-//        float diff = 0;
-//        int minDiffId = -1;
-//        minDiff = Float.MAX_VALUE;
-//
-//        for (int i = 0; i < results.size(); ++i) {
-//            diff = value - results.get(i).getUnixTime();
-//            if (diff == 0) {
-//                return results.get(i);
-//            }
-//
-//            if (minDiff > Math.abs(diff)) {
-//                minDiff = diff;
-//                minDiffId = i;
-//            }
-//        }
-//        if (minDiffId == -1) {
-//            return null;
-//        }
-//        return results.get(minDiffId);
-        return null;
+        if (results.size() == 0) {
+            return null;
+        }
+
+        if (results.size() == 1) {
+            return results.first();
+        }
+
+        float diff = 0;
+        int minDiffId = -1;
+        minDiff = Float.MAX_VALUE;
+
+        for (int i = 0; i < results.size(); ++i) {
+            diff = results.get(i).getUnixTime() - value;
+
+            if (minDiff > Math.abs(diff)) {
+                minDiff = Math.abs(diff);
+                minDiffId = i;
+            }
+        }
+        if (minDiffId == -1) {
+            return null;
+        }
+        return results.get(minDiffId);
     }
 
 //    public RealmModel findClosestValueSorted(RealmResults<Weather> results, String key, float value) {

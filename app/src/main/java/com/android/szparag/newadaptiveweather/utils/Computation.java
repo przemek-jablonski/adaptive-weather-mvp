@@ -18,6 +18,7 @@ public class Computation {
         public static final int HOUR_6 = 21600;
         public static final int HOUR_12 = 43200;
         public static final int DAY_1 = 86400;
+        public static final int DAY_2 = 172800;
         public static final int DAY_5 = 432000;
 
         public static final int OUTDATED_DATA_INTERVAL = MINUTE_15;

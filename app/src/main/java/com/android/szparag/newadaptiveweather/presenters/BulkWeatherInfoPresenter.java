@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.android.szparag.newadaptiveweather.backend.MethodCallback;
 import com.android.szparag.newadaptiveweather.backend.RealmUtils;
@@ -26,6 +27,8 @@ import javax.inject.Inject;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import io.realm.Sort;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -99,13 +102,16 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
         fetchWeatherCurrentLocal(new MethodCallback.OnSuccess() {
             @Override
             public void onSuccess(Weather result) {
+                Utils.logMisc("Local - onSuccess()", "updating view...");
                 view.showForecastLocationLayout();
                 view.updateForecastCurrentView(result);
                 view.showWeatherFetchSuccess();
+                Utils.logMisc("...view updated");
             }
         }, new MethodCallback.OnFailure() {
             @Override
             public void onFailure() {
+                Utils.logMisc("Local - ONFAILURE()", "fetching from internet");
                 fetchWeatherCurrentInternet();
             }
         });
@@ -113,43 +119,49 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
     }
 
     private void fetchWeatherCurrentLocal(
-            @NonNull MethodCallback.OnSuccess onSuccess,
-            @NonNull MethodCallback.OnFailure onFailure) {
+            @Nullable MethodCallback.OnSuccess onSuccess,
+            @Nullable MethodCallback.OnFailure onFailure) {
 
-        Weather currentWeather = realmUtils.findClosestTimeValue(
-                        realm.where(Weather.class)
-                                .between(
-                                        "time",
-                                        Computation.getCurrentUnixTime(),
-                                        Computation.calculateUnixTimeInterval(Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL))
-                                .findAllSorted("time", Sort.ASCENDING),
-                        Computation.getCurrentUnixTime());
+        RealmQuery<Weather> weatherRealmQuery = realm.where(Weather.class)
+                .greaterThanOrEqualTo(
+                        "unixTime",
+                        Computation.getCurrentUnixTime() - Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL)
+                .lessThanOrEqualTo(
+                        "unixTime",
+                        Computation.getCurrentUnixTime() + Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL);
+        RealmResults<Weather> closestWeathers = weatherRealmQuery.findAllSorted("unixTime", Sort.ASCENDING);
+
+        Weather currentWeather = realmUtils.findClosestTimeValue(closestWeathers, Computation.getCurrentUnixTime());
 
         if (currentWeather == null
                 || realmUtils.getMinDiff() > Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL
-//              || IF THERE IS INTERNET CONNECTIVITY AVAILABLE
+//              || IF THERE IS INTERNET CONNECTIVITY AVAILABLE (if user said in settings that he always wants fresh weather info)
 //              || IF LAST KNOWN LOCATION HAS CHANGED
                 ) {
-//            fetchWeatherCurrentInternet();
-            Utils.logRealm("fetching CurrentWeather from Local FAILED!", "Calling onFailure...");
+            Utils.logRealm("fetching CurrentWeather from Local FAILED!");
+            if (currentWeather == null) {
+                Utils.logRealm("(currentWeather null)");
+            } else {
+                Utils.logRealm("(outdated data interval)");
+            }
+            Utils.logRealm("Calling onFailure...");
             onFailure.onFailure();
+            return;
         }
 
-        //// FIXME: 10/10/2016 possible deadlock or infinite spaghetti here
-        // if computation fails or currWeather will be null, then retrofit will query API forever
-
-//        view.updateForecastCurrentView(currentWeather);
 
         Utils.logRealm("fetching CurrentWeather from Local succeeded!", "Calling onSuccess...");
+        Utils.logRealm("currentWeather time delay: " + ((Computation.getCurrentUnixTime() - currentWeather.getUnixTime())/60f) + "minutes  (acceptable: up to " + (Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL/60f) + ")");
         onSuccess.onSuccess(currentWeather);
-
     }
 
     private void fetchWeatherCurrentInternet() {
+        Utils.logRetrofit("fetchWeatherCurrentInternet() - firing up Retrofit...");
         service.getCurrentWeather(placeholderWarsawGpsLat, placeholderWarsawGpsLon, new Callback<WeatherCurrentResponse>() {
 
             @Override
             public void onResponse(Call<WeatherCurrentResponse> call, Response<WeatherCurrentResponse> response) {
+                Utils.logRetrofit("..Retrofit success");
                 final WeatherCurrentResponse body = avoidNullsInterceptor.processResponseBody(response.body());
 
                 realm.executeTransactionAsync(new Realm.Transaction() {
@@ -159,33 +171,14 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
                                 realm.createObject(Weather.class, realm.where(Weather.class).count());
 
                         currentWeatherFromAPI = realmUtils.mapJsonResponseToRealm(body, currentWeatherFromAPI);
-                        realm.commitTransaction();
-                        Utils.logRealm("Weather object created: ID:" + currentWeatherFromAPI.getId() + ", Unix:" + currentWeatherFromAPI.getUnixTime());
+                        Utils.logRealm("(fetchInternet) Weather object created: ID:" + currentWeatherFromAPI.getId() + ", Unix:" + currentWeatherFromAPI.getUnixTime());
                     }
                 });
-                //REPLACED WITH ONCHANGE LISTENER?
-//
-//                view.showForecastLocationLayout();
-////                view.updateForecastCurrentView(body);
-//                fetchWeatherCurrentLocal(new MethodCallback.OnSuccess() {
-//                    @Override
-//                    public void onSuccess(RealmResults<Weather> results) {
-//                        view.showForecastLocationLayout();
-//                        view.updateForecastCurrentView(results.first());
-//                        view.showWeatherFetchSuccess();
-//                    }
-//                }, new MethodCallback.OnFailure() {
-//                    @Override
-//                    public void onFailure() {
-//
-//                    }
-//                });
-//
-//                view.showWeatherFetchSuccess();
             }
 
             @Override
             public void onFailure(Call<WeatherCurrentResponse> call, Throwable t) {
+                Utils.logRetrofit("..Retrofit failure");
                 view.showWeatherFetchFailure();
             }
         });
