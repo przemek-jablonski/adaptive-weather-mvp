@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.android.szparag.newadaptiveweather.backend.MethodCallback;
@@ -17,7 +16,7 @@ import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
 import com.android.szparag.newadaptiveweather.utils.Computation;
 import com.android.szparag.newadaptiveweather.utils.Constants;
 import com.android.szparag.newadaptiveweather.utils.Utils;
-import com.android.szparag.newadaptiveweather.views.BaseView;
+import com.android.szparag.newadaptiveweather.views.contracts.BulkWeatherInfoView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -48,7 +47,7 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
     @Inject
     AvoidNullsInterceptor avoidNullsInterceptor;
 
-    private BaseView view;
+    private BulkWeatherInfoView view;
 
     private float placeholderWarsawGpsLat = 52.233101f;
     private float placeholderWarsawGpsLon = 21.061399f;
@@ -58,6 +57,8 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
 
     WeatherService service;
 
+    private long lastApiUpdateTime = -2L;
+
 
     public BulkWeatherInfoPresenter(WeatherService service, String googleStaticMapsBaseUrl, String googleStaticMapsApiKey) {
         this.service = service;
@@ -66,9 +67,11 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
     }
 
     @Override
-    public void setView(BaseView view) {
+    public void setView(BulkWeatherInfoView view) {
         this.view = view;
+        lastApiUpdateTime = view.getSharedPreferences().getLong(Constants.LAST_API_UPDATE_TIME, -1L);
         Utils.getDagger2(view.getAndroidView()).inject(this);
+
 
         RealmChangeListener realmWeatherCurrentChangeListener = new RealmChangeListener() {
             @Override
@@ -106,7 +109,17 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
                 view.showForecastLocationLayout();
                 view.updateForecastCurrentView(result);
                 view.showWeatherFetchSuccess();
-                Utils.logMisc("...view updated");
+
+                //todo: make outdated_data_interval variable in settings and make boolean "always force refresh" and append (&& alwaysForce...) to IF statement
+                if (lastApiUpdateTime < Computation.getCurrentUnixTime() - Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL) {
+                    Utils.logMisc("LAST API UPDATE TIME WAS TOO LONG AGO (" + lastApiUpdateTime
+                            + ", current: " + Computation.getCurrentUnixTime()
+                            + ") , UPDATING DATA THROUGH INTERNET");
+                    fetchWeatherCurrentInternet();
+                } else {
+                    Utils.logMisc("LAST API UPDATE TIME WAS (" + lastApiUpdateTime
+                            + ", current: " + Computation.getCurrentUnixTime());
+                }
             }
         }, new MethodCallback.OnFailure() {
             @Override
@@ -122,41 +135,34 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
             @Nullable MethodCallback.OnSuccess onSuccess,
             @Nullable MethodCallback.OnFailure onFailure) {
 
-        RealmQuery<Weather> weatherRealmQuery = realm.where(Weather.class)
-                .greaterThanOrEqualTo(
-                        "unixTime",
-                        Computation.getCurrentUnixTime() - Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL)
-                .lessThanOrEqualTo(
-                        "unixTime",
-                        Computation.getCurrentUnixTime() + Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL);
+        RealmQuery<Weather> weatherRealmQuery = realm.where(Weather.class);
         RealmResults<Weather> closestWeathers = weatherRealmQuery.findAllSorted("unixTime", Sort.ASCENDING);
 
         Weather currentWeather = realmUtils.findClosestTimeValue(closestWeathers, Computation.getCurrentUnixTime());
 
         if (currentWeather == null
-                || realmUtils.getMinDiff() > Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL
 //              || IF THERE IS INTERNET CONNECTIVITY AVAILABLE (if user said in settings that he always wants fresh weather info)
 //              || IF LAST KNOWN LOCATION HAS CHANGED
                 ) {
             Utils.logRealm("fetching CurrentWeather from Local FAILED!");
             if (currentWeather == null) {
                 Utils.logRealm("(currentWeather null)");
-            } else {
-                Utils.logRealm("(outdated data interval)");
             }
             Utils.logRealm("Calling onFailure...");
             onFailure.onFailure();
             return;
         }
 
-
-        Utils.logRealm("fetching CurrentWeather from Local succeeded!", "Calling onSuccess...");
-        Utils.logRealm("currentWeather time delay: " + ((Computation.getCurrentUnixTime() - currentWeather.getUnixTime())/60f) + "minutes  (acceptable: up to " + (Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL/60f) + ")");
+        Utils.logRealm(
+                "fetching CurrentWeather from Local succeeded!",
+                "Calling onSuccess...",
+                "currentWeather time delay: " + ((Computation.getCurrentUnixTime() - currentWeather.getUnixTime())/60f) + "minutes  (acceptable: up to " + (Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL/60f) + ")");
         onSuccess.onSuccess(currentWeather);
     }
 
     private void fetchWeatherCurrentInternet() {
         Utils.logRetrofit("fetchWeatherCurrentInternet() - firing up Retrofit...");
+        lastApiUpdateTime = view.writeToSharedPreferences(Constants.LAST_API_UPDATE_TIME, Computation.getCurrentUnixTime());
         service.getCurrentWeather(placeholderWarsawGpsLat, placeholderWarsawGpsLon, new Callback<WeatherCurrentResponse>() {
 
             @Override

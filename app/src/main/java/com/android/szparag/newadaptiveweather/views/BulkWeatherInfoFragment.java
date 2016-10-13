@@ -32,11 +32,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.android.szparag.newadaptiveweather.decorators.HorizontalSeparator;
+import com.android.szparag.newadaptiveweather.views.contracts.BulkWeatherInfoView;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class BulkWeatherInfoFragment extends Fragment implements BaseView {
+public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfoView {
 
     @Inject
     BasePresenter presenter;
@@ -114,8 +115,8 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
         buildForecast5DayView();
 
         presenter.fetchWeatherCurrent();
-//        presenter.fetchWeather5Day();
-//        presenter.fetchBackgroundMap();
+        presenter.fetchWeather5Day();
+        presenter.fetchBackgroundMap();
     }
 
     @Override
@@ -208,11 +209,16 @@ public class BulkWeatherInfoFragment extends Fragment implements BaseView {
     }
 
     @Override
-    public void writeToSharedPreferences(String key, long value) {
+    public long writeToSharedPreferences(String key, long value) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
         editor.remove(key);
         editor.putLong(key, value);
-        editor.commit();
+        editor.apply();
+        return value;
+    }
+
+    public String getResourceString(int stringResId) {
+        return getActivity().getString(stringResId);
     }
 
     @Override

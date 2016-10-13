@@ -15,6 +15,8 @@ public class Constants {
     public static final String GOOGLEMAPSSTATIC_BASEURL = "googlemapsstatic_baseurl";
     public static final String GOOGLEMAPSSTATIC_APIKEY = "googlemapsstatic_apikey";
 
+    public static final String LAST_API_UPDATE_TIME = "last_api_update_time";
+
     public static float KELVIN_TO_CELSIUS_SUBTRAHEND = 273.15f;
 
     //the reason behind existence of this class (instead of having strings in strings.xml)

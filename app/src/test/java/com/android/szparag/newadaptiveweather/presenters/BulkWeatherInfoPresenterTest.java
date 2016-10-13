@@ -1,7 +1,7 @@
 package com.android.szparag.newadaptiveweather.presenters;
 
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
-import com.android.szparag.newadaptiveweather.views.BaseView;
+import com.android.szparag.newadaptiveweather.views.contracts.BulkWeatherInfoView;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,14 +15,14 @@ public class BulkWeatherInfoPresenterTest {
 
     BasePresenter   basePresenter;
     WeatherService  mockService;
-    BaseView        mockView;
+    BulkWeatherInfoView mockView;
 
 
     @Before
     public void setup() {
         mockService = mock(WeatherService.class);
 
-        mockView = mock(BaseView.class);
+        mockView = mock(BulkWeatherInfoView.class);
 
 //        basePresenter = new BulkWeatherInfoPresenter(mockService);
 //        basePresenter.setView(mockView);

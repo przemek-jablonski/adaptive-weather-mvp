@@ -6,8 +6,7 @@ package com.android.szparag.newadaptiveweather.utils;
 public class Computation {
 
     public class UnixTimeInterval {
-        public static final int NOW = 0; //SECONDS as units of measurement (as in epoch time)
-        public static final int MINUTE_1 = 60;
+        public static final int MINUTE_1 = 60; //SECONDS as units of measurement (as in epoch time)
         public static final int MINUTE_5 = 300;
         public static final int MINUTE_10 = 600;
         public static final int MINUTE_15 = 900;
@@ -21,13 +20,14 @@ public class Computation {
         public static final int DAY_2 = 172800;
         public static final int DAY_5 = 432000;
 
-        public static final int OUTDATED_DATA_INTERVAL = MINUTE_15;
+        public static final int OUTDATED_DATA_INTERVAL = HOUR_2;
     }
+
+
 
     public static long calculateUnixTimeInterval(int unixTimeIntervalConstant) {
         return getCurrentUnixTime() - unixTimeIntervalConstant;
     }
-
 
     public static float kelvinToCelsiusConversion(float kelvinTemp) {
         return kelvinTemp - Constants.KELVIN_TO_CELSIUS_SUBTRAHEND;
