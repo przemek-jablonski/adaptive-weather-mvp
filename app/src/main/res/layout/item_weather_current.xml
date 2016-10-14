@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="center_vertical"
-        android:background="@color/backgroundPrimary"
+        android:background="@color/backgroundDarkLight"
         android:gravity="center_vertical">
 
         <TextView
@@ -53,7 +53,8 @@
         android:layout_weight="1"
         android:layout_height="match_parent"
         android:background="@color/backgroundPrimary"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:backgroundTint="@color/backgroundDarkLight">
 
         <LinearLayout
             android:layout_width="wrap_content"

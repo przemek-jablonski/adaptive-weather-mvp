@@ -33,6 +33,13 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.android.szparag.newadaptiveweather.decorators.HorizontalSeparator;
 import com.android.szparag.newadaptiveweather.views.contracts.BulkWeatherInfoView;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -43,16 +50,20 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
     BasePresenter presenter;
 
     @BindView(R.id.bulk_fragment_location)
-    View    locationView;
+    View        locationView;
 
     @BindView(R.id.bulk_fragment_current)
-    View    forecastCurrentView;
+    View        forecastCurrentView;
 
     @BindView(R.id.bulk_fragment_5day_recycler)
     RecyclerView forecast5dayView;
 
+    @BindView(R.id.item_weather_charts_horizontal)
+    LineChart   forecastChartsView;
+
 
     //todo: make a viewholder pattern for every view inside forecastCurrentView
+    //TODO: SOONER THAN LATER
     @BindView(R.id.item_weather_current_shortdesc)
     TextView forecastCurrentShortDesc;
 
@@ -103,6 +114,11 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
 
         unbinder = ButterKnife.bind(this, getView());
         Utils.getDagger2(this).inject(this);
+
+        hideForecastCurrentView();
+        hideForecastLocationLayout();
+        hideForecast5DayView();
+        hideForecastChartLayout();
     }
 
     @Override
@@ -110,7 +126,6 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         super.onResume();
         presenter.setView(this);
         presenter.checkInternetConnectivity();
-        hideForecastLocationLayout();
         buildForecastCurrentView();
         buildForecast5DayView();
 
@@ -137,9 +152,20 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         presenter.realmClose();
     }
 
+    //methods for current forecast view:
     @Override
     public void buildForecastCurrentView() {
 //        unbinderCurrentView = ButterKnife.bind(this, forecastCurrentView);
+    }
+
+    @Override
+    public void hideForecastCurrentView() {
+        forecastCurrentView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showForecastCurrentView() {
+        forecastCurrentView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -162,6 +188,7 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         forecastCurrentSnowVal.setText(Utils.makeStringRoundedFloat(weather.getSnowPast3h()));
     }
 
+    //methods for 5day forecast view:
     @Override
     public void buildForecast5DayView() {
         forecast5dayView.setLayoutManager(
@@ -176,6 +203,16 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         forecast5dayView.setAdapter(adapter);
         forecast5dayView.setNestedScrollingEnabled(false);
 
+    }
+
+    @Override
+    public void hideForecast5DayView() {
+        forecast5dayView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showForecast5DayView() {
+        forecast5dayView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -201,6 +238,31 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         ((TextView) locationView.findViewById(R.id.item_weather_location_right)).setText(response.city.countryCode);
         ((TextView) locationView.findViewById(R.id.item_weather_location_gps)).setText(Utils.makeLocationGpsString(response.city));
         ((TextView) locationView.findViewById(R.id.item_weather_location_time)).setText(response.list.get(0).calculationUTCTime);
+    }
+
+    // location
+    @Override
+    public void hideForecastChartLayout() {
+        forecastChartsView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showForecastChartLayout() {
+        forecastChartsView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void updateForecastChartLayout(WeatherForecastResponse response) {
+        List<Entry> entries = new ArrayList<>(response.list.size());
+
+        for (int i = 0; i < response.list.size(); ++i) {
+            entries.add(new Entry(response.list.get(i).calculationUnixTime, response.list.get(i).mainWeatherData.temp));
+        }
+        LineDataSet lineDataSet = new LineDataSet(entries, "temperature");
+        LineData lineData = new LineData(lineDataSet);
+        forecastChartsView.setData(lineData);
+        forecastChartsView.invalidate();
+
     }
 
     @Override

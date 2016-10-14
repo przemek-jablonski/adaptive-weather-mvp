@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="backgroundPrimary">#96fafafa</color>
+
+    <color name="backgroundDarkLight">#99bdbdbd</color>
+    <color name="backgroundDarkHeavy">#757575</color>
 </resources>

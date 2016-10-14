@@ -106,7 +106,7 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
             @Override
             public void onSuccess(Weather result) {
                 Utils.logMisc("Local - onSuccess()", "updating view...");
-                view.showForecastLocationLayout();
+                view.showForecastCurrentView();
                 view.updateForecastCurrentView(result);
                 view.showWeatherFetchSuccess();
 
@@ -199,6 +199,7 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
                 view.showForecastLocationLayout();
                 view.updateForecast5DayView(response.body());
                 view.updateForecastLocationTimeLayout(response.body());
+                view.updateForecastChartLayout(response.body());
                 view.showWeatherFetchSuccess();
             }
 
@@ -207,7 +208,6 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
                 view.showWeatherFetchFailure();
             }
         });
-
     }
 
     @Override
