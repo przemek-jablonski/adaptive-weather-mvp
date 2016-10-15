@@ -34,6 +34,9 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
+        if (position == 0) {
+            return "Today";
+        }
         if (position == 1) {
             return "Tomorrow"; //todo: make this load from strings.xml
         }
