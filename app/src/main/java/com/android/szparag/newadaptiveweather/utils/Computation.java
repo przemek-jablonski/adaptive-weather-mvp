@@ -1,5 +1,10 @@
 package com.android.szparag.newadaptiveweather.utils;
 
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by ciemek on 28/09/2016.
  */
@@ -24,6 +29,20 @@ public class Computation {
     }
 
 
+    public static int getHour24FromUnixTime(long unixTime) {
+        //todo: move it to dagger module with @Singleton annot
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(unixTime * 1000L);
+        calendar.add(Calendar.HOUR_OF_DAY, -1);
+        return calendar.get(Calendar.HOUR_OF_DAY);
+    }
+
+    public static int getHour12FromUnixTime(long unixTime) {
+        //todo: move it to dagger module with @Singleton annot
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(unixTime * 1000L);
+        return calendar.get(Calendar.HOUR);
+    }
 
     public static long calculateUnixTimeInterval(int unixTimeIntervalConstant) {
         return getCurrentUnixTime() - unixTimeIntervalConstant;
@@ -31,6 +50,13 @@ public class Computation {
 
     public static float kelvinToCelsiusConversion(float kelvinTemp) {
         return kelvinTemp - Constants.KELVIN_TO_CELSIUS_SUBTRAHEND;
+    }
+
+    public static float kelvinToCelsiusConversion(float kelvinTemp, boolean roundCelsius) {
+        if (!roundCelsius) {
+            return kelvinToCelsiusConversion(kelvinTemp);
+        }
+        return Math.abs(kelvinTemp - Constants.KELVIN_TO_CELSIUS_SUBTRAHEND);
     }
 
     public static int kelvinToCelsiusConversionInteger(float kelvinTemp) {
