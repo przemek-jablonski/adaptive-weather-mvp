@@ -40,10 +40,9 @@ public interface BulkWeatherInfoView extends BaseAndroidView {
     void showForecastLocationLayout();
     void updateForecastLocationTimeLayout(WeatherForecastResponse response);
 
-
-    void hideForecastChartLayout();
-    void showForecastChartLayout();
-    void updateForecastChartLayout(WeatherForecastResponse response);
+//    void hideForecastChartLayout();
+//    void showForecastChartLayout();
+//    void updateForecastChartLayout(WeatherForecastResponse response);
 
 
 

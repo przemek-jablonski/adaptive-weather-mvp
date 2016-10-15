@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 
 import com.android.szparag.newadaptiveweather.AppController;
 import com.android.szparag.newadaptiveweather.R;
+import com.android.szparag.newadaptiveweather.views.MainPagerAdapter;
 
 import java.util.Random;
 
@@ -19,20 +21,17 @@ import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity {
 
-    public String sharedPrefsKey = "dagger";
+    MainPagerAdapter    mainPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //layout (nested fragment inside .xml here)
         setContentView(R.layout.activity_main);
 
-        //toolbar instantiation from .xml
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //floating action button instantiation + onclick
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -9,8 +9,10 @@ import com.android.szparag.newadaptiveweather.AppController;
 import com.android.szparag.newadaptiveweather.backend.RealmUtils;
 import com.android.szparag.newadaptiveweather.backend.interceptors.AvoidNullsInterceptor;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
-import com.android.szparag.newadaptiveweather.presenters.BasePresenter;
+import com.android.szparag.newadaptiveweather.presenters.BulkWeatherInfoBasePresenter;
 import com.android.szparag.newadaptiveweather.presenters.BulkWeatherInfoPresenter;
+import com.android.szparag.newadaptiveweather.presenters.OneDayWeatherInfoBasePresenter;
+import com.android.szparag.newadaptiveweather.presenters.OneDayWeatherInfoPresenter;
 import com.android.szparag.newadaptiveweather.utils.Constants;
 
 import javax.inject.Named;
@@ -70,12 +72,17 @@ public class AdaptiveWeatherModule {
     }
 
     @Provides
-    public BasePresenter provideMainPresenter(WeatherService service,
-                                              @Named(Constants.GOOGLEMAPSSTATIC_BASEURL) String baseUrl,
-                                              @Named(Constants.GOOGLEMAPSSTATIC_APIKEY) String apiKey) {
+    @Singleton
+    public BulkWeatherInfoBasePresenter provideBulkWeatherInfoPresenter(WeatherService service,
+                                                                        @Named(Constants.GOOGLEMAPSSTATIC_BASEURL) String baseUrl,
+                                                                        @Named(Constants.GOOGLEMAPSSTATIC_APIKEY) String apiKey) {
         return new BulkWeatherInfoPresenter(service, baseUrl, apiKey);
     }
 
+    @Provides
+    public OneDayWeatherInfoBasePresenter provideOneDayWeatherInfoPresenter(WeatherService service) {
+        return new OneDayWeatherInfoPresenter(service);
+    }
 
 
 }

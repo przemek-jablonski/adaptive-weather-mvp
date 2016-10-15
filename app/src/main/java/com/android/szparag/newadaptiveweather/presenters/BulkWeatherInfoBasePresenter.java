@@ -5,7 +5,7 @@ import com.android.szparag.newadaptiveweather.views.contracts.BulkWeatherInfoVie
 /**
  * Created by ciemek on 24/09/2016.
  */
-public interface BasePresenter {
+public interface BulkWeatherInfoBasePresenter {
 
     void setView(BulkWeatherInfoView view);
 

@@ -7,6 +7,8 @@ import com.android.szparag.newadaptiveweather.activities.MainActivity;
 import com.android.szparag.newadaptiveweather.dagger.modules.AdaptiveWeatherModule;
 import com.android.szparag.newadaptiveweather.dagger.modules.NetworkingModule;
 import com.android.szparag.newadaptiveweather.utils.Utils;
+import com.android.szparag.newadaptiveweather.views.OneDayWeatherInfoFragment;
+import com.android.szparag.newadaptiveweather.views.contracts.OneDayWeatherInfoView;
 
 import javax.inject.Singleton;
 
@@ -20,11 +22,16 @@ import dagger.Component;
 @Component(modules = { AdaptiveWeatherModule.class, NetworkingModule.class})
 public interface MainComponent {
 
-    void inject(BulkWeatherInfoFragment injectionTarget);
+    //presenters:
     void inject(BulkWeatherInfoPresenter injectionTarget);
+    void inject(OneDayWeatherInfoView injectionTarget);
 
-    void inject(MainActivity injectionTarget);
+    //views:
+    void inject(BulkWeatherInfoFragment injectionTarget);
+    void inject(OneDayWeatherInfoFragment injectionTarget);
+    void inject(MainActivity injectionTarget); //?
 
+    //misc:
     void inject(AppController injectionTarget);
     void inject(Utils injectionTarget);
 

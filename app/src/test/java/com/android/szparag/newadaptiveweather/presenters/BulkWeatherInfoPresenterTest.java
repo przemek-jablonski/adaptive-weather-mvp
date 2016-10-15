@@ -13,7 +13,7 @@ import static org.mockito.Mockito.mock;
  */
 public class BulkWeatherInfoPresenterTest {
 
-    BasePresenter   basePresenter;
+    BulkWeatherInfoBasePresenter bulkWeatherInfoBasePresenter;
     WeatherService  mockService;
     BulkWeatherInfoView mockView;
 
@@ -24,8 +24,8 @@ public class BulkWeatherInfoPresenterTest {
 
         mockView = mock(BulkWeatherInfoView.class);
 
-//        basePresenter = new BulkWeatherInfoPresenter(mockService);
-//        basePresenter.setView(mockView);
+//        bulkWeatherInfoBasePresenter = new BulkWeatherInfoPresenter(mockService);
+//        bulkWeatherInfoBasePresenter.setView(mockView);
     }
 
     @Test
@@ -35,7 +35,7 @@ public class BulkWeatherInfoPresenterTest {
 
 //    @Test
 //    public void ifUserIsNullThenNoInteractionWithView() {
-//        basePresenter.fetchWeather5Day();
+//        bulkWeatherInfoBasePresenter.fetchWeather5Day();
 //    }
 
 

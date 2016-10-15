@@ -36,7 +36,7 @@ import retrofit2.Response;
 /**
  * Created by ciemek on 24/09/2016.
  */
-public class BulkWeatherInfoPresenter implements BasePresenter {
+public class BulkWeatherInfoPresenter implements BulkWeatherInfoBasePresenter {
 
     @Inject
     Realm realm;
@@ -197,9 +197,11 @@ public class BulkWeatherInfoPresenter implements BasePresenter {
             @Override
             public void onResponse(Call<WeatherForecastResponse> call, Response<WeatherForecastResponse> response) {
                 view.showForecastLocationLayout();
+                view.showForecast5DayView();
+//                view.showForecastChartLayout();
                 view.updateForecast5DayView(response.body());
                 view.updateForecastLocationTimeLayout(response.body());
-                view.updateForecastChartLayout(response.body());
+//                view.updateForecastChartLayout(response.body());
                 view.showWeatherFetchSuccess();
             }
 

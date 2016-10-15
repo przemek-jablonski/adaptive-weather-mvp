@@ -22,7 +22,7 @@ import com.android.szparag.newadaptiveweather.adapters.BaseAdapter;
 import com.android.szparag.newadaptiveweather.adapters.MainAdapter;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
-import com.android.szparag.newadaptiveweather.presenters.BasePresenter;
+import com.android.szparag.newadaptiveweather.presenters.BulkWeatherInfoBasePresenter;
 import com.android.szparag.newadaptiveweather.utils.Utils;
 
 
@@ -33,13 +33,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.android.szparag.newadaptiveweather.decorators.HorizontalSeparator;
 import com.android.szparag.newadaptiveweather.views.contracts.BulkWeatherInfoView;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -47,7 +40,7 @@ import java.util.List;
 public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfoView {
 
     @Inject
-    BasePresenter presenter;
+    BulkWeatherInfoBasePresenter presenter;
 
     @BindView(R.id.bulk_fragment_location)
     View        locationView;
@@ -58,9 +51,7 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
     @BindView(R.id.bulk_fragment_5day_recycler)
     RecyclerView forecast5dayView;
 
-    @BindView(R.id.item_weather_charts_horizontal)
-    LineChart   forecastChartsView;
-
+    //todo: or maybe as a fragment? like WeatherCurrentFragment
 
     //todo: make a viewholder pattern for every view inside forecastCurrentView
     //TODO: SOONER THAN LATER
@@ -101,6 +92,16 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
     private MainAdapter adapter;
     private Unbinder    unbinder;
 
+    public static BulkWeatherInfoFragment newInstance(int pagePos, String pageTitle) {
+        BulkWeatherInfoFragment fragment = new BulkWeatherInfoFragment();
+        Bundle args = new Bundle();
+
+        args.putInt("pagePos", pagePos);
+        args.putString("pageTitle", pageTitle);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     // fragment lifecycle calls:
     @Override
@@ -118,7 +119,7 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         hideForecastCurrentView();
         hideForecastLocationLayout();
         hideForecast5DayView();
-        hideForecastChartLayout();
+//        hideForecastChartLayout();
     }
 
     @Override
@@ -240,30 +241,7 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         ((TextView) locationView.findViewById(R.id.item_weather_location_time)).setText(response.list.get(0).calculationUTCTime);
     }
 
-    // location
-    @Override
-    public void hideForecastChartLayout() {
-        forecastChartsView.setVisibility(View.GONE);
-    }
 
-    @Override
-    public void showForecastChartLayout() {
-        forecastChartsView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void updateForecastChartLayout(WeatherForecastResponse response) {
-        List<Entry> entries = new ArrayList<>(response.list.size());
-
-        for (int i = 0; i < response.list.size(); ++i) {
-            entries.add(new Entry(response.list.get(i).calculationUnixTime, response.list.get(i).mainWeatherData.temp));
-        }
-        LineDataSet lineDataSet = new LineDataSet(entries, "temperature");
-        LineData lineData = new LineData(lineDataSet);
-        forecastChartsView.setData(lineData);
-        forecastChartsView.invalidate();
-
-    }
 
     @Override
     public SharedPreferences getSharedPreferences() {
