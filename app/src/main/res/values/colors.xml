@@ -8,4 +8,10 @@
 
     <color name="backgroundDarkLight">#99bdbdbd</color>
     <color name="backgroundDarkHeavy">#757575</color>
+
+    <color name="tempGraph_dot">#ffccbc</color>
+    <color name="tempGraph_line">#ff3d00</color>
+    <color name="tempGraph_high">#ff6e40</color>
+    <color name="tempGraph_middle">#ff9e80</color>
+    <color name="tempGraph_low">#ffecb3</color>
 </resources>

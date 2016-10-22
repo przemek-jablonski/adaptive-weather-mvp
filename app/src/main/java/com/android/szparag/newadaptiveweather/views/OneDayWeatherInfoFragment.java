@@ -12,21 +12,22 @@ import com.android.szparag.newadaptiveweather.R;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.WeatherForecastItem;
 import com.android.szparag.newadaptiveweather.presenters.OneDayWeatherInfoBasePresenter;
-import com.android.szparag.newadaptiveweather.utils.Computation;
+import com.android.szparag.newadaptiveweather.utils.Constants;
 import com.android.szparag.newadaptiveweather.utils.Utils;
 import com.android.szparag.newadaptiveweather.views.contracts.OneDayWeatherInfoView;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.android.szparag.newadaptiveweather.utils.Constants.DAY_FORWARD_KEY;
+import static com.android.szparag.newadaptiveweather.utils.Constants.DAY_FORWARD_PAGE_TITLE_KEY;
 
 /**
  * Created by ciemek on 14/10/2016.
@@ -40,12 +41,12 @@ public class OneDayWeatherInfoFragment extends Fragment implements OneDayWeather
     @BindView(R.id.item_weather_chart_horizontal)
     LineChart forecastChartsView;
 
-    public static OneDayWeatherInfoFragment newInstance(int pagePos, String pageTitle) {
+    public static OneDayWeatherInfoFragment newInstance(int dayForward, String pageTitle) {
         OneDayWeatherInfoFragment fragment = new OneDayWeatherInfoFragment();
         Bundle args = new Bundle();
 
-        args.putInt("pagePos", pagePos);
-        args.putString("pageTitle", pageTitle);
+        args.putInt(DAY_FORWARD_KEY, dayForward); //todo: key string values in Constants.(...) class
+        args.putString(DAY_FORWARD_PAGE_TITLE_KEY, pageTitle);
         fragment.setArguments(args);
 
         return fragment;
@@ -69,25 +70,21 @@ public class OneDayWeatherInfoFragment extends Fragment implements OneDayWeather
     @Override
     public void onResume() {
         super.onResume();
-
         presenter.setView(this);
 
-        presenter.fetchWeather5Day();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            presenter.fetchWeatherOneDay();
+        }
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public int getDaysForward() {
+        return getArguments().getInt(DAY_FORWARD_KEY, 1);
     }
 
     @Override
@@ -101,25 +98,20 @@ public class OneDayWeatherInfoFragment extends Fragment implements OneDayWeather
     }
 
     @Override
-    public void updateForecastChartLayout(WeatherForecastResponse response) {
-        updateForecastChartLayout(response.list);
-    }
+    public void updateForecastChartLayout(LineDataSet graphLineDataSet) {
 
-    @Override
-    public void updateForecastChartLayout(List<WeatherForecastItem> oneDayWeatherList) {
-        List<Entry> entries = new ArrayList<>(oneDayWeatherList.size());
+        graphLineDataSet.setColor(getResources().getColor(R.color.tempGraph_high));
+        graphLineDataSet.setCircleColor(getResources().getColor(R.color.tempGraph_dot));
+        graphLineDataSet.setFillColor(getResources().getColor(R.color.tempGraph_low));
+        LineData lineData = new LineData(graphLineDataSet);
+        showForecastChartLayout();
 
-        for (int i = 0; i < oneDayWeatherList.size(); ++i) {
-            entries.add(
-                    new Entry(
-                            Computation.getHour24FromUnixTime(oneDayWeatherList.get(i).calculationUnixTime),
-                            Computation.kelvinToCelsiusConversion(oneDayWeatherList.get(i).mainWeatherData.temp, true))
-            );
-        }
-        LineDataSet lineDataSet = new LineDataSet(entries, "temperature");
-
-        LineData lineData = new LineData(lineDataSet);
         forecastChartsView.setData(lineData);
+        forecastChartsView.getAxisLeft().setLabelCount(0);
+        forecastChartsView.getAxisRight().setEnabled(false);
+        forecastChartsView.getXAxis().setAvoidFirstLastClipping(true);
+        forecastChartsView.getXAxis().setAxisMaxValue(forecastChartsView.getXAxis().getAxisMaximum() + 4);
+        forecastChartsView.getXAxis().setAxisMinValue(forecastChartsView.getXAxis().getAxisMinimum() - 4);
         forecastChartsView.invalidate();
     }
 

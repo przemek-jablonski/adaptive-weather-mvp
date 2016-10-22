@@ -61,14 +61,14 @@ public class AdaptiveWeatherModule {
     }
 
     @Provides
-    @Singleton
-    public RealmUtils provideRealmUtils() {
-        return new RealmUtils();
+    public Realm provideRealm() {
+        return Realm.getDefaultInstance();
     }
 
     @Provides
-    public Realm provideRealm() {
-        return Realm.getDefaultInstance();
+    @Singleton
+    public RealmUtils provideRealmUtils(Realm realm) {
+        return new RealmUtils(realm);
     }
 
     @Provides
@@ -80,6 +80,7 @@ public class AdaptiveWeatherModule {
     }
 
     @Provides
+    @Singleton
     public OneDayWeatherInfoBasePresenter provideOneDayWeatherInfoPresenter(WeatherService service) {
         return new OneDayWeatherInfoPresenter(service);
     }

@@ -17,6 +17,9 @@ public class Constants {
 
     public static final String LAST_API_UPDATE_TIME = "last_api_update_time";
 
+    public static final String DAY_FORWARD_KEY = "dayForward";
+    public static final String DAY_FORWARD_PAGE_TITLE_KEY = "pageTitle";
+
     public static float KELVIN_TO_CELSIUS_SUBTRAHEND = 273.15f;
 
     //the reason behind existence of this class (instead of having strings in strings.xml)

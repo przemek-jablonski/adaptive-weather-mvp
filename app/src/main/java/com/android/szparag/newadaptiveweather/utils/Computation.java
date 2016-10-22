@@ -4,6 +4,7 @@ package com.android.szparag.newadaptiveweather.utils;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,9 +30,18 @@ public class Computation {
         public static final int OUTDATED_DATA_INTERVAL = HOUR_2;
     }
 
+    public static long getNextDaysTime(int daysForward) {
+        Calendar date = new GregorianCalendar();
+        date.set(Calendar.HOUR_OF_DAY, 0);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
+        date.add(Calendar.DAY_OF_MONTH, daysForward);
+        return date.getTime().getTime()/1000L;
+    }
 
     public static int getHour24FromUnixTime(long unixTime) {
-        //todo: move it to dagger module with @Singleton annot
+//        //todo: move it to dagger module with @Singleton annot
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(unixTime * 1000L);
         calendar.add(Calendar.HOUR_OF_DAY, -1);
@@ -47,9 +57,6 @@ public class Computation {
 
     //todo: move to utils
     public static CharSequence getHumanDateFromUnixTime(long unixTime) {
-//        Date date = new Date(unixTime);
-//        return date.toString();
-//        SimpleDateFormat date = new SimpleDateFormat("MMMM d, yyyy 'at' h:mm a");
         SimpleDateFormat date = new SimpleDateFormat("MMM d h:mm a");
         return date.format(unixTime * 1000L);
     }

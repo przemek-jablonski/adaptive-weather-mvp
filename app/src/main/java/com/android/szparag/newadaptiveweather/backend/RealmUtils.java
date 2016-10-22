@@ -10,12 +10,24 @@ import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Weath
 
 import java.util.LinkedList;
 
+import javax.inject.Inject;
+
+import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 /**
  * Created by ciemek on 10/10/2016.
  */
 public class RealmUtils {
+
+    @Inject
+    Realm realm;
+
+
+    public RealmUtils(Realm realm) {
+        this.realm = realm;
+    }
 
     private float minDiff;
 
@@ -121,4 +133,20 @@ public class RealmUtils {
     public synchronized float getMinDiff() {
         return minDiff;
     }
+
+    //todo: make here methods for retrieving queries with parameters
+
+    public RealmQuery queryWeathersBetweenTimes(long unixTimeFrom, long unixTimeTo, @Nullable boolean betweenOrEqualTo) {
+        if (betweenOrEqualTo) {
+            return queryWeatherBetweenTimesOrEqualTo(unixTimeFrom, unixTimeTo);
+        }
+        return realm.where(Weather.class).greaterThan("unixTime", unixTimeFrom).lessThan("unixTime", unixTimeTo);
+    }
+
+    private RealmQuery<Weather> queryWeatherBetweenTimesOrEqualTo(long unixTimeFrom, long unixTimeTo) {
+        RealmQuery<Weather> results = realm.where(Weather.class).greaterThanOrEqualTo("unixTime", unixTimeFrom).lessThanOrEqualTo("unixTime", unixTimeTo);
+        return  results;
+    }
+
+
 }
