@@ -6,6 +6,7 @@ import com.android.szparag.newadaptiveweather.dagger.components.DaggerMainCompon
 import com.android.szparag.newadaptiveweather.dagger.components.MainComponent;
 import com.android.szparag.newadaptiveweather.dagger.modules.AdaptiveWeatherModule;
 import com.android.szparag.newadaptiveweather.dagger.modules.NetworkingModule;
+import com.squareup.picasso.Picasso;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -29,12 +30,15 @@ public class AppController extends Application {
                 .build();
 
         Realm.init(this);
-
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-        .name("weatherdata.realm")
-        .build();
+                .name("weatherdata.realm")
+                .deleteRealmIfMigrationNeeded()
+                .build();
 
         Realm.setDefaultConfiguration(realmConfiguration);
+
+        Picasso.with(this).setLoggingEnabled(true);
+        Picasso.with(this).setIndicatorsEnabled(true);
 
     }
 

@@ -7,6 +7,8 @@ import com.android.szparag.newadaptiveweather.adapters.BaseAdapter;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 
+import io.realm.RealmResults;
+
 /**
  * Created by ciemek on 23/09/2016.
  */
@@ -34,11 +36,11 @@ public interface BulkWeatherInfoView extends BaseAndroidView {
     void buildForecast5DayView();
     void hideForecast5DayView();
     void showForecast5DayView();
-    void updateForecast5DayView(WeatherForecastResponse forecast);
+    void updateForecast5DayView(RealmResults<Weather> weathers);
 
-    void hideForecastLocationLayout();
-    void showForecastLocationLayout();
-    void updateForecastLocationTimeLayout(WeatherForecastResponse response);
+    void hideForecastLocationTimeLayout();
+    void showForecastLocationTimeLayout();
+    void updateForecastLocationTimeLayout(Weather weather);
 
 //    void hideForecastChartLayout();
 //    void showForecastChartLayout();
@@ -49,6 +51,6 @@ public interface BulkWeatherInfoView extends BaseAndroidView {
     int[] getViewDimensions();
 
     RecyclerView getRecycler();
-    BaseAdapter getAdapter();
+    BaseAdapter getWeatherAdapter();
 
 }

@@ -19,10 +19,11 @@ import android.widget.TextView;
 
 import com.android.szparag.newadaptiveweather.R;
 import com.android.szparag.newadaptiveweather.adapters.BaseAdapter;
-import com.android.szparag.newadaptiveweather.adapters.MainAdapter;
+import com.android.szparag.newadaptiveweather.adapters.CurrentWeatherAdapter;
+import com.android.szparag.newadaptiveweather.adapters.WeatherAdapter;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
-import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.presenters.BulkWeatherInfoBasePresenter;
+import com.android.szparag.newadaptiveweather.utils.Computation;
 import com.android.szparag.newadaptiveweather.utils.Utils;
 
 
@@ -31,6 +32,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.realm.RealmResults;
+
 import com.android.szparag.newadaptiveweather.decorators.HorizontalSeparator;
 import com.android.szparag.newadaptiveweather.views.contracts.BulkWeatherInfoView;
 
@@ -53,44 +56,10 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
 
     //todo: or maybe as a fragment? like WeatherCurrentFragment
 
-    //todo: make a viewholder pattern for every view inside forecastCurrentView
-    //TODO: SOONER THAN LATER
-    @BindView(R.id.item_weather_current_shortdesc)
-    TextView forecastCurrentShortDesc;
-
-    @BindView(R.id.item_weather_current_tempmaxmin)
-    TextView forecastCurrentTemperatures;
-
-    @BindView(R.id.item_weather_current_temperature)
-    TextView forecastCurrentTemperature;
-
-    @BindView(R.id.item_weather_current_desc)
-    TextView forecastCurrentDesc;
-
-    @BindView(R.id.item_weather_current_pressure_val)
-    TextView forecastCurrentPressureVal;
-
-    @BindView(R.id.item_weather_current_humidity_val)
-    TextView forecastCurrentHumidityVal;
-
-    @BindView(R.id.item_weather_current_windspeed_val)
-    TextView forecastCurrentWindspeedVal;
-
-    @BindView(R.id.item_weather_current_winddirection_val)
-    TextView forecastCurrentWinddirectionVal;
-
-    @BindView(R.id.item_weather_current_clouds_val)
-    TextView forecastCurrentCloudsVal;
-
-    @BindView(R.id.item_weather_current_rain_val)
-    TextView forecastCurrentRainVal;
-
-    @BindView(R.id.item_weather_current_snow_val)
-    TextView forecastCurrentSnowVal;
-
-
-    private MainAdapter adapter;
+    private CurrentWeatherAdapter currentWeatherAdapter;
+    private WeatherAdapter weatherAdapter;
     private Unbinder    unbinder;
+
 
     public static BulkWeatherInfoFragment newInstance(int pagePos, String pageTitle) {
         BulkWeatherInfoFragment fragment = new BulkWeatherInfoFragment();
@@ -117,7 +86,7 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         Utils.getDagger2(this).inject(this);
 
         hideForecastCurrentView();
-        hideForecastLocationLayout();
+        hideForecastLocationTimeLayout();
         hideForecast5DayView();
 //        hideForecastChartLayout();
     }
@@ -156,7 +125,7 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
     //methods for current forecast view:
     @Override
     public void buildForecastCurrentView() {
-//        unbinderCurrentView = ButterKnife.bind(this, forecastCurrentView);
+        currentWeatherAdapter = new CurrentWeatherAdapter(forecastCurrentView);
     }
 
     @Override
@@ -171,25 +140,11 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
 
     @Override
     public void updateForecastCurrentView(Weather weather) {
-        forecastCurrentTemperature.setText(Utils.makeTemperatureString(weather.getTemperature()));
-        forecastCurrentTemperatures.setText(Utils.makeTemperatureMinMaxString(weather.getTemperatureMax(), weather.getTemperatureMin()));
-
-        forecastCurrentShortDesc.setText(weather.getWeatherMain());
-        forecastCurrentDesc.setText(weather.getWeatherDescription());
-
-        forecastCurrentPressureVal.setText(Utils.makeStringRoundedFloat(weather.getPressureAtmospheric()));
-        forecastCurrentHumidityVal.setText(Utils.makeStringRoundedFloat(weather.getHumidityPercent()));
-
-        forecastCurrentWindspeedVal.setText(Utils.makeStringRoundedFloat(weather.getWindSpeed()));
-        forecastCurrentWinddirectionVal.setText(Utils.makeStringRoundedFloat(weather.getWindDirection()));
-
-        forecastCurrentCloudsVal.setText(Utils.makeStringRoundedFloat(weather.getCloudsPercent()));
-
-        forecastCurrentRainVal.setText(Utils.makeStringRoundedFloat(weather.getRainPast3h()));
-        forecastCurrentSnowVal.setText(Utils.makeStringRoundedFloat(weather.getSnowPast3h()));
+        currentWeatherAdapter.setCurrentWeather(weather);
+        currentWeatherAdapter.onBind();
+        showForecastCurrentView();
     }
 
-    //methods for 5day forecast view:
     @Override
     public void buildForecast5DayView() {
         forecast5dayView.setLayoutManager(
@@ -200,10 +155,9 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         );
         forecast5dayView.setHasFixedSize(false);
         forecast5dayView.addItemDecoration(new HorizontalSeparator(getActivity()));
-        adapter = new MainAdapter(null);
-        forecast5dayView.setAdapter(adapter);
+        weatherAdapter = new WeatherAdapter(null);
+        forecast5dayView.setAdapter(weatherAdapter);
         forecast5dayView.setNestedScrollingEnabled(false);
-
     }
 
     @Override
@@ -217,29 +171,33 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
     }
 
     @Override
-    public void updateForecast5DayView(WeatherForecastResponse forecast) {
-        adapter.updateItems(forecast.list);
+    public void updateForecast5DayView(RealmResults<Weather> weathers) {
+        showForecast5DayView();
+        weatherAdapter.updateItems(weathers);
     }
 
 
     // location on/off
     @Override
-    public void showForecastLocationLayout() {
+    public void showForecastLocationTimeLayout() {
         locationView.setVisibility(LinearLayout.VISIBLE);
     }
 
     @Override
-    public void hideForecastLocationLayout() {
+    public void hideForecastLocationTimeLayout() {
         locationView.setVisibility(LinearLayout.INVISIBLE);
     }
 
     @Override
-    public void updateForecastLocationTimeLayout(WeatherForecastResponse response) {
-        ((TextView) locationView.findViewById(R.id.item_weather_location_left)).setText(response.city.name);
-        ((TextView) locationView.findViewById(R.id.item_weather_location_right)).setText(response.city.countryCode);
-        ((TextView) locationView.findViewById(R.id.item_weather_location_gps)).setText(Utils.makeLocationGpsString(response.city));
-        ((TextView) locationView.findViewById(R.id.item_weather_location_time)).setText(response.list.get(0).calculationUTCTime);
+    public void updateForecastLocationTimeLayout(Weather weather) {
+        showForecastLocationTimeLayout();
+        ((TextView) locationView.findViewById(R.id.item_weather_location_left)).setText(weather.getCity());
+        ((TextView) locationView.findViewById(R.id.item_weather_location_right)).setText("PL"); //fixme
+//        ((TextView) locationView.findViewById(R.id.item_weather_location_gps)).setText(Utils.makeLocationGpsString("asdadsasd")); //fixme
+        ((TextView) locationView.findViewById(R.id.item_weather_location_gps)).setText("asdadsasd");
+        ((TextView) locationView.findViewById(R.id.item_weather_location_time)).setText(Computation.getHumanDateFromUnixTime(weather.getUnixTime()));
     }
+
 
 
 
@@ -309,9 +267,8 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         return forecast5dayView;
     }
 
-    @Override
-    public BaseAdapter getAdapter() {
-        return adapter;
+    public BaseAdapter getWeatherAdapter() {
+        return weatherAdapter;
     }
 
     @Override

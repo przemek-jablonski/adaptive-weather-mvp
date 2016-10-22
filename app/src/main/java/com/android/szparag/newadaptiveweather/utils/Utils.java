@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.android.szparag.newadaptiveweather.AppController;
+import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.City;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Coordinates;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.WeatherForecastItem;
@@ -58,44 +59,25 @@ public class Utils {
     }
 
 
-    public static CharSequence makeWeatherDetailString(WeatherForecastItem weatherForecastItem) {
+    public static CharSequence makeWeatherDetailString(Weather weather) {
         StringBuilder builder = new StringBuilder();
 
-        if (weatherForecastItem.clouds.cloudsPercent < 5) {
-            builder.append("Clear sky");
-        } else {
-            builder.append(weatherForecastItem.clouds.cloudsPercent);
-            builder.append("% clouds");
-        }
+        builder.append(weather.getCloudsPercent());
+        builder.append("% clouds");
 
-        //TODO: write custom json deserializer, that will map (null)s to (0)s
-        if (weatherForecastItem.rain != null) {
-            if (weatherForecastItem.rain.past3h != null) {
-                if (weatherForecastItem.rain.past3h > 0) {
-                    builder.append(" | ");
-                    builder.append(weatherForecastItem.rain.past3h);
-                    builder.append(" rain");
-                }
-            }
-        }
-
-        if (weatherForecastItem.snow != null) {
-            if(weatherForecastItem.rain.past3h != null) {
-                if (weatherForecastItem.snow.past3h > 0) {
-                    builder.append(" | ");
-                    builder.append(weatherForecastItem.snow.past3h);
-                    builder.append(" snow");
-                }
-            }
-        }
 
         builder.append(" | ");
-        if (weatherForecastItem.wind.speed < 1) {
-            builder.append("no wind");
-        } else {
-            builder.append(weatherForecastItem.wind.speed);
-            builder.append("kmph (?)");
-        }
+        builder.append(weather.getRainPast3h());
+        builder.append(" rain");
+
+        builder.append(" | ");
+        builder.append(weather.getSnowPast3h());
+        builder.append(" snow");
+
+
+        builder.append(" | ");
+        builder.append(weather.getWindSpeed());
+        builder.append("kmph (?)");
 
         return builder.toString();
     }

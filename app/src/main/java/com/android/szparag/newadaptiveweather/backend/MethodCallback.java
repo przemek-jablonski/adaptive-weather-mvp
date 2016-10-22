@@ -13,6 +13,10 @@ public interface MethodCallback {
         void onSuccess(Weather result);
     }
 
+    interface OnSuccesses {
+        void onSuccess(RealmResults<Weather> weathers);
+    }
+
     interface OnFailure {
         void onFailure();
     }

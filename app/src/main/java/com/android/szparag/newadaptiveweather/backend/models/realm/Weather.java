@@ -16,6 +16,7 @@ public class Weather implements RealmModel {
     @PrimaryKey
     private long    id;
     private long    unixTime;
+    private String  humanTime;
     private String  city;
 
     //WeatherForecastItem outer scope representation
@@ -177,5 +178,12 @@ public class Weather implements RealmModel {
     }
     public void setWeatherIconId(String weatherIconId) {
         this.weatherIconId = weatherIconId;
+    }
+
+    public String getHumanTime() {
+        return humanTime;
+    }
+    public void setHumanTime(String humanTime) {
+        this.humanTime = humanTime;
     }
 }

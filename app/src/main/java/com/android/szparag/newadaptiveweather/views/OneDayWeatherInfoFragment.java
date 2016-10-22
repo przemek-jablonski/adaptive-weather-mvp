@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 
 import com.android.szparag.newadaptiveweather.R;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
+import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.WeatherForecastItem;
 import com.android.szparag.newadaptiveweather.presenters.OneDayWeatherInfoBasePresenter;
+import com.android.szparag.newadaptiveweather.utils.Computation;
 import com.android.szparag.newadaptiveweather.utils.Utils;
 import com.android.szparag.newadaptiveweather.views.contracts.OneDayWeatherInfoView;
 import com.github.mikephil.charting.charts.LineChart;
@@ -100,10 +102,19 @@ public class OneDayWeatherInfoFragment extends Fragment implements OneDayWeather
 
     @Override
     public void updateForecastChartLayout(WeatherForecastResponse response) {
-        List<Entry> entries = new ArrayList<>(response.list.size());
+        updateForecastChartLayout(response.list);
+    }
 
-        for (int i = 0; i < response.list.size(); ++i) {
-            entries.add(new Entry(response.list.get(i).calculationUnixTime % 100, response.list.get(i).mainWeatherData.temp));
+    @Override
+    public void updateForecastChartLayout(List<WeatherForecastItem> oneDayWeatherList) {
+        List<Entry> entries = new ArrayList<>(oneDayWeatherList.size());
+
+        for (int i = 0; i < oneDayWeatherList.size(); ++i) {
+            entries.add(
+                    new Entry(
+                            Computation.getHour24FromUnixTime(oneDayWeatherList.get(i).calculationUnixTime),
+                            Computation.kelvinToCelsiusConversion(oneDayWeatherList.get(i).mainWeatherData.temp, true))
+            );
         }
         LineDataSet lineDataSet = new LineDataSet(entries, "temperature");
 

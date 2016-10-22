@@ -45,6 +45,13 @@
             android:layout_margin="@dimen/margin_vertical_smaller"
             android:text="@string/placeholder_string_separated" />
 
+        <TextView
+            android:id="@+id/item_weather_current_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_vertical_smaller"
+            android:text="@string/placeholder_string_separated" />
+
     </LinearLayout>
 
 

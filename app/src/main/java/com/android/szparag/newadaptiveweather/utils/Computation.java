@@ -1,6 +1,7 @@
 package com.android.szparag.newadaptiveweather.utils;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -42,6 +43,15 @@ public class Computation {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(unixTime * 1000L);
         return calendar.get(Calendar.HOUR);
+    }
+
+    //todo: move to utils
+    public static CharSequence getHumanDateFromUnixTime(long unixTime) {
+//        Date date = new Date(unixTime);
+//        return date.toString();
+//        SimpleDateFormat date = new SimpleDateFormat("MMMM d, yyyy 'at' h:mm a");
+        SimpleDateFormat date = new SimpleDateFormat("MMM d h:mm a");
+        return date.format(unixTime * 1000L);
     }
 
     public static long calculateUnixTimeInterval(int unixTimeIntervalConstant) {

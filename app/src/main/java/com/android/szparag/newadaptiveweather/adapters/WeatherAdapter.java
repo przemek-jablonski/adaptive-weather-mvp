@@ -8,25 +8,29 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.szparag.newadaptiveweather.R;
-import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.WeatherForecastItem;
+import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
+import com.android.szparag.newadaptiveweather.utils.Computation;
 import com.android.szparag.newadaptiveweather.utils.Utils;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by ciemek on 26/09/2016.
  */
-public class MainAdapter extends BaseAdapter<WeatherForecastItem> {
+public class WeatherAdapter extends BaseAdapter<Weather> {
 
 
     //todo: implement butterknife injects here
 
-    public MainAdapter(@Nullable RecyclerOnPosClickListener clickListener) {
+    public WeatherAdapter(@Nullable RecyclerOnPosClickListener clickListener) {
         super(clickListener);
     }
 
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MainViewHolder(
+        return new WeatherViewHolder(
                 LayoutInflater
                         .from(parent.getContext())
                         .inflate(
@@ -39,11 +43,15 @@ public class MainAdapter extends BaseAdapter<WeatherForecastItem> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        WeatherForecastItem item = items.get(position);
-        ((MainViewHolder) holder).textDay.setText(item.calculationUTCTime);
-        ((MainViewHolder) holder).textShortDesc.setText(item.weather.get(0).description);
-        ((MainViewHolder) holder).textDetail.setText(Utils.makeWeatherDetailString(item));
-        ((MainViewHolder) holder).textTemperature.setText(Utils.makeTemperatureString(item.mainWeatherData.temp));
+        onBindWeatherViewHolder(((WeatherViewHolder) holder), position);
+    }
+
+    private void onBindWeatherViewHolder(WeatherViewHolder holder, int position) {
+        Weather item = items.get(position);
+        holder.textDay.setText(Computation.getHumanDateFromUnixTime(item.getUnixTime()));
+        holder.textShortDesc.setText(item.getWeatherDescription());
+        holder.textDetail.setText(Utils.makeWeatherDetailString(item));
+        holder.textTemperature.setText(Utils.makeTemperatureString(item.getTemperature()));
     }
 
     @Override
@@ -51,20 +59,17 @@ public class MainAdapter extends BaseAdapter<WeatherForecastItem> {
         return super.getItemCount();
     }
 
-    public class MainViewHolder extends RecyclerView.ViewHolder {
+    public class WeatherViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textDay;
-        TextView textShortDesc;
-        TextView textDetail;
-        TextView textTemperature;
+        @BindView(R.id.recycler_item_weather_row_basic_day)     TextView textDay;
+        @BindView(R.id.recycler_item_weather_row_basic_shortdesc) TextView textShortDesc;
+        @BindView(R.id.recycler_item_weather_row_basic_detail)  TextView textDetail;
+        @BindView(R.id.recycler_item_weather_row_basic_temperature) TextView textTemperature;
 
-        public MainViewHolder(View itemView) {
+        public WeatherViewHolder(View itemView) {
             super(itemView);
 
-            textDay = (TextView) itemView.findViewById(R.id.recycler_item_weather_row_basic_day);
-            textShortDesc = (TextView) itemView.findViewById(R.id.recycler_item_weather_row_basic_shortdesc);
-            textDetail = (TextView) itemView.findViewById(R.id.recycler_item_weather_row_basic_detail);
-            textTemperature = (TextView) itemView.findViewById(R.id.recycler_item_weather_row_basic_temperature);
+            ButterKnife.bind(this, itemView);
 
             if (recyclerOnPosClickListener != null) {
                 itemView.setOnClickListener(new View.OnClickListener() {

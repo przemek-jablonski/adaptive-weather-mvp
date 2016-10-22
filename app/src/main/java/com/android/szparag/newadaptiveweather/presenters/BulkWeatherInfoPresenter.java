@@ -72,16 +72,25 @@ public class BulkWeatherInfoPresenter implements BulkWeatherInfoBasePresenter {
         lastApiUpdateTime = view.getSharedPreferences().getLong(Constants.LAST_API_UPDATE_TIME, -1L);
         Utils.getDagger2(view.getAndroidView()).inject(this);
 
-
-        RealmChangeListener realmWeatherCurrentChangeListener = new RealmChangeListener() {
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void onChange(Object element) {
-                Utils.logRealm("Realm WeatherCurrentChangeListener triggered." , "Calling fetchWeatherCurrent...");
-                fetchWeatherCurrent();
+            public void execute(Realm realm) {
+                realm.where(Weather.class).findAll().deleteAllFromRealm();
             }
-        };
+        });
 
-        realm.addChangeListener(realmWeatherCurrentChangeListener);
+
+//        RealmChangeListener realmWeatherCurrentChangeListener = new RealmChangeListener() {
+//            @Override
+//            public void onChange(Object element) {
+//                Utils.logRealm("Realm WeatherCurrentChangeListener triggered." , "Calling fetchWeatherCurrent...");
+////                view.
+////                fetchWeather5Day();
+//            }
+//        };
+//
+//
+//        realm.addChangeListener(realmWeatherCurrentChangeListener);
     }
 
     @Override
@@ -102,74 +111,63 @@ public class BulkWeatherInfoPresenter implements BulkWeatherInfoBasePresenter {
     @Override
     public void fetchWeatherCurrent() {
 
+        //fixme: current weather may be incorectly queried (wrong data)
         fetchWeatherCurrentLocal(new MethodCallback.OnSuccess() {
             @Override
-            public void onSuccess(Weather result) {
-                Utils.logMisc("Local - onSuccess()", "updating view...");
-                view.showForecastCurrentView();
-                view.updateForecastCurrentView(result);
-                view.showWeatherFetchSuccess();
-
+            public void onSuccess(Weather weather) {
+//                view.updateForecastCurrentView(weather);
+//                view.showWeatherFetchSuccess();
+                //                view.updateForecastLocationTimeLayout(weather);
                 //todo: make outdated_data_interval variable in settings and make boolean "always force refresh" and append (&& alwaysForce...) to IF statement
-                if (lastApiUpdateTime < Computation.getCurrentUnixTime() - Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL) {
-                    Utils.logMisc("LAST API UPDATE TIME WAS TOO LONG AGO (" + lastApiUpdateTime
-                            + ", current: " + Computation.getCurrentUnixTime()
-                            + ") , UPDATING DATA THROUGH INTERNET");
-                    fetchWeatherCurrentInternet();
-                } else {
-                    Utils.logMisc("LAST API UPDATE TIME WAS (" + lastApiUpdateTime
-                            + ", current: " + Computation.getCurrentUnixTime());
-                }
+                //todo: get rid of this, this is mostly debug only
+//                if (view.getSharedPreferences().getLong(Constants.LAST_API_UPDATE_TIME, -1L)
+//                        < Computation.getCurrentUnixTime() - Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL) {
+//                    Utils.logMisc("LAST API UPDATE TIME WAS TOO LONG AGO (" + lastApiUpdateTime
+//                            + ", current: " + Computation.getCurrentUnixTime()
+//                            + ") , UPDATING DATA THROUGH INTERNET");
+//                    fetchWeatherCurrentInternet();
+//                } else {
+//                    Utils.logMisc("LAST API UPDATE TIME WAS (" + lastApiUpdateTime
+//                            + ", current: " + Computation.getCurrentUnixTime());
+//                }
             }
         }, new MethodCallback.OnFailure() {
             @Override
             public void onFailure() {
-                Utils.logMisc("Local - ONFAILURE()", "fetching from internet");
                 fetchWeatherCurrentInternet();
+
             }
         });
 
     }
 
+    //currently only internet based, not local
     private void fetchWeatherCurrentLocal(
             @Nullable MethodCallback.OnSuccess onSuccess,
             @Nullable MethodCallback.OnFailure onFailure) {
 
-        RealmQuery<Weather> weatherRealmQuery = realm.where(Weather.class);
-        RealmResults<Weather> closestWeathers = weatherRealmQuery.findAllSorted("unixTime", Sort.ASCENDING);
-
-        Weather currentWeather = realmUtils.findClosestTimeValue(closestWeathers, Computation.getCurrentUnixTime());
-
-        if (currentWeather == null
-//              || IF THERE IS INTERNET CONNECTIVITY AVAILABLE (if user said in settings that he always wants fresh weather info)
-//              || IF LAST KNOWN LOCATION HAS CHANGED
-                ) {
-            Utils.logRealm("fetching CurrentWeather from Local FAILED!");
-            if (currentWeather == null) {
-                Utils.logRealm("(currentWeather null)");
-            }
-            Utils.logRealm("Calling onFailure...");
+//        RealmQuery<Weather> weatherRealmQuery = realm.where(Weather.class);
+//        RealmResults<Weather> closestWeathers = weatherRealmQuery.findAllSorted("unixTime", Sort.ASCENDING);
+//
+//        Weather currentWeather = realmUtils.findClosestTimeValue(closestWeathers, Computation.getCurrentUnixTime());
+//
+//        if (currentWeather == null
+////              || IF THERE IS INTERNET CONNECTIVITY AVAILABLE (if user said in settings that he always wants fresh weather info)
+////              || IF LAST KNOWN LOCATION HAS CHANGED
+//                ) {
             onFailure.onFailure();
-            return;
-        }
-
-        Utils.logRealm(
-                "fetching CurrentWeather from Local succeeded!",
-                "Calling onSuccess...",
-                "currentWeather time delay: " + ((Computation.getCurrentUnixTime() - currentWeather.getUnixTime())/60f) + "minutes  (acceptable: up to " + (Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL/60f) + ")");
-        onSuccess.onSuccess(currentWeather);
+//            return;
+//        }
+//
+//        onSuccess.onSuccess(currentWeather);
     }
 
     private void fetchWeatherCurrentInternet() {
-        Utils.logRetrofit("fetchWeatherCurrentInternet() - firing up Retrofit...");
-        lastApiUpdateTime = view.writeToSharedPreferences(Constants.LAST_API_UPDATE_TIME, Computation.getCurrentUnixTime());
+//        lastApiUpdateTime = view.writeToSharedPreferences(Constants.LAST_API_UPDATE_TIME, Computation.getCurrentUnixTime());
         service.getCurrentWeather(placeholderWarsawGpsLat, placeholderWarsawGpsLon, new Callback<WeatherCurrentResponse>() {
-
             @Override
             public void onResponse(Call<WeatherCurrentResponse> call, Response<WeatherCurrentResponse> response) {
-                Utils.logRetrofit("..Retrofit success");
                 final WeatherCurrentResponse body = avoidNullsInterceptor.processResponseBody(response.body());
-
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -177,14 +175,19 @@ public class BulkWeatherInfoPresenter implements BulkWeatherInfoBasePresenter {
                                 realm.createObject(Weather.class, realm.where(Weather.class).count());
 
                         currentWeatherFromAPI = realmUtils.mapJsonResponseToRealm(body, currentWeatherFromAPI);
-                        Utils.logRealm("(fetchInternet) Weather object created: ID:" + currentWeatherFromAPI.getId() + ", Unix:" + currentWeatherFromAPI.getUnixTime());
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        view.updateForecastCurrentView(realmUtils.findClosestTimeValue(realm.where(Weather.class).findAll(), Computation.getCurrentUnixTime()));
                     }
                 });
+
+
             }
 
             @Override
             public void onFailure(Call<WeatherCurrentResponse> call, Throwable t) {
-                Utils.logRetrofit("..Retrofit failure");
                 view.showWeatherFetchFailure();
             }
         });
@@ -193,16 +196,95 @@ public class BulkWeatherInfoPresenter implements BulkWeatherInfoBasePresenter {
     @Override
     public void fetchWeather5Day() {
 
+        fetchWeather5DayLocal(new MethodCallback.OnSuccesses() {
+            @Override
+            public void onSuccess(RealmResults<Weather> weathers) {
+//                view.updateForecast5DayView(
+//                        realm.where(Weather.class)
+//                                .greaterThanOrEqualTo("unixTime", Computation.getCurrentUnixTime())
+//                                .findAll()
+//                );
+//                view.showWeatherFetchSuccess();
+//                if (view.getSharedPreferences().getLong(Constants.LAST_API_UPDATE_TIME, -1L)
+//                        < Computation.getCurrentUnixTime() - Computation.UnixTimeInterval.OUTDATED_DATA_INTERVAL) {
+//                    fetchWeather5DayInternet();
+//                }
+            }
+        }, new MethodCallback.OnFailure() {
+            @Override
+            public void onFailure() {
+                fetchWeather5DayInternet();
+            }
+        });
+    }
+
+    //(querying from local realm here)
+    private void fetchWeather5DayLocal(
+            @Nullable MethodCallback.OnSuccesses onSuccesses,
+            @Nullable MethodCallback.OnFailure onFailure) {
+
+//        RealmQuery<Weather> realmQuery = realm
+//                .where(Weather.class)
+//                .greaterThanOrEqualTo(
+//                        "unixTime",
+//                        Computation.getCurrentUnixTime()
+//                );
+//
+//        RealmResults<Weather> forecasts5Day = realmQuery.findAllSorted("unixTime", Sort.ASCENDING);
+//
+//        if (forecasts5Day.size() == 0) {
+            onFailure.onFailure();
+//            return;
+//        }
+//
+//        onSuccesses.onSuccess(forecasts5Day);
+    }
+
+
+    private void fetchWeather5DayInternet() {
+//        lastApiUpdateTime = view.writeToSharedPreferences(Constants.LAST_API_UPDATE_TIME, Computation.getCurrentUnixTime());
+
+//        realm.executeTransactionAsync(new Realm.Transaction() {
+//            @Override
+//            public void execute(Realm realm) {
+//                realm
+//                        .where(Weather.class)
+//                        .greaterThan("unixTime", Computation.getCurrentUnixTime())
+//                        .findAll()
+//                        .deleteAllFromRealm();
+//            }
+//        });
+
         service.getForecast5Day(placeholderWarsawGpsLat, placeholderWarsawGpsLon, new Callback<WeatherForecastResponse>() {
             @Override
-            public void onResponse(Call<WeatherForecastResponse> call, Response<WeatherForecastResponse> response) {
-                view.showForecastLocationLayout();
+            public void onResponse(Call<WeatherForecastResponse> call, final Response<WeatherForecastResponse> response) {
+                final WeatherForecastResponse body = avoidNullsInterceptor.processResponseBody(response.body());
+                view.showForecastLocationTimeLayout();
                 view.showForecast5DayView();
-//                view.showForecastChartLayout();
-                view.updateForecast5DayView(response.body());
-                view.updateForecastLocationTimeLayout(response.body());
-//                view.updateForecastChartLayout(response.body());
-                view.showWeatherFetchSuccess();
+
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        for (int i = 0; i < body.list.size(); ++i) {
+                            Weather weather =
+                                    realm.createObject(
+                                            Weather.class,
+                                            realm.where(Weather.class).count()
+                                    );
+
+                            weather = realmUtils.mapJsonRespnseToRealm(
+                                    body.list.get(i),
+                                    body.city,
+                                    weather
+                            );
+                        }
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        view.updateForecast5DayView(realm.where(Weather.class).findAll());
+                    }
+                });
             }
 
             @Override
@@ -211,6 +293,7 @@ public class BulkWeatherInfoPresenter implements BulkWeatherInfoBasePresenter {
             }
         });
     }
+
 
     @Override
     public void fetchBackgroundMap() {
