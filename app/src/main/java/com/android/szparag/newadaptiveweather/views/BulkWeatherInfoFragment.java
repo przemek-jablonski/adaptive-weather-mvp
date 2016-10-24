@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -22,10 +22,11 @@ import com.android.szparag.newadaptiveweather.adapters.BaseAdapter;
 import com.android.szparag.newadaptiveweather.adapters.CurrentWeatherAdapter;
 import com.android.szparag.newadaptiveweather.adapters.WeatherAdapter;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
+import com.android.szparag.newadaptiveweather.decorators.HorizontalSeparator;
 import com.android.szparag.newadaptiveweather.presenters.BulkWeatherInfoBasePresenter;
 import com.android.szparag.newadaptiveweather.utils.Computation;
 import com.android.szparag.newadaptiveweather.utils.Utils;
-
+import com.android.szparag.newadaptiveweather.views.contracts.BulkWeatherInfoView;
 
 import javax.inject.Inject;
 
@@ -33,9 +34,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.realm.RealmResults;
-
-import com.android.szparag.newadaptiveweather.decorators.HorizontalSeparator;
-import com.android.szparag.newadaptiveweather.views.contracts.BulkWeatherInfoView;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -79,29 +77,35 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, getView());
-        Utils.getDagger2(this).inject(this);
-
+        buildForecastCurrentView();
+        buildForecast5DayView();
         hideForecastCurrentView();
         hideForecastLocationTimeLayout();
-        hideForecast5DayView();
-//        hideForecastChartLayout();
+        hideForecast5DayView(); //todo: there should be hide method inside each build()
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Utils.getDagger2(this).inject(this);
+        presenter.setView(this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.fetchWeatherCurrent();
+        presenter.fetchWeather5Day();
+        presenter.fetchBackgroundMap();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        presenter.setView(this);
         presenter.checkInternetConnectivity();
-        buildForecastCurrentView();
-        buildForecast5DayView();
-
-        presenter.fetchWeatherCurrent();
-        presenter.fetchWeather5Day();
-        presenter.fetchBackgroundMap();
     }
 
     @Override
@@ -148,11 +152,7 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
     @Override
     public void buildForecast5DayView() {
         forecast5dayView.setLayoutManager(
-                new LinearLayoutManager(
-                    getActivity(),
-                    LinearLayoutManager.VERTICAL,
-                    false)
-        );
+                new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         forecast5dayView.setHasFixedSize(false);
         forecast5dayView.addItemDecoration(new HorizontalSeparator(getActivity()));
         weatherAdapter = new WeatherAdapter(null);

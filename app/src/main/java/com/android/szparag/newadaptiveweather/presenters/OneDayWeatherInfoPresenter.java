@@ -1,5 +1,7 @@
 package com.android.szparag.newadaptiveweather.presenters;
 
+import android.util.Log;
+
 import com.android.szparag.newadaptiveweather.backend.RealmUtils;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
@@ -7,7 +9,6 @@ import com.android.szparag.newadaptiveweather.utils.Computation;
 import com.android.szparag.newadaptiveweather.utils.Utils;
 import com.android.szparag.newadaptiveweather.views.contracts.OneDayWeatherInfoView;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
 import java.util.ArrayList;
@@ -36,11 +37,13 @@ public class OneDayWeatherInfoPresenter implements OneDayWeatherInfoBasePresente
 
     OneDayWeatherInfoView view;
 
+//    private RealmResults<Weather> weathersOneDay;
+
     private float   placeholderWarsawGpsLat = 52.233101f;
     private float   placeholderWarsawGpsLon = 21.061399f;
 
-    private int     weatherDay = 1; //0 - today, 1 - tomorrow, etc
-    private Date    date;
+//    private int     weatherDay = 1; //0 - today, 1 - tomorrow, etc
+//    private Date    date;
 
     WeatherService  service;
 
@@ -66,6 +69,7 @@ public class OneDayWeatherInfoPresenter implements OneDayWeatherInfoBasePresente
                 .findAllSorted("unixTime", Sort.ASCENDING);
 
         updateGraphData(weathersOneDay);
+        updateOneDayForecastView(weathersOneDay);
     }
 
     @Override
@@ -81,5 +85,15 @@ public class OneDayWeatherInfoPresenter implements OneDayWeatherInfoBasePresente
         LineDataSet lineDataSet = new LineDataSet(chartEntries, "temp");
 
         view.updateForecastChartLayout(lineDataSet);
+    }
+
+    @Override
+    public void updateOneDayForecastView(RealmResults<Weather> weathersOneDay) {
+        view.updateOneDayForecastView(weathersOneDay);
+    }
+
+    @Override
+    public void closeRealm() {
+        realm.close();
     }
 }

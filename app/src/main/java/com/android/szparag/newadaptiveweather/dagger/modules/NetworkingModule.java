@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.android.szparag.newadaptiveweather.R;
 import com.android.szparag.newadaptiveweather.backend.apis.WeatherApiService;
-import com.android.szparag.newadaptiveweather.backend.interceptors.AvoidNullsInterceptor;
 import com.android.szparag.newadaptiveweather.backend.interceptors.PrintResponseInterceptor;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherServiceImpl;

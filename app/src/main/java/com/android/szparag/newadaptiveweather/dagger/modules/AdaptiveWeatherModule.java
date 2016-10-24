@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.android.szparag.newadaptiveweather.AppController;
+import com.android.szparag.newadaptiveweather.AdaptiveWeatherApplication;
 import com.android.szparag.newadaptiveweather.backend.RealmUtils;
 import com.android.szparag.newadaptiveweather.backend.interceptors.AvoidNullsInterceptor;
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
@@ -50,8 +50,8 @@ public class AdaptiveWeatherModule {
 
     @Provides
     @Singleton
-    public AppController provideAppController() throws ClassCastException {
-        return (AppController)application;
+    public AdaptiveWeatherApplication provideAppController() throws ClassCastException {
+        return (AdaptiveWeatherApplication)application;
     }
 
     @Provides

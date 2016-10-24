@@ -15,7 +15,7 @@ import io.realm.RealmConfiguration;
 /**
  * Created by ciemek on 21/09/2016.
  */
-public class AppController extends Application {
+public class AdaptiveWeatherApplication extends Application {
 
     private MainComponent daggerComponent;
 

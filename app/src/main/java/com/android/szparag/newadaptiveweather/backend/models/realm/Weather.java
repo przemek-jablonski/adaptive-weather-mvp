@@ -1,7 +1,5 @@
 package com.android.szparag.newadaptiveweather.backend.models.realm;
 
-import java.util.Date;
-
 import io.realm.RealmModel;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.RealmClass;

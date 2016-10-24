@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.android.szparag.newadaptiveweather.adapters.BaseAdapter;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
-import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 
 import io.realm.RealmResults;
 

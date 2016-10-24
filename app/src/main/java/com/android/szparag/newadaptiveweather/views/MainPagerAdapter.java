@@ -10,9 +10,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
 
-    private static int ITEM_COUNT = 2;
+    private static int ITEM_COUNT = 5;
     //1: bulk info
     //2: day +1 (tomorrow)
+    //3: day +2 (next day) etc etc
 
 
     public MainPagerAdapter(FragmentManager fragmentManager) {

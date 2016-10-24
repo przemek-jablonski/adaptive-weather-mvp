@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentResponse;
-import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.City;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.WeatherForecastItem;
 

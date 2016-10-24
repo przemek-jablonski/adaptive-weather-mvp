@@ -12,13 +12,18 @@ import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.utils.Computation;
 import com.android.szparag.newadaptiveweather.utils.Utils;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.RealmResults;
 
 /**
  * Created by ciemek on 26/09/2016.
  */
 public class WeatherAdapter extends BaseAdapter<Weather> {
+
+//    private RealmResults<Weather> items;
 
 
     //todo: implement butterknife injects here

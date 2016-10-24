@@ -3,9 +3,7 @@ package com.android.szparag.newadaptiveweather.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by ciemek on 28/09/2016.

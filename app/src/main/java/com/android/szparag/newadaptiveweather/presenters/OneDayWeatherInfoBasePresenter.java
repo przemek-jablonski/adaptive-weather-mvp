@@ -16,4 +16,7 @@ public interface OneDayWeatherInfoBasePresenter {
     void fetchWeatherOneDay();
 
     void updateGraphData(RealmResults<Weather> weathersOneDay);
+    void updateOneDayForecastView(RealmResults<Weather> weathersOneDay);
+
+    void closeRealm();
 }

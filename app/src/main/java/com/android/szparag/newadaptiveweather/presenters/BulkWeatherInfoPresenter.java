@@ -20,15 +20,10 @@ import com.android.szparag.newadaptiveweather.views.contracts.BulkWeatherInfoVie
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-
-
 import javax.inject.Inject;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
-import io.realm.Sort;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

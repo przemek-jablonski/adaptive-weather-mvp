@@ -4,7 +4,6 @@ package com.android.szparag.newadaptiveweather.backend.interceptors;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentResponse;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Clouds;
-import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.MainWeatherData;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Rain;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Snow;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.WeatherForecastItem;

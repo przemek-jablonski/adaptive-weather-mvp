@@ -26,4 +26,7 @@
     <string name="rain_text">Rain(3h):</string>
     <string name="snow_text">Snow(3h):</string>
 
+    <string name="day_0_name">Today</string>
+    <string name="day_1_name">Tomorrow</string>
+
 </resources>

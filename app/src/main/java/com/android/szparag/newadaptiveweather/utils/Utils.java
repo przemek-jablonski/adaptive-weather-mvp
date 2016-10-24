@@ -1,15 +1,13 @@
 package com.android.szparag.newadaptiveweather.utils;
 
 import android.app.Activity;
-
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
-import com.android.szparag.newadaptiveweather.AppController;
+import com.android.szparag.newadaptiveweather.AdaptiveWeatherApplication;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.City;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Coordinates;
-import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.WeatherForecastItem;
 import com.android.szparag.newadaptiveweather.dagger.components.MainComponent;
 
 /**
@@ -18,7 +16,7 @@ import com.android.szparag.newadaptiveweather.dagger.components.MainComponent;
 public class Utils {
 
     public static MainComponent getDagger2(Activity activity) {
-        return ((AppController) activity.getApplication()).getComponent();
+        return ((AdaptiveWeatherApplication) activity.getApplication()).getComponent();
     }
 
     public static MainComponent getDagger2(Fragment fragment) {
