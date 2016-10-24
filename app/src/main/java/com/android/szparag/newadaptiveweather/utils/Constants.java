@@ -56,6 +56,9 @@ public class Constants {
             public static final int SCALE_X1 = 1;
             public static final int SCALE_X2 = 2;
         }
+        public class Size {
+            public static final int SIZE_STANDARD = 640; //the only one available in free programme
+        }
     }
 
 }

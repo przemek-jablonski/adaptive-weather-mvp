@@ -18,9 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.szparag.newadaptiveweather.R;
-import com.android.szparag.newadaptiveweather.adapters.BaseAdapter;
+import com.android.szparag.newadaptiveweather.adapters.BaseRecyclerViewAdapter;
 import com.android.szparag.newadaptiveweather.adapters.CurrentWeatherAdapter;
-import com.android.szparag.newadaptiveweather.adapters.WeatherAdapter;
+import com.android.szparag.newadaptiveweather.adapters.FrontWeatherAdapter;
+import com.android.szparag.newadaptiveweather.adapters.WeatherRecyclerViewAdapter;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.decorators.HorizontalSeparator;
 import com.android.szparag.newadaptiveweather.presenters.BulkWeatherInfoBasePresenter;
@@ -40,25 +41,24 @@ import io.realm.RealmResults;
  */
 public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfoView {
 
-    @Inject
-    BulkWeatherInfoBasePresenter presenter;
+    @Inject BulkWeatherInfoBasePresenter presenter;
 
-    @BindView(R.id.bulk_fragment_location)
-    View        locationView;
+    @BindView(R.id.bulk_fragment_location) View locationView;
 
-    @BindView(R.id.bulk_fragment_current)
-    View        forecastCurrentView;
-
-    @BindView(R.id.bulk_fragment_5day_recycler)
-    RecyclerView forecast5dayView;
-
-    //todo: or maybe as a fragment? like WeatherCurrentFragment
-
+    @BindView(R.id.bulk_fragment_current) View forecastCurrentView;
     private CurrentWeatherAdapter currentWeatherAdapter;
-    private WeatherAdapter weatherAdapter;
+
+    @BindView(R.id.bulk_fragment_5day_recycler) RecyclerView forecast5dayView;
+    private WeatherRecyclerViewAdapter weatherAdapter;
+
+    @BindView(R.id.bulk_fragment_front)
+    View forecastFrontView;
+
+    private FrontWeatherAdapter forecastFrontAdapter;
     private Unbinder    unbinder;
 
 
+    //STATIC BUILDER FOR FRAGMENT WITH PARAMS
     public static BulkWeatherInfoFragment newInstance(int pagePos, String pageTitle) {
         BulkWeatherInfoFragment fragment = new BulkWeatherInfoFragment();
         Bundle args = new Bundle();
@@ -70,7 +70,8 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         return fragment;
     }
 
-    // fragment lifecycle calls:
+
+    // FRAGMENT LIFECYCLE CALLS:
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_bulk_weather_info, container, false);
@@ -82,6 +83,7 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         unbinder = ButterKnife.bind(this, getView());
         buildForecastCurrentView();
         buildForecast5DayView();
+        buildFrontWeatherView();
         hideForecastCurrentView();
         hideForecastLocationTimeLayout();
         hideForecast5DayView(); //todo: there should be hide method inside each build()
@@ -98,8 +100,9 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
     public void onStart() {
         super.onStart();
         presenter.fetchWeatherCurrent();
-        presenter.fetchWeather5Day();
         presenter.fetchBackgroundMap();
+        presenter.fetchWeather5Day();
+
     }
 
     @Override
@@ -123,10 +126,36 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.realmClose();
+//        presenter.realmClose();
     }
 
-    //methods for current forecast view:
+
+    //FRONTWEATHER SUBVIEW:
+    @Override
+    public void buildFrontWeatherView() {
+        forecastFrontAdapter = new FrontWeatherAdapter(forecastFrontView);
+        hideFrontWeatherView();
+    }
+
+    @Override
+    public void hideFrontWeatherView() {
+        forecastFrontView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showFrontWeatherView() {
+        forecastFrontView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void updateFrontWeatherView(Weather weather) {
+        forecastFrontAdapter.setWeather(weather);
+        forecastFrontAdapter.onBind();
+        showFrontWeatherView();
+    }
+
+
+    //CURRENTFORECAST SUBVIEW:
     @Override
     public void buildForecastCurrentView() {
         currentWeatherAdapter = new CurrentWeatherAdapter(forecastCurrentView);
@@ -149,13 +178,15 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         showForecastCurrentView();
     }
 
+
+    //5 DAY FORECAST SUBVIEW:
     @Override
     public void buildForecast5DayView() {
         forecast5dayView.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         forecast5dayView.setHasFixedSize(false);
         forecast5dayView.addItemDecoration(new HorizontalSeparator(getActivity()));
-        weatherAdapter = new WeatherAdapter(null);
+        weatherAdapter = new WeatherRecyclerViewAdapter(null);
         forecast5dayView.setAdapter(weatherAdapter);
         forecast5dayView.setNestedScrollingEnabled(false);
     }
@@ -198,7 +229,18 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         ((TextView) locationView.findViewById(R.id.item_weather_location_time)).setText(Computation.getHumanDateFromUnixTime(weather.getUnixTime()));
     }
 
+    //BACKGROUNDIMAGEMETHODS
+    @Override
+    public void setBackground(Bitmap bitmap) {
+//        getView().setBackground(new BitmapDrawable(getResources(), bitmap));
+        forecastFrontAdapter.setBackgroundImage(bitmap);
+        forecastFrontAdapter.onBindBackgroundImage();
+    }
 
+    @Override
+    public void setBackgroundPlaceholder() {
+        //...
+    }
 
 
     @Override
@@ -229,16 +271,6 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         };
     }
 
-    @Override
-    public void setBackground(Bitmap bitmap) {
-//        getView().setBackground(new BitmapDrawable(getResources(), bitmap));
-    }
-
-    @Override
-    public void setBackgroundPlaceholder() {
-        //...
-    }
-
     // snackbar responses:
     @Override
     public void showNetworkConnectionError() {
@@ -267,13 +299,17 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
         return forecast5dayView;
     }
 
-    public BaseAdapter getWeatherAdapter() {
+    public BaseRecyclerViewAdapter getWeatherAdapter() {
         return weatherAdapter;
     }
 
     @Override
     public Fragment getAndroidView() {
         return this;
+    }
+
+    public FrontWeatherAdapter getForecastFrontAdapter() {
+        return forecastFrontAdapter;
     }
 
 }

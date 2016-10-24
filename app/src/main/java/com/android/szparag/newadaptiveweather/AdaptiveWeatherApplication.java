@@ -38,7 +38,7 @@ public class AdaptiveWeatherApplication extends Application {
         Realm.setDefaultConfiguration(realmConfiguration);
 
         Picasso.with(this).setLoggingEnabled(true);
-        Picasso.with(this).setIndicatorsEnabled(true);
+        Picasso.with(this).setIndicatorsEnabled(false);
 
     }
 

@@ -47,6 +47,7 @@ public class BulkWeatherInfoPresenter implements BulkWeatherInfoBasePresenter {
     private float placeholderWarsawGpsLat = 52.233101f;
     private float placeholderWarsawGpsLon = 21.061399f;
 
+
     private String googleStaticMapsBaseUrl;
     private String googleStaticMapsApiKey;
 
@@ -174,7 +175,9 @@ public class BulkWeatherInfoPresenter implements BulkWeatherInfoBasePresenter {
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-                        view.updateForecastCurrentView(realmUtils.findClosestTimeValue(realm.where(Weather.class).findAll(), Computation.getCurrentUnixTime()));
+                        Weather currentWeather = realmUtils.findClosestTimeValue(realm.where(Weather.class).findAll(), Computation.getCurrentUnixTime());
+                        view.updateForecastCurrentView(currentWeather);
+                        view.updateFrontWeatherView(currentWeather);
                     }
                 });
 
@@ -292,41 +295,33 @@ public class BulkWeatherInfoPresenter implements BulkWeatherInfoBasePresenter {
 
     @Override
     public void fetchBackgroundMap() {
-        Picasso.with(view.getActivity()).load(createBackgroundMapUri())
-                .into(new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                view.setBackground(bitmap);
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-                view.showBackgroundFetchFailure();
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                view.setBackgroundPlaceholder();
-            }
-        });
-    }
-
-
-    private String createBackgroundMapUri() {
-        int[] viewDimensions = view.getViewDimensions();
-        return Utils.makeGoogleMapsStaticMapUri(
+        Picasso
+                .with(view.getAndroidView().getContext())
+                .load(Utils.createBackgroundMapUri(
                 googleStaticMapsBaseUrl,
                 googleStaticMapsApiKey,
                 placeholderWarsawGpsLat,
-                placeholderWarsawGpsLon,
-                viewDimensions[0],
-                viewDimensions[1],
-                9,
-                Constants.GoogleMapsStatic.Scale.SCALE_X2,
-                Constants.GoogleMapsStatic.MapType.HYBRID,
-                Constants.GoogleMapsStatic.Format.JPG
-        );
+                placeholderWarsawGpsLon)
+                )
+                .into(view.getForecastFrontAdapter().getBackgroundImage());
+//                .into(new Target() {
+//            @Override
+//            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                view.setBackground(bitmap);
+//            }
+//
+//            @Override
+//            public void onBitmapFailed(Drawable errorDrawable) {
+//                view.showBackgroundFetchFailure();
+//            }
+//
+//            @Override
+//            public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                view.setBackgroundPlaceholder();
+//            }
+//        });
     }
+
 
     @Override
     public void fetchBackgroundImage() {

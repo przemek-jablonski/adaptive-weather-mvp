@@ -6,6 +6,14 @@
     android:layout_marginTop="@dimen/activity_horizontal_margin_half"
     android:layout_marginBottom="@dimen/activity_vertical_margin">
 
+    <!--background image-->
+    <ImageView
+        android:id="@+id/item_weather_front_image_background"
+        android:src="@drawable/ic_light_clouds"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
     <!--view for top weather info-->
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,16 +55,7 @@
             android:layout_marginBottom="@dimen/activity_separator_small" />
     </LinearLayout>
 
-    <!--background image-->
-    <ImageView
-        android:id="@+id/item_weather_front_image_background"
-        android:src="@drawable/ic_light_clouds"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
-
     <!--view for bottom weather info-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"

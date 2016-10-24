@@ -9,18 +9,18 @@ import java.util.List;
 /**
  * Created by ciemek on 26/09/2016.
  */
-public abstract class BaseAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     protected RecyclerOnPosClickListener    recyclerOnPosClickListener;
     protected List<T>                       items;
 
 
-    public BaseAdapter() {
+    public BaseRecyclerViewAdapter() {
         super();
         items = new ArrayList<T>();
     }
 
-    public BaseAdapter(@Nullable RecyclerOnPosClickListener clickListener) {
+    public BaseRecyclerViewAdapter(@Nullable RecyclerOnPosClickListener clickListener) {
         this();
         if (clickListener != null) {
             setRecyclerOnPosClickListener(clickListener);

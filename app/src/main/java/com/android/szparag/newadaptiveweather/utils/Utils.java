@@ -1,10 +1,13 @@
 package com.android.szparag.newadaptiveweather.utils;
 
 import android.app.Activity;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.android.szparag.newadaptiveweather.AdaptiveWeatherApplication;
+import com.android.szparag.newadaptiveweather.R;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.City;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.Coordinates;
@@ -78,6 +81,56 @@ public class Utils {
         builder.append("kmph (?)");
 
         return builder.toString();
+    }
+
+    public static @DrawableRes int getIconRes(int weatherId, boolean colourIcon) {
+        if (weatherId == 800) {
+            return colourIcon ? R.drawable.art_clear : R.drawable.ic_clear;
+        }
+
+        if (weatherId == 801 || weatherId == 802) {
+            return colourIcon ? R.drawable.art_clear : R.drawable.ic_clear;
+        }
+
+        if (weatherId == 803 || weatherId == 804) {
+            return colourIcon ? R.drawable.art_clear : R.drawable.ic_clear;
+        }
+
+        switch (getFirstDigit(weatherId)) {
+            case 2:
+                return colourIcon? R.drawable.art_storm : R.drawable.ic_storm;
+            case 3:
+                return colourIcon? R.drawable.art_light_rain : R.drawable.ic_light_rain;
+            case 5:
+                return colourIcon? R.drawable.art_light_rain : R.drawable.ic_rain;
+            case 6:
+                return colourIcon? R.drawable.art_snow : R.drawable.ic_snow;
+            default:
+                return colourIcon? R.drawable.art_fog : R.drawable.ic_fog;
+        }
+    }
+
+    public static int getFirstDigit(int x) {
+        if (x == 0) return 0;
+        x = Math.abs(x);
+        return (int) Math.floor(x / Math.pow(10, Math.floor(Math.log10(x))));
+    }
+
+    //https://developers.google.com/maps/documentation/static-maps/intro
+    public static String createBackgroundMapUri(
+            String googleStaticMapsBaseUrl, String googleStaticMapsApiKey, float gpsLat, float gpsLon) {
+        return Utils.makeGoogleMapsStaticMapUri(
+                googleStaticMapsBaseUrl,
+                googleStaticMapsApiKey,
+                gpsLat,
+                gpsLon,
+                Constants.GoogleMapsStatic.Size.SIZE_STANDARD,
+                Constants.GoogleMapsStatic.Size.SIZE_STANDARD,
+                9,
+                Constants.GoogleMapsStatic.Scale.SCALE_X2,
+                Constants.GoogleMapsStatic.MapType.HYBRID,
+                Constants.GoogleMapsStatic.Format.JPG
+        );
     }
 
     public static CharSequence makeLocationGpsString(float gpsLat, float gpsLon) {

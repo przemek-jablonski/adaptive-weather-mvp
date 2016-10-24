@@ -3,7 +3,8 @@ package com.android.szparag.newadaptiveweather.views.contracts;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 
-import com.android.szparag.newadaptiveweather.adapters.BaseAdapter;
+import com.android.szparag.newadaptiveweather.adapters.BaseRecyclerViewAdapter;
+import com.android.szparag.newadaptiveweather.adapters.FrontWeatherAdapter;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 
 import io.realm.RealmResults;
@@ -26,6 +27,10 @@ public interface BulkWeatherInfoView extends BaseAndroidView {
     void setBackgroundPlaceholder();
     void showBackgroundFetchFailure();
 
+    void buildFrontWeatherView();
+    void hideFrontWeatherView();
+    void showFrontWeatherView();
+    void updateFrontWeatherView(Weather weather);
 
     void buildForecastCurrentView();
     void hideForecastCurrentView();
@@ -50,6 +55,7 @@ public interface BulkWeatherInfoView extends BaseAndroidView {
     int[] getViewDimensions();
 
     RecyclerView getRecycler();
-    BaseAdapter getWeatherAdapter();
+    BaseRecyclerViewAdapter getWeatherAdapter();
+    public FrontWeatherAdapter getForecastFrontAdapter();
 
 }

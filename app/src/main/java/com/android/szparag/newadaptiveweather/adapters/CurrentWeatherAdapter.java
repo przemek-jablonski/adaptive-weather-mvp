@@ -31,7 +31,6 @@ public class CurrentWeatherAdapter {
 
     public void onBind() {
 
-
         viewHolder.forecastCurrentTemperature.setText(Utils.makeTemperatureString(weather.getTemperature()));
         viewHolder.forecastCurrentTemperatures.setText(Utils.makeTemperatureMinMaxString(weather.getTemperatureMax(), weather.getTemperatureMin()));
 

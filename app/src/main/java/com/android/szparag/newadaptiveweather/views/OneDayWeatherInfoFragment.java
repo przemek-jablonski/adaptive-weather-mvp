@@ -9,10 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 
 import com.android.szparag.newadaptiveweather.R;
-import com.android.szparag.newadaptiveweather.adapters.WeatherAdapter;
+import com.android.szparag.newadaptiveweather.adapters.WeatherRecyclerViewAdapter;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.decorators.HorizontalSeparator;
 import com.android.szparag.newadaptiveweather.presenters.OneDayWeatherInfoBasePresenter;
@@ -46,7 +45,7 @@ public class OneDayWeatherInfoFragment extends Fragment implements OneDayWeather
     @BindView(R.id.bulk_fragment_one_day_recycler)
     RecyclerView oneDayForecastView;
 
-    private WeatherAdapter weatherAdapter;
+    private WeatherRecyclerViewAdapter weatherAdapter;
 
 
     public static OneDayWeatherInfoFragment newInstance(int dayForward, String pageTitle) {
@@ -99,7 +98,7 @@ public class OneDayWeatherInfoFragment extends Fragment implements OneDayWeather
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.closeRealm();
+//        presenter.closeRealm();
     }
 
     @Override
@@ -114,7 +113,7 @@ public class OneDayWeatherInfoFragment extends Fragment implements OneDayWeather
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 //        oneDayForecastView.setHasFixedSize(true);
         oneDayForecastView.addItemDecoration(new HorizontalSeparator(getActivity()));
-        weatherAdapter = new WeatherAdapter(null);
+        weatherAdapter = new WeatherRecyclerViewAdapter(null);
         oneDayForecastView.setAdapter(weatherAdapter);
         oneDayForecastView.setNestedScrollingEnabled(false);
         hideOneDayForecastView();
