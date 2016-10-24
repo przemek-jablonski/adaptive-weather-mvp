@@ -1,10 +1,8 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/app_black</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
@@ -16,5 +14,74 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="app_pagerTitleStrip">
+        <item name="android:textAppearance">@style/PagerTitleStripTextAppearance</item>
+    </style>
+
+    <style name="app_text_xxxl">
+        <item name="android:textAppearance">@style/AppTextHugeLight</item>
+    </style>
+
+    <style name="app_text_xl">
+        <item name="android:textAppearance">@style/AppTextLargeDark</item>
+    </style>
+
+    <style name="app_text_normal_light">
+        <item name="android:textAppearance">@style/AppTextLight</item>
+    </style>
+
+    <style name="app_text_normal_dark">
+
+    </style>
+
+
+    <style name="PagerTitleStripTextAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+
+    <style name="AppTextHugeDark">
+        <item name="android:textColor">@color/text_color_hardblack</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">@dimen/font_size_huge_plus</item>
+    </style>
+
+    <style name="AppTextHugeLight">
+        <item name="android:textColor">@color/text_color_white</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">@dimen/font_size_huge_plus</item>
+    </style>
+
+    <style name="AppTextLargeLight">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AppTextLargeDark">
+        <item name="android:textColor">@color/text_color_hardblack</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">@dimen/font_size_big</item>
+    </style>
+
+    <style name="AppTextLight">
+        <item name="android:textColor">@color/text_color_orangish</item>
+        <item name="android:textSize">@dimen/font_size_normal</item>
+    </style>
+
+    <style name="AppTextNormalDark">
+        <item name="android:textColor">@color/text_color_hardblack</item>
+        <item name="android:textSize">@dimen/font_size_normal</item>
+    </style>
+
+    <style name="AppTextNormalLight">
+        <item name="android:textColor">@color/text_color_lightgrey</item>
+        <item name="android:textSize">@dimen/font_size_normal</item>
+    </style>
+
+
 
 </resources>

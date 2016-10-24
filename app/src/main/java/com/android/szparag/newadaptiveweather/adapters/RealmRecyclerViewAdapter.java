@@ -162,7 +162,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
         } else if (data instanceof RealmList) {
             RealmList realmList = (RealmList) data;
             //noinspection unchecked
-            realmList.realm.handlerController.addChangeListenerAsWeakReference(listener);
+//            realmList.realm.handlerController.addChangeListenerAsWeakReference(listener);
         } else {
             throw new IllegalArgumentException("RealmCollection not supported: " + data.getClass());
         }
@@ -175,7 +175,7 @@ public abstract class RealmRecyclerViewAdapter<T extends RealmModel, VH extends 
         } else if (data instanceof RealmList) {
             RealmList realmList = (RealmList) data;
             //noinspection unchecked
-            realmList.realm.handlerController.removeWeakChangeListener(listener);
+//            realmList.realm.handlerController.removeWeakChangeListener(listener);
         } else {
             throw new IllegalArgumentException("RealmCollection not supported: " + data.getClass());
         }

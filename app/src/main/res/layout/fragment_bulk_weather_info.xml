@@ -1,16 +1,16 @@
  <android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:orientation="vertical"
+     android:paddingLeft="@dimen/activity_horizontal_margin"
+     android:paddingRight="@dimen/activity_horizontal_margin"
      android:layout_marginBottom="@dimen/activity_vertical_margin"
-    tools:context=".views.BulkWeatherInfoFragment"
-    tools:showIn="@layout/activity_main">
+     tools:context=".views.BulkWeatherInfoFragment">
+     <!--tools:showIn="@layout/activity_main"-->
+     <!--android:paddingBottom="@dimen/activity_vertical_margin"-->
+     <!--android:paddingTop="@dimen/activity_vertical_margin"-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,6 +19,11 @@
         android:showDividers="beginning|middle|end"
         android:fadingEdge="horizontal|vertical"
         android:scrollIndicators="top|bottom|left">
+
+        <!--current (front) weather view-->
+        <include
+            layout="@layout/item_weather_front"
+            android:id="@+id/bulk_fragment_front" />
 
         <include
             layout="@layout/item_weather_location"

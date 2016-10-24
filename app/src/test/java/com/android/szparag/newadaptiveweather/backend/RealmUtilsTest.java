@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.util.LinkedList;
 import java.util.Random;
 
+import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
@@ -31,7 +32,7 @@ public class RealmUtilsTest {
     @Before
     public void setUp() throws Exception {
         currentTime = System.currentTimeMillis()/1000L;
-        realmUtils = new RealmUtils();
+        realmUtils = new RealmUtils(Realm.getDefaultInstance());
         random = new Random();
 //        mockRealmQuery = mock(RealmQuery.class);
 //        mockRealmResults = mock(RealmResults.class);

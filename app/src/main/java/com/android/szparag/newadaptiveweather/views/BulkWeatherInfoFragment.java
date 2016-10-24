@@ -231,7 +231,7 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
 
     @Override
     public void setBackground(Bitmap bitmap) {
-        getView().setBackground(new BitmapDrawable(getResources(), bitmap));
+//        getView().setBackground(new BitmapDrawable(getResources(), bitmap));
     }
 
     @Override
