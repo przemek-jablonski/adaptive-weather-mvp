@@ -2,17 +2,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="400dp"
-    android:layout_marginTop="@dimen/activity_horizontal_margin_half"
-    android:layout_marginBottom="@dimen/activity_vertical_margin">
+    android:layout_height="400dp">
 
     <!--background image-->
     <ImageView
         android:id="@+id/item_weather_front_image_background"
-        android:src="@drawable/ic_light_clouds"
+        android:src="@color/app_triadic_purple_lighter"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
+    <!--android:layout_margin="12dp"-->
 
     <!--view for top weather info-->
     <LinearLayout
@@ -20,9 +19,6 @@
         android:orientation="vertical"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_marginTop="@dimen/activity_horizontal_margin_half"
-        android:layout_marginStart="@dimen/activity_horizontal_margin_half"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin_half"
         android:background="@color/app_primary_orange_lighter_alpha">
         <TextView
             android:id="@+id/item_weather_front_datetime"
@@ -40,9 +36,10 @@
             android:lines="1"
             android:ellipsize="end"
             android:text="@string/placeholder_string_float"
-            android:layout_marginStart="@dimen/activity_horizontal_margin_half"
             android:paddingTop="@dimen/activity_separator_small"
-            style="@style/app_text_xl" />
+            style="@style/app_text_xl"
+            android:paddingStart="@dimen/activity_horizontal_margin_half"
+            android:background="@color/app_triadic_purple_lighter_alpha" />
         <TextView
             android:id="@+id/item_weather_front_coords"
             android:layout_width="match_parent"
@@ -61,9 +58,6 @@
         android:orientation="horizontal"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="22dp"
-        android:layout_marginStart="@dimen/activity_horizontal_margin_half"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin_half"
         android:background="@color/app_primary_orange_lighter_alpha">>
 
         <!--text (left) view-->
@@ -89,9 +83,9 @@
                 android:ellipsize="end"
                 android:text="@string/placeholder_string_int"
                 android:gravity="left|center_vertical"
-                android:layout_marginStart="@dimen/activity_horizontal_margin_half"
-                android:paddingTop="@dimen/activity_separator_small"
-                style="@style/app_text_xxxl" />
+                style="@style/app_text_xxxl"
+                android:paddingStart="@dimen/activity_horizontal_margin_half"
+                android:background="@color/app_triadic_purple_lighter_alpha" />
             <TextView
                 android:id="@+id/item_weather_front_desc"
                 android:layout_width="match_parent"
@@ -116,6 +110,10 @@
         android:layout_gravity="bottom|right"
         android:scaleX="1.4"
         android:scaleY="1.4"
-        android:layout_margin="@dimen/activity_horizontal_margin_half" />
+        android:scaleType="centerCrop"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin_half"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin_half"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin" />
 
 </FrameLayout>

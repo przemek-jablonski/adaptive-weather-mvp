@@ -1,10 +1,12 @@
 package com.android.szparag.newadaptiveweather.adapters;
 
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.szparag.newadaptiveweather.PicassoColorTransformation;
 import com.android.szparag.newadaptiveweather.R;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.utils.Computation;
@@ -13,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
 
 /**
  * Created by ciemek on 24/10/2016.

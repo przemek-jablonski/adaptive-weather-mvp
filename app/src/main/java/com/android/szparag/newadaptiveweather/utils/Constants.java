@@ -1,5 +1,9 @@
 package com.android.szparag.newadaptiveweather.utils;
 
+import android.support.annotation.ColorInt;
+
+import com.android.szparag.newadaptiveweather.R;
+
 /**
  * Created by ciemek on 23/09/2016.
  */

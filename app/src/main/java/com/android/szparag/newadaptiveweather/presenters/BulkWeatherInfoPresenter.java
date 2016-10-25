@@ -1,11 +1,10 @@
 package com.android.szparag.newadaptiveweather.presenters;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 
+import com.android.szparag.newadaptiveweather.R;
 import com.android.szparag.newadaptiveweather.backend.MethodCallback;
 import com.android.szparag.newadaptiveweather.backend.RealmUtils;
 import com.android.szparag.newadaptiveweather.backend.interceptors.AvoidNullsInterceptor;
@@ -15,15 +14,19 @@ import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecast
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
 import com.android.szparag.newadaptiveweather.utils.Computation;
 import com.android.szparag.newadaptiveweather.utils.Constants;
+import com.android.szparag.newadaptiveweather.PicassoSaturationTransformation;
 import com.android.szparag.newadaptiveweather.utils.Utils;
 import com.android.szparag.newadaptiveweather.views.contracts.BulkWeatherInfoView;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
+import com.squareup.picasso.Transformation;
 
 import javax.inject.Inject;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
+import jp.wasabeef.picasso.transformations.gpu.BrightnessFilterTransformation;
+import jp.wasabeef.picasso.transformations.gpu.ContrastFilterTransformation;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -293,6 +296,7 @@ public class BulkWeatherInfoPresenter implements BulkWeatherInfoBasePresenter {
     }
 
 
+    //todo: this should be in some view, not presenter, fix it
     @Override
     public void fetchBackgroundMap() {
         Picasso
@@ -303,6 +307,10 @@ public class BulkWeatherInfoPresenter implements BulkWeatherInfoBasePresenter {
                 placeholderWarsawGpsLat,
                 placeholderWarsawGpsLon)
                 )
+//                .transform(new PicassoSaturationTransformation(0.9f))
+                .transform(new ColorFilterTransformation(R.color.app_triadic_purple))
+                .transform(new BrightnessFilterTransformation(view.getAndroidView().getContext(), 0.15f))
+                .transform(new ContrastFilterTransformation(view.getAndroidView().getContext(), 1.30f))
                 .into(view.getForecastFrontAdapter().getBackgroundImage());
 //                .into(new Target() {
 //            @Override

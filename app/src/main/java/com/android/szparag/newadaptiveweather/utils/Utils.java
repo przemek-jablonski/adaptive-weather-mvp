@@ -126,7 +126,7 @@ public class Utils {
                 gpsLon,
                 Constants.GoogleMapsStatic.Size.SIZE_STANDARD,
                 Constants.GoogleMapsStatic.Size.SIZE_STANDARD,
-                9,
+                10,
                 Constants.GoogleMapsStatic.Scale.SCALE_X2,
                 Constants.GoogleMapsStatic.MapType.HYBRID,
                 Constants.GoogleMapsStatic.Format.JPG

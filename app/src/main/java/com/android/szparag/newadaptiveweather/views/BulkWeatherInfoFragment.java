@@ -43,7 +43,7 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
 
     @Inject BulkWeatherInfoBasePresenter presenter;
 
-    @BindView(R.id.bulk_fragment_location) View locationView;
+//    @BindView(R.id.bulk_fragment_location) View locationView;
 
     @BindView(R.id.bulk_fragment_current) View forecastCurrentView;
     private CurrentWeatherAdapter currentWeatherAdapter;
@@ -211,22 +211,22 @@ public class BulkWeatherInfoFragment extends Fragment implements BulkWeatherInfo
     // location on/off
     @Override
     public void showForecastLocationTimeLayout() {
-        locationView.setVisibility(LinearLayout.VISIBLE);
+//        locationView.setVisibility(LinearLayout.VISIBLE);
     }
 
     @Override
     public void hideForecastLocationTimeLayout() {
-        locationView.setVisibility(LinearLayout.INVISIBLE);
+//        locationView.setVisibility(LinearLayout.INVISIBLE);
     }
 
     @Override
     public void updateForecastLocationTimeLayout(Weather weather) {
-        showForecastLocationTimeLayout();
-        ((TextView) locationView.findViewById(R.id.item_weather_location_left)).setText(weather.getCity());
-        ((TextView) locationView.findViewById(R.id.item_weather_location_right)).setText("PL"); //fixme
-//        ((TextView) locationView.findViewById(R.id.item_weather_location_gps)).setText(Utils.makeLocationGpsString("asdadsasd")); //fixme
-        ((TextView) locationView.findViewById(R.id.item_weather_location_gps)).setText("asdadsasd");
-        ((TextView) locationView.findViewById(R.id.item_weather_location_time)).setText(Computation.getHumanDateFromUnixTime(weather.getUnixTime()));
+//        showForecastLocationTimeLayout();
+//        ((TextView) locationView.findViewById(R.id.item_weather_location_left)).setText(weather.getCity());
+//        ((TextView) locationView.findViewById(R.id.item_weather_location_right)).setText("PL"); //fixme
+////        ((TextView) locationView.findViewById(R.id.item_weather_location_gps)).setText(Utils.makeLocationGpsString("asdadsasd")); //fixme
+//        ((TextView) locationView.findViewById(R.id.item_weather_location_gps)).setText("asdadsasd");
+//        ((TextView) locationView.findViewById(R.id.item_weather_location_time)).setText(Computation.getHumanDateFromUnixTime(weather.getUnixTime()));
     }
 
     //BACKGROUNDIMAGEMETHODS

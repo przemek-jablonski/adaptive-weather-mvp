@@ -3,7 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/backgroundPrimary"
+    android:background="@color/app_primary_orange_lighter_alpha"
     android:baselineAligned="false">
 
     <LinearLayout
@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="center_vertical"
-        android:background="@color/backgroundDarkLight"
         android:gravity="center_vertical">
 
         <TextView

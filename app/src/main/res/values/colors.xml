@@ -14,6 +14,15 @@
     <color name="materialGrey800">#212121</color>
     <color name="materialBrown100">#d7ccc8</color>
 
+    <!--https://www.sessions.edu/color-calculator-results/?colors=ffccbc,dcbcff,dfffbc-->
+    <color name="app_triadic_green_lighter">#dfffbc</color>
+    <color name="app_triadic_green">#94ff22</color>
+
+    <color name="app_triadic_purple_lighter">#dcbcff</color>
+    <color name="app_triadic_purple_lighter_alpha">#a4dcbcff</color>
+    <color name="app_triadic_purple">#8d22ff</color>
+    <!--https://www.sessions.edu/color-calculator-results/?colors=ff5722,8d22ff,94ff22-->
+
     <color name="thumbnail_placeholder_white">#e8e8e8</color>
     <color name="card_text">#4a4a4a</color>
     <color name="recycler_view_background">#dde3e9</color>

@@ -28,6 +28,10 @@ public class Computation {
         public static final int OUTDATED_DATA_INTERVAL = HOUR_2;
     }
 
+    public static float linearInterpolation(float valueMin, float valueMax, float delta) {
+        return valueMin + delta * (valueMax - valueMin);
+    }
+
     public static long getNextDaysTime(int daysForward) {
         Calendar date = new GregorianCalendar();
         date.set(Calendar.HOUR_OF_DAY, 0);
