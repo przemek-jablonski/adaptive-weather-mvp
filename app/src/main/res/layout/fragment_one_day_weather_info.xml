@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
- <LinearLayout
+ <android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_marginBottom="@dimen/activity_vertical_margin"
-    tools:context=".views.BulkWeatherInfoFragment"
+    android:layout_marginTop="@dimen/activity_separator_small"
+    tools:context=".views.OneDayWeatherInfoFragment"
     android:background="@drawable/background_gradient">
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/item_weather_chart_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/bulk_fragment_one_day_recycler"
-        android:background="@color/backgroundDarkLight"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_separator_small"/>
+        android:orientation="vertical"
+        android:showDividers="beginning|middle|end"
+        android:fadingEdge="horizontal|vertical">
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/item_weather_chart_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/bulk_fragment_one_day_recycler"
+            android:background="@color/backgroundDarkLight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_separator_small"/>
+
+    </LinearLayout>
 
 
 <!--</android.support.v4.widget.NestedScrollView>-->
-</LinearLayout>
+</android.support.v4.widget.NestedScrollView>

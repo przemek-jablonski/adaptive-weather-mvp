@@ -140,6 +140,7 @@ public class OneDayWeatherInfoFragment extends Fragment implements OneDayWeather
         forecastChartsView.getAxisLeft().setLabelCount(0);
         forecastChartsView.getAxisRight().setEnabled(false);
         forecastChartsView.getXAxis().setAvoidFirstLastClipping(true);
+
 //        forecastChartsView.getXAxis().setAxisMaxValue(1);
 //        forecastChartsView.getXAxis().setAxisMinValue(23);
         hideForecastChartLayout();
@@ -159,8 +160,12 @@ public class OneDayWeatherInfoFragment extends Fragment implements OneDayWeather
     public void updateForecastChartLayout(LineDataSet graphLineDataSet) {
 
         graphLineDataSet.setColor(getResources().getColor(R.color.tempGraph_high));
-        graphLineDataSet.setCircleColor(getResources().getColor(R.color.tempGraph_dot));
-        graphLineDataSet.setFillColor(getResources().getColor(R.color.tempGraph_low));
+        graphLineDataSet.setCircleColor(getResources().getColor(R.color.tempGraph_line));
+        graphLineDataSet.setCircleHoleRadius(1f);
+        graphLineDataSet.setFillColor(getResources().getColor(R.color.tempGraph_high));
+        graphLineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        graphLineDataSet.setDrawFilled(true);
+        graphLineDataSet.setLineWidth(2f);
         LineData lineData = new LineData(graphLineDataSet);
         showForecastChartLayout();
 
