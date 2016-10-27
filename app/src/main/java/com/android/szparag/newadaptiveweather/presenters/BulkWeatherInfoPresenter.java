@@ -14,11 +14,9 @@ import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecast
 import com.android.szparag.newadaptiveweather.backend.services.WeatherService;
 import com.android.szparag.newadaptiveweather.utils.Computation;
 import com.android.szparag.newadaptiveweather.utils.Constants;
-import com.android.szparag.newadaptiveweather.PicassoSaturationTransformation;
 import com.android.szparag.newadaptiveweather.utils.Utils;
 import com.android.szparag.newadaptiveweather.views.contracts.BulkWeatherInfoView;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
 import javax.inject.Inject;
 
@@ -47,8 +45,8 @@ public class BulkWeatherInfoPresenter implements BulkWeatherInfoBasePresenter {
 
     private BulkWeatherInfoView view;
 
-    private float placeholderWarsawGpsLat = 52.233101f;
-    private float placeholderWarsawGpsLon = 21.061399f;
+    private float placeholderWarsawGpsLat = 50.070503f;
+    private float placeholderWarsawGpsLon = 19.924972f;
 
 
     private String googleStaticMapsBaseUrl;
@@ -273,7 +271,7 @@ public class BulkWeatherInfoPresenter implements BulkWeatherInfoBasePresenter {
                                             realm.where(Weather.class).count()
                                     );
 
-                            weather = realmUtils.mapJsonRespnseToRealm(
+                            weather = realmUtils.mapJsonResponseToRealm(
                                     body.list.get(i),
                                     body.city,
                                     weather

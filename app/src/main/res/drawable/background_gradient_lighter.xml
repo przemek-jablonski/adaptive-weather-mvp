@@ -24,7 +24,7 @@
                 android:type="linear"
                 android:centerX="50%"
                 android:startColor="#ffffff"
-                android:centerColor="@color/app_triadic_purple_lighter"
+                android:centerColor="#74dcbcff"
                 android:endColor="#ffffff"
                 android:angle="0"/>
 

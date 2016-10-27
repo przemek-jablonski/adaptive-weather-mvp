@@ -3,7 +3,6 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/app_primary_orange_lighter_alpha"
     android:baselineAligned="false">
 
     <LinearLayout
@@ -25,24 +24,27 @@
             android:id="@+id/item_weather_current_tempmaxmin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_vertical_margin"
             android:textSize="@dimen/font_size_big"
-            android:text="@string/placeholder_string_float" />
+            android:text="@string/placeholder_string_float"
+            android:paddingLeft="@dimen/activity_vertical_margin"
+            android:background="@color/app_primary_orange_lighter_alpha" />
 
         <TextView
             android:id="@+id/item_weather_current_temperature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_size_huge"
-            android:layout_marginLeft="@dimen/activity_vertical_margin"
-            android:text="@string/placeholder_string_int" />
+            android:text="@string/placeholder_string_int"
+            android:paddingLeft="@dimen/activity_vertical_margin"
+            android:background="@color/app_triadic_purple_lighter_alpha" />
 
         <TextView
             android:id="@+id/item_weather_current_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_vertical_smaller"
-            android:text="@string/placeholder_string_separated" />
+            android:text="@string/placeholder_string_separated"
+            android:background="@color/app_primary_orange_lighter_alpha"
+            android:padding="@dimen/margin_vertical_smaller" />
 
         <TextView
             android:id="@+id/item_weather_current_date"
@@ -58,9 +60,8 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:background="@color/backgroundPrimary"
-        android:orientation="horizontal"
-        android:backgroundTint="@color/backgroundDarkLight">
+        android:background="@color/app_triadic_purple_lighter_alpha"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"

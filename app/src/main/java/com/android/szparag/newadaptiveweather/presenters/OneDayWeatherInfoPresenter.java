@@ -39,8 +39,8 @@ public class OneDayWeatherInfoPresenter implements OneDayWeatherInfoBasePresente
 
 //    private RealmResults<Weather> weathersOneDay;
 
-    private float   placeholderWarsawGpsLat = 52.233101f;
-    private float   placeholderWarsawGpsLon = 21.061399f;
+    private float   placeholderWarsawGpsLat = 50.070503f;
+    private float   placeholderWarsawGpsLon = 19.924972f;
 
 //    private int     weatherDay = 1; //0 - today, 1 - tomorrow, etc
 //    private Date    date;

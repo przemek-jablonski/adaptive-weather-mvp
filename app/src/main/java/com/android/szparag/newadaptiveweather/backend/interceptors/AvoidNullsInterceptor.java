@@ -44,14 +44,26 @@ public class AvoidNullsInterceptor {
     public WeatherForecastItem processResponseBody(WeatherForecastItem responseBody) {
         if (responseBody.snow == null) {
             responseBody.snow = fixNullsSnow();
+        } else {
+            if (responseBody.snow.past3h == null) {
+                responseBody.snow = fixNullsSnow();
+            }
         }
 
         if (responseBody.rain == null) {
             responseBody.rain = fixNullsRain();
+        } else {
+            if (responseBody.rain.past3h == null) {
+                responseBody.rain = fixNullsRain();
+            }
         }
 
         if (responseBody.clouds == null) {
             responseBody.clouds = fixNullsClouds();
+        } else {
+            if (responseBody.clouds.cloudsPercent == null) {
+                responseBody.clouds = fixNullsClouds();
+            }
         }
 
         if (responseBody.mainWeatherData.pressureGroundLevel == null) {

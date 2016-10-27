@@ -2,8 +2,10 @@ package com.android.szparag.newadaptiveweather.backend;
 
 import android.support.annotation.Nullable;
 
+import com.android.szparag.newadaptiveweather.backend.interceptors.AvoidNullsInterceptor;
 import com.android.szparag.newadaptiveweather.backend.models.realm.Weather;
 import com.android.szparag.newadaptiveweather.backend.models.web.WeatherCurrentResponse;
+import com.android.szparag.newadaptiveweather.backend.models.web.WeatherForecastResponse;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.City;
 import com.android.szparag.newadaptiveweather.backend.models.web.auxiliary.WeatherForecastItem;
 
@@ -23,9 +25,12 @@ public class RealmUtils {
     @Inject
     Realm realm;
 
+    AvoidNullsInterceptor interceptor;
+
 
     public RealmUtils(Realm realm) {
         this.realm = realm;
+        interceptor = new AvoidNullsInterceptor();
     }
 
     private float minDiff;
@@ -89,42 +94,64 @@ public class RealmUtils {
     //todo: if diff ==0, return this value
 //    }
 
-    public Weather mapJsonResponseToRealm(WeatherCurrentResponse responseBody, Weather mappedObject) {
-        mappedObject.setCity(responseBody.cityName); //refactor to coord instead of city, with some error margin, like ~10km.
-        mappedObject.setUnixTime(responseBody.calculationUnixTime);
+    public Weather mapJsonResponseToRealm(WeatherCurrentResponse item, Weather mappedObject) {
+        WeatherCurrentResponse fetch = interceptor.processResponseBody(item);
+
+        mappedObject.setCity(fetch.cityName); //refactor to coord instead of city, with some error margin, like ~10km.
+        mappedObject.setUnixTime(fetch.calculationUnixTime);
         mappedObject.setHumanTime(new String("human time"));
 
-        mappedObject.setTemperature(responseBody.mainWeatherData.temp);
-        mappedObject.setTemperatureMin(responseBody.mainWeatherData.tempMin);
-        mappedObject.setTemperatureMax(responseBody.mainWeatherData.tempMax);
-        mappedObject.setHumidityPercent(responseBody.mainWeatherData.humidityPercent);
-        mappedObject.setPressureAtmospheric(responseBody.mainWeatherData.pressureAtmospheric);
-        mappedObject.setPressureSeaLevel(responseBody.mainWeatherData.pressureSeaLevel);
-        mappedObject.setPressureGroundLevel(responseBody.mainWeatherData.pressureGroundLevel);
+        mappedObject.setTemperature(fetch.mainWeatherData.temp);
+        mappedObject.setTemperatureMin(fetch.mainWeatherData.tempMin);
+        mappedObject.setTemperatureMax(fetch.mainWeatherData.tempMax);
+        mappedObject.setHumidityPercent(fetch.mainWeatherData.humidityPercent);
+        mappedObject.setPressureAtmospheric(fetch.mainWeatherData.pressureAtmospheric);
+        mappedObject.setPressureSeaLevel(fetch.mainWeatherData.pressureSeaLevel);
+        mappedObject.setPressureGroundLevel(fetch.mainWeatherData.pressureGroundLevel);
 
-        mappedObject.setWeatherMain(responseBody.weather.get(0).main);
-        mappedObject.setWeatherDescription(responseBody.weather.get(0).description);
-        mappedObject.setWeatherIconId(responseBody.weather.get(0).iconId);
+        mappedObject.setWindDirection(fetch.wind.directionDegrees);
+        mappedObject.setWindSpeed(fetch.wind.speed);
+
+        mappedObject.setCloudsPercent(fetch.clouds.cloudsPercent);
+
+        mappedObject.setRainPast3h(fetch.rain.past3h);
+        mappedObject.setSnowPast3h(fetch.snow.past3h);
+
+        mappedObject.setWeatherMain(fetch.weather.get(0).main);
+        mappedObject.setWeatherDescription(fetch.weather.get(0).description);
+        mappedObject.setWeatherIconId(fetch.weather.get(0).iconId);
+        mappedObject.setWeatherId(fetch.weather.get(0).id);
 
         return mappedObject;
     }
 
-    public Weather mapJsonRespnseToRealm(WeatherForecastItem responseItem, City city, Weather mappedObject) {
+    public Weather mapJsonResponseToRealm(WeatherForecastItem item, City city, Weather mappedObject) {
+        WeatherForecastItem fetch = interceptor.processResponseBody(item);
+
         mappedObject.setCity(city.name); //todo: refactor to coord instead of city, with some error margin, like ~10km.
-        mappedObject.setUnixTime(responseItem.calculationUnixTime);
-        mappedObject.setHumanTime(responseItem.calculationUTCTime);
+        mappedObject.setUnixTime(fetch.calculationUnixTime);
+        mappedObject.setHumanTime(fetch.calculationUTCTime);
 
-        mappedObject.setTemperature(responseItem.mainWeatherData.temp);
-        mappedObject.setTemperatureMin(responseItem.mainWeatherData.tempMin);
-        mappedObject.setTemperatureMax(responseItem.mainWeatherData.tempMax);
-        mappedObject.setHumidityPercent(responseItem.mainWeatherData.humidityPercent);
-        mappedObject.setPressureAtmospheric(responseItem.mainWeatherData.pressureAtmospheric);
-        mappedObject.setPressureSeaLevel(responseItem.mainWeatherData.pressureSeaLevel);
-        mappedObject.setPressureGroundLevel(responseItem.mainWeatherData.pressureGroundLevel);
+        mappedObject.setTemperature(fetch.mainWeatherData.temp);
+        mappedObject.setTemperatureMin(fetch.mainWeatherData.tempMin);
+        mappedObject.setTemperatureMax(fetch.mainWeatherData.tempMax);
+        mappedObject.setHumidityPercent(fetch.mainWeatherData.humidityPercent);
+        mappedObject.setPressureAtmospheric(fetch.mainWeatherData.pressureAtmospheric);
+        mappedObject.setPressureSeaLevel(fetch.mainWeatherData.pressureSeaLevel);
+        mappedObject.setPressureGroundLevel(fetch.mainWeatherData.pressureGroundLevel);
 
-        mappedObject.setWeatherMain(responseItem.weather.get(0).main);
-        mappedObject.setWeatherDescription(responseItem.weather.get(0).description);
-        mappedObject.setWeatherIconId(responseItem.weather.get(0).iconId);
+        mappedObject.setWindDirection(fetch.wind.directionDegrees);
+        mappedObject.setWindSpeed(fetch.wind.speed);
+
+        mappedObject.setCloudsPercent(fetch.clouds.cloudsPercent);
+
+        mappedObject.setRainPast3h(fetch.rain.past3h);
+        mappedObject.setSnowPast3h(fetch.snow.past3h);
+
+        mappedObject.setWeatherMain(fetch.weather.get(0).main);
+        mappedObject.setWeatherDescription(fetch.weather.get(0).description);
+        mappedObject.setWeatherIconId(fetch.weather.get(0).iconId);
+        mappedObject.setWeatherId(fetch.weather.get(0).id);
 
         return mappedObject;
     }

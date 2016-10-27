@@ -2,7 +2,6 @@ package com.android.szparag.newadaptiveweather.utils;
 
 import android.app.Activity;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
@@ -60,25 +59,30 @@ public class Utils {
     }
 
 
-    public static CharSequence makeWeatherDetailString(Weather weather) {
+    public static String makeWeatherDetailString(Weather weather) {
         StringBuilder builder = new StringBuilder();
 
-        builder.append(weather.getCloudsPercent());
-        builder.append("% clouds");
-
+        if (weather.getCloudsPercent() == 0) {
+            builder.append("<b>NO </b>clouds");
+        } else {
+            builder.append("<b>" + weather.getCloudsPercent() + "</b>");
+            builder.append("% clouds");
+        }
 
         builder.append(" | ");
-        builder.append(weather.getRainPast3h());
+
+
+        builder.append("<b>" + weather.getRainPast3h() + "</b>");
         builder.append(" rain");
 
-        builder.append(" | ");
-        builder.append(weather.getSnowPast3h());
-        builder.append(" snow");
+//        builder.append(" | ");
+//        builder.append(weather.getSnowPast3h());
+//        builder.append(" snow");
 
 
         builder.append(" | ");
-        builder.append(weather.getWindSpeed());
-        builder.append("kmph (?)");
+        builder.append("<b>" + weather.getWindSpeed() + "</b>");
+        builder.append("m/s");
 
         return builder.toString();
     }
@@ -126,7 +130,7 @@ public class Utils {
                 gpsLon,
                 Constants.GoogleMapsStatic.Size.SIZE_STANDARD,
                 Constants.GoogleMapsStatic.Size.SIZE_STANDARD,
-                10,
+                11,
                 Constants.GoogleMapsStatic.Scale.SCALE_X2,
                 Constants.GoogleMapsStatic.MapType.HYBRID,
                 Constants.GoogleMapsStatic.Format.JPG
